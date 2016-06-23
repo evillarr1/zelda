@@ -1,6 +1,7 @@
 "use strict";
 
 import Constants from "../../../constants/Constants";
+import KeyCodes from "../../../constants/KeyCodes";
 
 export default class NameSelect {
 	constructor() {
@@ -32,6 +33,7 @@ export default class NameSelect {
 		};
 	}
 
+	// Modify fairy animate
 	update() {
 		this.frames++;
 
