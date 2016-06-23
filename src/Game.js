@@ -16,7 +16,7 @@ export default class Game {
 		window.MainLoop = Mainloop.setUpdate(() => {
 			let lastState = window.State.peek();
 
-			if (lastState) {
+			if (lastState && lastState.update) {
 				lastState.update();
 			}
 		}).setDraw(() => {

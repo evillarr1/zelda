@@ -1,6 +1,8 @@
 "use strict";
 
 import Constants from "../../../constants/Constants";
+import KeyCodes from "../../../constants/KeyCodes";
+import NameSelect from "../nameSelect/nameSelect";
 
 export default class Title {
 	constructor() {
@@ -14,10 +16,16 @@ export default class Title {
 			autoplay: true,
 			loop: false
 		});
-	}
 
-	update() {
+		// Setup the keybindings
+		this.keyboard = document.onkeydown = (event) => {
+			if (event.keyCode === KeyCodes.A) {
+				let nameSelect = new NameSelect();
 
+				State.pop();
+				State.push(nameSelect);
+			}
+		};
 	}
 
 	draw() {

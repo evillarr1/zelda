@@ -14,9 +14,22 @@ export default class NameSelect {
 			autoplay: true,
 			loop: true
 		});
+
+		// Keep track of fairy animation
 		this.numOfFrames = 6;
 		this.frames = 0;
 		this.frameIndex = 0;
+
+		// Setup the keybindings
+		this.keyboard = document.onkeydown = (event) => {
+			if (event.keyCode === KeyCodes.A) {
+
+			} else if (event.keyCode === KeyCodes.DOWN) {
+
+			} else if (event.keyCode === KeyCodes.UP) {
+
+			}
+		};
 	}
 
 	update() {
