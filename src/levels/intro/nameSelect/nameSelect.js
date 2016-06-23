@@ -1,6 +1,6 @@
 "use strict";
 
-import Constants from "../../../assets/constants/Constants";
+import Constants from "../../../constants/Constants";
 
 export default class NameSelect {
 	constructor(context) {
@@ -23,7 +23,7 @@ export default class NameSelect {
 			165,
 			230,
 			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT + 80,
+			Constants.GAME_HEIGHT,
 			0,
 			0,
 			Constants.GAME_WIDTH,
@@ -33,49 +33,49 @@ export default class NameSelect {
 		this.context.drawImage(
 			this.nameSelectScreen,
 			0,
-			248,
-			40,
-			100,
+			257,
+			12,
+			78,
+			80,
 			70,
-			40,
-			40,
-			70);
+			12,
+			78);
 
 		// Draw copy/erase player text
 		this.context.drawImage(
 			this.nameSelectScreen,
-			-10,
-			215,
-			120,
-			40,
-			35,
-			108,
-			120,
+			0,
+			217,
+			94,
+			30,
+			54,
+			174,
+			94,
 			30);
 
 		// Draw player select text
 		this.context.drawImage(
 			this.nameSelectScreen,
 			0,
-			198,
-			120,
-			18,
+			201,
+			111,
+			13,
 			40,
-			12,
-			120,
-			14);
+			24,
+			111,
+			13);
 
 		// Draw fairy
 		this.context.drawImage(
 			this.nameSelectScreen,
-			40,
-			248,
-			20,
-			40,
-			22,
+			43,
+			272,
 			16,
-			20,
-			40);
+			16,
+			30,
+			70,
+			16,
+			16);
 	}
 
 	playMusic() {

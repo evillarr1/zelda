@@ -1,6 +1,6 @@
 "use strict";
 
-import Constants from "../../../assets/constants/Constants";
+import Constants from "../../../constants/Constants";
 
 export default class Title {
 	constructor(context) {
@@ -25,19 +25,19 @@ export default class Title {
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT,
 			0,
-			0,
+			35,
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT);
 
 		// Draw the text and logo
 		this.context.drawImage(
 			this.titleScreen,
-			Constants.GAME_WIDTH,
+			Constants.GAME_WIDTH + 10,
 			0,
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT,
 			20,
-			0,
+			35,
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT);
 	}

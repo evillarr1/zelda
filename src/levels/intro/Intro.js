@@ -2,7 +2,7 @@
 
 import Title from "./title/title";
 import NameSelect from "./nameSelect/nameSelect";
-import KeyCodes from "../../assets/constants/KeyCodes";
+import KeyCodes from "../../constants/KeyCodes";
 
 export default class Intro {
 	constructor() {
