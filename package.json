@@ -14,10 +14,8 @@
     }
   ],
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/evillarr1/zelda/issues"
-  },
   "scripts": {
+    "build": "gulp build",
     "start": "gulp"
   },
   "homepage": "https://github.com/evillarr1/zelda#readme",
@@ -30,6 +28,8 @@
     "gulp-sass": "2.3.2",
     "gulp-server-livereload": "1.8.1",
     "gulp-webpack": "1.5.0",
+    "howler": "1.1.29",
+    "mainloop.js": "1.0.3",
     "script-loader": "0.7.0"
   }
 }

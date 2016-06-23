@@ -66,4 +66,6 @@ function watch() {
 	gulp.watch(paths.allStyles, gulp.series(styles));
 }
 
-gulp.task("default", gulp.series(clean, html, images, styles, scripts, music, gulp.parallel(webserver, watch)));
+gulp.task("build", gulp.series(clean, html, images, styles, scripts, music));
+gulp.task("serve", gulp.parallel(webserver, watch));
+gulp.task("default", gulp.series("build", "serve"));

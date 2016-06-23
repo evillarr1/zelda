@@ -6,21 +6,20 @@ import KeyCodes from "../../constants/KeyCodes";
 
 export default class Intro {
 	constructor() {
-		this.canvas = document.getElementById("canvas");
-		this.context = this.canvas.getContext("2d");
-
 		document.onkeydown = (event) => {
 			if (event.keyCode === KeyCodes.A) {
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				let nameSelect = new NameSelect();
 
-				new NameSelect(this.context);
+				State.pop();
+				State.push(nameSelect);
 			} else if (event.keyCode === KeyCodes.DOWN) {
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 			}
 		};
 
 		// Create title object
-		new Title(this.context);
+		let title = new Title();
+
+		State.push(title);
 	}
 }

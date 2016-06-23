@@ -3,22 +3,28 @@
 import Constants from "../../../constants/Constants";
 
 export default class NameSelect {
-	constructor(context) {
-		this.context = context;
-
+	constructor() {
 		// Create a new image for the name select screen
 		this.nameSelectScreen = new Image();
 		this.nameSelectScreen.src = "img/intro/nameSelect/nameSelect.png";
 
-		this.nameSelectScreen.onload = () => {
-			this.draw();
-			this.playMusic();
-		};
+		// Create the music element for the screen
+		this.music = new Howl({
+			urls: ["/music/intro/nameSelect/nameSelect.mp4"],
+			autoplay: true,
+			loop: true
+		});
+	}
+
+	update() {
+
 	}
 
 	draw() {
+		Context.clearRect(0, 0, Canvas.width, Canvas.height);
+
 		// Draw the background
-		this.context.drawImage(
+		Context.drawImage(
 			this.nameSelectScreen,
 			165,
 			230,
@@ -30,7 +36,7 @@ export default class NameSelect {
 			Constants.GAME_HEIGHT);
 
 		// Draw numbers
-		this.context.drawImage(
+		Context.drawImage(
 			this.nameSelectScreen,
 			0,
 			257,
@@ -42,7 +48,7 @@ export default class NameSelect {
 			78);
 
 		// Draw copy/erase player text
-		this.context.drawImage(
+		Context.drawImage(
 			this.nameSelectScreen,
 			0,
 			217,
@@ -54,7 +60,7 @@ export default class NameSelect {
 			30);
 
 		// Draw player select text
-		this.context.drawImage(
+		Context.drawImage(
 			this.nameSelectScreen,
 			0,
 			201,
@@ -66,7 +72,7 @@ export default class NameSelect {
 			13);
 
 		// Draw fairy
-		this.context.drawImage(
+		Context.drawImage(
 			this.nameSelectScreen,
 			43,
 			272,
@@ -76,12 +82,5 @@ export default class NameSelect {
 			70,
 			16,
 			16);
-	}
-
-	playMusic() {
-		this.audioElement = document.createElement("audio");
-		this.audioElement.src = "/music/intro/nameSelect/nameSelect.mp3";
-		this.audioElement.load();
-		this.audioElement.play();
 	}
 }
