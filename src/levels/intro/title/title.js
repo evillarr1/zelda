@@ -7,8 +7,8 @@ import NameSelect from "../nameSelect/nameSelect";
 export default class Title {
 	constructor() {
 		// Create a new image for the title screen
-		this.titleScreen = new Image();
-		this.titleScreen.src = "img/intro/title/titleScreen.png";
+		this.titleSheet = new Image();
+		this.titleSheet.src = "img/intro/title/title.png";
 
 		// Create the music element for the screen
 		this.music = new Howl({
@@ -33,7 +33,7 @@ export default class Title {
 
 		// Draw the background
 		Context.drawImage(
-			this.titleScreen,
+			this.titleSheet,
 			0,
 			0,
 			Constants.GAME_WIDTH,
@@ -45,7 +45,7 @@ export default class Title {
 
 		// Draw the text and logo
 		Context.drawImage(
-			this.titleScreen,
+			this.titleSheet,
 			288,
 			6,
 			169,

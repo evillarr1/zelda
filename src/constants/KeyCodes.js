@@ -6,7 +6,7 @@ export default {
 	A: 68, // D
 	X: 87, // W
 	START: 13, // Enter
-	SHIFT: 220, // \
+	SELECT: 220, // \
 	L: 81, // Q
 	R: 51, // E
 	LEFT: 37,

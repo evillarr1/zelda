@@ -2,12 +2,13 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
+import RegisterName from "./registerName";
 
 export default class NameSelect {
 	constructor() {
 		// Create a new image for the name select screen
-		this.nameSelectScreen = new Image();
-		this.nameSelectScreen.src = "img/intro/nameSelect/nameSelect.png";
+		this.nameSelectSheet = new Image();
+		this.nameSelectSheet.src = "img/intro/nameSelect/nameSelect.png";
 
 		// Create the music element for the screen
 		this.music = new Howl({
@@ -23,8 +24,11 @@ export default class NameSelect {
 
 		// Setup the keybindings
 		this.keyboard = document.onkeydown = (event) => {
-			if (event.keyCode === KeyCodes.Y) {
+			if ([KeyCodes.Y, KeyCodes.B , KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
+				let registerName = new RegisterName();
 
+				State.pop();
+				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
 
 			} else if (event.keyCode === KeyCodes.UP) {
@@ -48,9 +52,9 @@ export default class NameSelect {
 
 		// Draw the background
 		Context.drawImage(
-			this.nameSelectScreen,
-			165,
-			230,
+			this.nameSelectSheet,
+			166,
+			231,
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT,
 			0,
@@ -60,7 +64,7 @@ export default class NameSelect {
 
 		// Draw numbers
 		Context.drawImage(
-			this.nameSelectScreen,
+			this.nameSelectSheet,
 			0,
 			257,
 			12,
@@ -72,7 +76,7 @@ export default class NameSelect {
 
 		// Draw copy/erase player text
 		Context.drawImage(
-			this.nameSelectScreen,
+			this.nameSelectSheet,
 			0,
 			217,
 			94,
@@ -84,7 +88,7 @@ export default class NameSelect {
 
 		// Draw player select text
 		Context.drawImage(
-			this.nameSelectScreen,
+			this.nameSelectSheet,
 			0,
 			201,
 			111,
@@ -96,7 +100,7 @@ export default class NameSelect {
 
 		// Draw fairy
 		Context.drawImage(
-			this.nameSelectScreen,
+			this.nameSelectSheet,
 			43 + (19 * this.frameIndex),
 			273,
 			16,
