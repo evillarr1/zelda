@@ -23,7 +23,7 @@ export default class NameSelect {
 
 		// Setup the keybindings
 		this.keyboard = document.onkeydown = (event) => {
-			if (event.keyCode === KeyCodes.A) {
+			if (event.keyCode === KeyCodes.Y) {
 
 			} else if (event.keyCode === KeyCodes.DOWN) {
 

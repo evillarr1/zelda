@@ -7,6 +7,9 @@ export default class State {
 
 	push(el) {
 		this.state.push(el);
+
+		// Add the binding again, in case pop is called first.
+		document.onkeydown = el.keyboard;
 	}
 
 	peek() {

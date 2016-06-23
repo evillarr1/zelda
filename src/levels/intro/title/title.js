@@ -19,7 +19,7 @@ export default class Title {
 
 		// Setup the keybindings
 		this.keyboard = document.onkeydown = (event) => {
-			if (event.keyCode === KeyCodes.A) {
+			if (event.keyCode === KeyCodes.Y) {
 				let nameSelect = new NameSelect();
 
 				State.pop();

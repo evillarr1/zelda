@@ -1,10 +1,14 @@
 "use strict";
 
 export default {
-	A: 65,
-	S: 83,
-	D: 68,
-	W: 87,
+	Y: 65, // A
+	B: 83, // S
+	A: 68, // D
+	X: 87, // W
+	START: 13, // Enter
+	SHIFT: 220, // \
+	L: 81, // Q
+	R: 51, // E
 	LEFT: 37,
 	UP: 38,
 	RIGHT: 39,
