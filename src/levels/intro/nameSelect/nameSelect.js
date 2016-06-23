@@ -14,10 +14,18 @@ export default class NameSelect {
 			autoplay: true,
 			loop: true
 		});
+		this.numOfFrames = 6;
+		this.frames = 0;
+		this.frameIndex = 0;
 	}
 
 	update() {
+		this.frames++;
 
+		if (this.frames > this.numOfFrames) {
+			this.frameIndex = this.frameIndex === 1 ? 0 : 1;
+			this.frames = 0;
+		}
 	}
 
 	draw() {
@@ -74,8 +82,8 @@ export default class NameSelect {
 		// Draw fairy
 		Context.drawImage(
 			this.nameSelectScreen,
-			43,
-			272,
+			43 + (19 * this.frameIndex),
+			273,
 			16,
 			16,
 			30,
