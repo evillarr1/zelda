@@ -6,17 +6,13 @@ import KeyCodes from "../../../constants/KeyCodes";
 const pos = [132, 148, 164, 180];
 
 export default class RegisterName {
-	constructor() {
+	constructor(music) {
 		// Create a new image for the name select screen
 		this.registerNameSheet = new Image();
 		this.registerNameSheet.src = "img/intro/nameSelect/nameSelect.png";
 
-		// Create the music element for the screen
-		this.music = new Howl({
-			urls: ["/music/intro/nameSelect/nameSelect.mp4"],
-			autoplay: true,
-			loop: true
-		});
+		// This page depends on music from the previous page
+		this.music = music;
 
 		this.barIndex = 0;
 

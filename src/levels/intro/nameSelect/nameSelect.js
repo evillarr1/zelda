@@ -19,6 +19,10 @@ export default class NameSelect {
 			loop: true
 		});
 
+		let menuSelect = new Howl({
+			urls: ["/sounds/menuSelect.mp4"]
+		});
+
 		// Keep track of fairy animation
 		this.numOfFrames = 6;
 		this.frames = 0;
@@ -28,9 +32,13 @@ export default class NameSelect {
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
-				let registerName = new RegisterName();
+				let registerName = new RegisterName(this.music);
+				let options = {
+					keepMusic: true
+				};
 
-				State.pop();
+				menuSelect.play();
+				State.pop(options);
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				this.yPosIndex = (this.yPosIndex + 1) % pos.length;

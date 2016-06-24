@@ -15,3 +15,4 @@
 * [Dungeons Maps](http://vgmaps.com/Atlas/SuperNES/index.htm#LegendOfZeldaALinkToThePast)
 * [Dialogue Text](http://www.zeldalegends.net/files/text/z3translation/z3_game_quotes.html)
 * [Audio](http://downloads.khinsider.com/game-soundtracks/album/legend-of-zelda-a-link-to-the-past-original-soundtrack)
+* [Sound Effects](http://noproblo.dayjo.org/ZeldaSounds/)

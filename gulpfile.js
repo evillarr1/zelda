@@ -7,6 +7,7 @@ const webpackConfig = require("./webpack.config.js");
 const paths = {
 	allScripts: ["src/**/*.js"],
 	allMusic: ["src/levels/**/*.mp4", "src/levels/**/*.mp3"],
+	allSounds: ["src/assets/sounds/**/*"],
 	entryScript: ["src/app.js"],
 	allImages: ["src/levels/**/*.png", "src/assets/icons/**/*"],
 	entryStyles: ["src/app.scss"],
@@ -47,7 +48,11 @@ function styles() {
 function music() {
 	return gulp.src(paths.allMusic)
 		.pipe(gulp.dest("build/music"));
+}
 
+function sounds() {
+	return gulp.src(paths.allSounds)
+		.pipe(gulp.dest("build/sounds"));
 }
 
 function webserver() {
@@ -66,6 +71,6 @@ function watch() {
 	gulp.watch(paths.allStyles, gulp.series(styles));
 }
 
-gulp.task("build", gulp.series(clean, html, images, styles, scripts, music));
+gulp.task("build", gulp.series(clean, html, images, styles, scripts, music, sounds));
 gulp.task("serve", gulp.parallel(webserver, watch));
 gulp.task("default", gulp.series("build", "serve"));
