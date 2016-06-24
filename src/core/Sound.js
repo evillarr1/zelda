@@ -5,7 +5,7 @@ export default class Sound {
 		this.sounds = {};
 	}
 
-	playSound(soundName) {
+	play(soundName) {
 		let sound;
 
 		if (this.sounds[soundName]) {

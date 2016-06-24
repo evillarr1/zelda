@@ -29,18 +29,14 @@ export default class NameSelect {
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				let registerName = new RegisterName(this.music);
-				let options = {
-					keepMusic: true
-				};
 
-				Sound.playSound("menu/select");
-				State.pop(options);
+				Sound.play("menu/select");
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
-				Sound.playSound("menu/cursor");
+				Sound.play("menu/cursor");
 				this.yPosIndex = (this.yPosIndex + 1) % pos.length;
 			} else if (event.keyCode === KeyCodes.UP) {
-				Sound.playSound("menu/cursor");
+				Sound.play("menu/cursor");
 				if (--this.yPosIndex < 0) {
 					this.yPosIndex = pos.length - 1;
 				}

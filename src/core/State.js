@@ -16,11 +16,11 @@ export default class State {
 		return this.state.peek();
 	}
 
-	pop(options) {
+	pop() {
 		let el = this.state.pop();
 
-		// Pause the music if it is currently playing, unless if the keepMusic option is passed in
-		if (el.music && (!options || !options.keepMusic)) {
+		// Pause the music if it is currently playing
+		if (el.music) {
 			el.music.pause();
 		}
 
