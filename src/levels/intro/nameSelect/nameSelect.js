@@ -4,6 +4,8 @@ import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
 
+const pos = [70, 100, 130, 175, 190];
+
 export default class NameSelect {
 	constructor() {
 		// Create a new image for the name select screen
@@ -22,17 +24,21 @@ export default class NameSelect {
 		this.frames = 0;
 		this.frameIndex = 0;
 
+		this.yPosIndex = 0;
+
 		// Setup the keybindings
 		this.keyboard = document.onkeydown = (event) => {
-			if ([KeyCodes.Y, KeyCodes.B , KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
+			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				let registerName = new RegisterName();
 
 				State.pop();
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
-
+				this.yPosIndex = (this.yPosIndex + 1) % pos.length;
 			} else if (event.keyCode === KeyCodes.UP) {
-
+				if (--this.yPosIndex < 0) {
+					this.yPosIndex = pos.length - 1;
+				}
 			}
 		};
 	}
@@ -106,7 +112,7 @@ export default class NameSelect {
 			16,
 			16,
 			30,
-			70,
+			pos[this.yPosIndex],
 			16,
 			16);
 	}
