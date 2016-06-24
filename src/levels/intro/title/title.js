@@ -17,7 +17,7 @@ export default class Title {
 			loop: false
 		});
 
-		// Setup the keybindings
+		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if (event.keyCode === KeyCodes.Y) {
 				let nameSelect = new NameSelect();

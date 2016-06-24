@@ -23,10 +23,9 @@ export default class NameSelect {
 		this.numOfFrames = 6;
 		this.frames = 0;
 		this.frameIndex = 0;
-
 		this.yPosIndex = 0;
 
-		// Setup the keybindings
+		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				let registerName = new RegisterName();
@@ -59,8 +58,8 @@ export default class NameSelect {
 		// Draw the background
 		Context.drawImage(
 			this.nameSelectSheet,
-			166,
-			231,
+			264,
+			1,
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT,
 			0,
@@ -71,8 +70,8 @@ export default class NameSelect {
 		// Draw numbers
 		Context.drawImage(
 			this.nameSelectSheet,
-			0,
-			257,
+			226,
+			229,
 			12,
 			78,
 			80,
@@ -83,8 +82,8 @@ export default class NameSelect {
 		// Draw copy/erase player text
 		Context.drawImage(
 			this.nameSelectSheet,
-			0,
-			217,
+			3,
+			261,
 			94,
 			30,
 			54,
@@ -95,8 +94,8 @@ export default class NameSelect {
 		// Draw player select text
 		Context.drawImage(
 			this.nameSelectSheet,
-			0,
-			201,
+			3,
+			245,
 			111,
 			13,
 			40,
@@ -107,8 +106,8 @@ export default class NameSelect {
 		// Draw fairy
 		Context.drawImage(
 			this.nameSelectSheet,
-			43 + (19 * this.frameIndex),
-			273,
+			150 + (19 * this.frameIndex),
+			265,
 			16,
 			16,
 			30,
