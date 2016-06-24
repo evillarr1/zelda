@@ -4,6 +4,7 @@ import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 
 const pos = [132, 148, 164, 180];
+const BAR_DISTANCE = 16;
 
 export default class RegisterName {
 	constructor(music) {
@@ -15,19 +16,42 @@ export default class RegisterName {
 		this.music = music;
 
 		this.barIndex = 0;
+		this.barTick = 0;
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if (event.keyCode === KeyCodes.DOWN && this.barIndex < pos.length - 1) {
-				this.barIndex++;
+				this.barTick++;
 			} else if (event.keyCode === KeyCodes.UP && this.barIndex > 0) {
-				this.barIndex--;
+				this.barTick--;
 			} else if (event.keyCode === KeyCodes.LEFT) {
 
 			} else if (event.keyCode === KeyCodes.RIGHT) {
 
 			}
 		};
+	}
+
+	update() {
+		this.animateBar();
+	}
+
+	animateBar() {
+		if (this.barTick > 0) {
+			this.barTick++;
+
+			if (this.barTick >= BAR_DISTANCE) {
+				this.barTick = 0;
+				this.barIndex++;
+			}
+		} else if (this.barTick < 0) {
+			this.barTick--;
+
+			if (this.barTick <= -BAR_DISTANCE) {
+				this.barTick = 0;
+				this.barIndex--;
+			}
+		}
 	}
 
 	draw() {
@@ -77,7 +101,7 @@ export default class RegisterName {
 			208,
 			1,
 			23,
-			pos[this.barIndex],
+			pos[this.barIndex] + this.barTick,
 			208,
 			1);
 	}

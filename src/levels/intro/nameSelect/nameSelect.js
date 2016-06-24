@@ -50,8 +50,12 @@ export default class NameSelect {
 		};
 	}
 
-	// Modify fairy animate
 	update() {
+		this.animateFairy();
+	}
+
+	// Modify fairy animate
+	animateFairy() {
 		this.frames++;
 
 		if (this.frames > this.numOfFrames) {

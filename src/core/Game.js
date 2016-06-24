@@ -1,6 +1,6 @@
 "use strict";
 
-import Intro from "./levels/intro/Intro";
+import Intro from "../levels/intro/Intro";
 import Mainloop from "mainloop.js";
 import "howler";
 import State from "./State";
