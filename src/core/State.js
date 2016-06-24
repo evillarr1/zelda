@@ -19,8 +19,8 @@ export default class State {
 	pop(options) {
 		let el = this.state.pop();
 
-		// Pause the music if it is currently playing
-		if (el.music && !options.keepMusic) {
+		// Pause the music if it is currently playing, unless if the keepMusic option is passed in
+		if (el.music && (!options || !options.keepMusic)) {
 			el.music.pause();
 		}
 

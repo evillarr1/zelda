@@ -4,6 +4,7 @@ import Intro from "../levels/intro/Intro";
 import Mainloop from "mainloop.js";
 import "howler";
 import State from "./State";
+import Sound from "./Sound";
 
 export default class Game {
 	constructor() {
@@ -27,8 +28,11 @@ export default class Game {
 			}
 		}).start();
 
-		// Setup the games state handler
+		// Setup the game's state handler
 		window.State = new State();
+
+		// Setup the game's sound engine
+		window.Sound = new Sound();
 
 		// Store the canvas/context elements on the window to make it available to every page
 		window.Canvas = document.getElementById("canvas");

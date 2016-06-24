@@ -19,10 +19,6 @@ export default class NameSelect {
 			loop: true
 		});
 
-		let menuSelect = new Howl({
-			urls: ["/sounds/menuSelect.mp4"]
-		});
-
 		// Keep track of fairy animation
 		this.numOfFrames = 6;
 		this.frames = 0;
@@ -37,7 +33,7 @@ export default class NameSelect {
 					keepMusic: true
 				};
 
-				menuSelect.play();
+				Sound.playSound("menuSelect");
 				State.pop(options);
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
