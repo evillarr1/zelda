@@ -33,12 +33,14 @@ export default class NameSelect {
 					keepMusic: true
 				};
 
-				Sound.playSound("menuSelect");
+				Sound.playSound("menu/select");
 				State.pop(options);
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
+				Sound.playSound("menu/cursor");
 				this.yPosIndex = (this.yPosIndex + 1) % pos.length;
 			} else if (event.keyCode === KeyCodes.UP) {
+				Sound.playSound("menu/cursor");
 				if (--this.yPosIndex < 0) {
 					this.yPosIndex = pos.length - 1;
 				}
