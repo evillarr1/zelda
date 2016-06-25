@@ -9,7 +9,7 @@ const paths = {
 	allMusic: ["src/levels/**/*.mp4", "src/levels/**/*.mp3"],
 	allSounds: ["src/assets/sounds/**/*"],
 	entryScript: ["src/app.js"],
-	allImages: ["src/levels/**/*.png", "src/assets/icons/**/*"],
+	allImages: ["src/levels/**/*.png", "src/assets/icons/**/*", "src/assets/img/*.png"],
 	entryStyles: ["src/app.scss"],
 	allStyles: ["src/**/*.scss"],
 	mainHtml: ["src/index.html"]

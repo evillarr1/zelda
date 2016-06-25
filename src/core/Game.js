@@ -5,6 +5,7 @@ import Mainloop from "mainloop.js";
 import "howler";
 import State from "./State";
 import Sound from "./Sound";
+import Text from "./Text";
 
 export default class Game {
 	constructor() {
@@ -33,6 +34,9 @@ export default class Game {
 
 		// Setup the game's sound engine
 		window.Sound = new Sound();
+
+		// Setup the text engine
+		window.Text = new Text();
 
 		// Store the canvas/context elements on the window to make it available to every page
 		window.Canvas = document.getElementById("canvas");

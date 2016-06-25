@@ -2,6 +2,8 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
+import NameSelect from "./charSelect";
+import SaveLoad from "../../../core/SaveLoad";
 
 const POS = [132, 148, 164, 180];
 const MAIN_DISTANCE = 16;
@@ -22,7 +24,7 @@ export default class RegisterName {
 
 		// Create a new image for the name select screen
 		this.registerNameSheet = new Image();
-		this.registerNameSheet.src = "img/intro/nameSelect/nameSelect.png";
+		this.registerNameSheet.src = "img/intro/charSelect/charSelect.png";
 
 		// This page depends on music from the previous page
 		this.music = music || new Howl({
@@ -58,7 +60,7 @@ export default class RegisterName {
 				this.secondCursorMoveCount++;
 
 			} else if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A].indexOf(event.keyCode) !== -1) {
-				Sound.play("menu/charSelect");
+				Sound.play("menu/select");
 
 				this.nameText[this.currentCharIndex] = [this.barXPos, POS[this.barIndex]];
 				this.currentCharIndex = (this.currentCharIndex + 1) % MAX_CHAR;
@@ -66,10 +68,23 @@ export default class RegisterName {
 				if (this.nameText.length === 0) {
 					Sound.play("menu/error");
 				} else {
+					let name = this.nameText.reduce((prev, val) => {
+						return prev + CHAR_MAP[val[0]][val[1]][2]
+					}, "");
+					let state = {
+						charName: name,
+						hearts: 3
+					};
+
+					let nameSelect = new NameSelect();
+
 					Sound.play(("menu/select"));
 
 					// Go back to the name select screen
 					State.pop();
+					State.push(nameSelect);
+
+					SaveLoad.save(state);
 				}
 			}
 		};

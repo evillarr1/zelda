@@ -2,7 +2,7 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
-import NameSelect from "../nameSelect/nameSelect";
+import NameSelect from "../charSelect/charSelect";
 
 export default class Title {
 	constructor() {

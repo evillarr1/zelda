@@ -3,6 +3,7 @@
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
+import SaveLoad from "../../../core/SaveLoad";
 
 const pos = [70, 100, 130, 175, 190];
 
@@ -10,11 +11,13 @@ export default class NameSelect {
 	constructor() {
 		// Create a new image for the name select screen
 		this.nameSelectSheet = new Image();
-		this.nameSelectSheet.src = "img/intro/nameSelect/nameSelect.png";
+		this.nameSelectSheet.src = "img/intro/charSelect/charSelect.png";
+		this.linkSheet = new Image();
+		this.linkSheet.src = "img/link.png";
 
 		// Create the music element for the screen
 		this.music = new Howl({
-			urls: ["/music/intro/nameSelect/nameSelect.mp4"],
+			urls: ["/music/intro/charSelect/charSelect.mp4"],
 			autoplay: true,
 			loop: true
 		});
@@ -25,12 +28,19 @@ export default class NameSelect {
 		this.frameIndex = 0;
 		this.yPosIndex = 0;
 
+		let char = SaveLoad.load();
+
+		if (char) {
+			this.char = char;
+		}
+
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				let registerName = new RegisterName(this.music);
 
 				Sound.play("menu/select");
+				State.pop();
 				State.push(registerName);
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				Sound.play("menu/cursor");
@@ -120,5 +130,37 @@ export default class NameSelect {
 			pos[this.yPosIndex],
 			16,
 			16);
+
+		// Draw char info
+		if (this.char) {
+			// Draw Link
+			Context.drawImage(
+				this.linkSheet,
+				907,
+				0,
+				16,
+				21,
+				60,
+				67,
+				16,
+				21);
+
+			// Draw hearts
+			for (let i = 0; i < this.char.hearts; i++) {
+				Context.drawImage(
+					this.nameSelectSheet,
+					253,
+					232,
+					8,
+					7,
+					150 + (i * 9),
+					70,
+					8,
+					7);
+			}
+
+			// Draw text
+			Text.write(this.char.charName, 100, 70)
+		}
 	}
 }
