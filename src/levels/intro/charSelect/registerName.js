@@ -27,11 +27,7 @@ export default class RegisterName {
 		this.registerNameSheet.src = "img/intro/charSelect/charSelect.png";
 
 		// This page depends on music from the previous page
-		this.music = music || new Howl({
-				urls: ["/music/intro/nameSelect/nameSelect.mp4"],
-				autoplay: true,
-				loop: true
-			});
+		this.music = music;
 
 		// This page depends on the save slot from the previous page selected
 		this.slot = slot;
@@ -63,7 +59,7 @@ export default class RegisterName {
 				this.secondCursorMoveCount++;
 
 			} else if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A].indexOf(event.keyCode) !== -1) {
-				Sound.play("menu/select");
+				Sound.play(("link/lowHealth"));
 
 				this.nameText[this.currentCharIndex] = [this.barXPos, POS[this.barIndex]];
 				this.currentCharIndex = (this.currentCharIndex + 1) % MAX_CHAR;
@@ -86,13 +82,12 @@ export default class RegisterName {
 
 					SaveLoad.save(state, slot);
 
-					let nameSelect = new NameSelect();
-
 					Sound.play(("menu/select"));
 
 					// Go back to the name select screen
-					State.pop();
-					State.push(nameSelect);
+					State.pop({
+						dontPause: true
+					});
 				}
 			}
 		};

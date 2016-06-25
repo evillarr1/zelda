@@ -28,25 +28,28 @@ export default class NameSelect {
 		this.frameIndex = 0;
 		this.yPosIndex = 0;
 
-		this.char = [];
-
-		// Load the save states
-		for (let i = 0; i < 3; i++) {
-			this.char.push(SaveLoad.load(i));
-		}
+		this.loadChars();
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				if (this.yPosIndex < 3) {
 					let registerName = new RegisterName(this.music, this.yPosIndex);
-					let options = {
-						keepMusic: true
-					};
 
 					Sound.play("menu/select");
-					State.pop(options);
 					State.push(registerName);
+				} else if (this.yPosIndex === 3) {
+					if (this.numOfChars === 0) {
+						Sound.play("menu/error");
+					} else {
+						Sound.play("menu/select");
+					}
+				} else if (this.yPosIndex === 4) {
+					if (this.numOfChars === 0) {
+						Sound.play("menu/error");
+					} else {
+						Sound.play("menu/select");
+					}
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				Sound.play("menu/cursor");
@@ -60,6 +63,22 @@ export default class NameSelect {
 		};
 	}
 
+	loadState() {
+		this.loadChars();
+	}
+
+	loadChars() {
+		this.char = [];
+		this.numOfChars = 0;
+
+		// Load the save states
+		for (let i = 0; i < 3; i++) {
+			this.char.push(SaveLoad.load(i));
+			if (this.char.peek()) {
+				this.numOfChars++;
+			}
+		}
+	}
 	update() {
 		this.animateFairy();
 	}

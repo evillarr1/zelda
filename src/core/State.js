@@ -16,20 +16,27 @@ export default class State {
 		return this.state.peek();
 	}
 
-	pop(options) {
+	pop(options = {}) {
 		let el = this.state.pop();
 
 		// Pause the music if it is currently playing
-		if (el.music && !options.keepMusic) {
-			el.music.pause();
+		if (el.music && !options.dontPause) {
+			el.music.pause()
 		}
 
 		// Remove any key bindings from the previous event handler
 		document.onkeydown = null;
 
-		// Add the keybindings from the previous state
 		if (this.state.length > 0) {
-			document.onkeydown = this.peek().keyboard;
+			let newState = this.peek();
+
+			// Add the keybindings from the previous state
+			document.onkeydown = newState.keyboard;
+
+			// Perform any updates needed by the previous state
+			if (newState.loadState) {
+				newState.loadState();
+			}
 		}
 
 		return el;
