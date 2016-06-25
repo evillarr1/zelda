@@ -4,6 +4,7 @@ import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
 import SaveLoad from "../../../core/SaveLoad";
+import CopyPlayer from "./copyPlayer";
 
 const POS = [70, 100, 130, 175, 190];
 
@@ -42,7 +43,10 @@ export default class NameSelect {
 					if (this.numOfChars === 0) {
 						Sound.play("menu/error");
 					} else {
+						let copyPlayer = new CopyPlayer(this.music);
 						Sound.play("menu/select");
+
+						State.push(copyPlayer);
 					}
 				} else if (this.yPosIndex === 4) {
 					if (this.numOfChars === 0) {
@@ -187,7 +191,7 @@ export default class NameSelect {
 						7);
 				}
 
-				// Draw text
+				// Draw name text
 				Text.write(char.charName, 100, POS[i] + (i * 2));
 			}
 		}

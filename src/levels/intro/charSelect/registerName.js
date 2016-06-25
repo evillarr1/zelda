@@ -2,7 +2,6 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
-import NameSelect from "./charSelect";
 import SaveLoad from "../../../core/SaveLoad";
 
 const POS = [132, 148, 164, 180];
@@ -187,8 +186,8 @@ export default class RegisterName {
 		// Draw horizontal bar
 		Context.drawImage(
 			this.registerNameSheet,
-			263,
-			227,
+			1,
+			225,
 			208,
 			1,
 			23,
