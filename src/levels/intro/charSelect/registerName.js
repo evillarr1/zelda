@@ -19,7 +19,7 @@ const CHAR_MAP = {
 	}
 };
 export default class RegisterName {
-	constructor(music) {
+	constructor(music, slot = 0) {
 		this.nameText = [];
 
 		// Create a new image for the name select screen
@@ -32,6 +32,9 @@ export default class RegisterName {
 			autoplay: true,
 			loop: true
 		});
+
+		// This page depends on the save slot from the previous page selected
+		this.slot = slot;
 
 		this.barIndex = 0;
 		this.barTick = 0;
@@ -73,10 +76,11 @@ export default class RegisterName {
 					}, "");
 					let state = {
 						charName: name,
-						hearts: 3
+						hearts: 3,
+						slot: this.slot
 					};
 
-					SaveLoad.save(state);
+					SaveLoad.save(state, slot);
 
 					let nameSelect = new NameSelect();
 
@@ -213,6 +217,7 @@ export default class RegisterName {
 		for (let i = 0; i < this.nameText.length; i++) {
 			let [x, y] = this.nameText[i];
 			let [xCor, yCor] = CHAR_MAP[x][y];
+
 			Context.drawImage(
 				this.registerNameSheet,
 				xCor,

@@ -1,15 +1,15 @@
 "use strict";
 
 export default class SaveLoad {
-	static save(state) {
-		localStorage.setItem("ZELDA", JSON.stringify(state));
+	static save(state, slot = 0) {
+		localStorage.setItem(`ZELDA-${slot}`, JSON.stringify(state));
 	}
 
-	static load() {
-		if (!localStorage.hasOwnProperty("ZELDA")) {
+	static load(slot) {
+		if (!localStorage.hasOwnProperty(`ZELDA-${slot}`)) {
 			return false;
 		}
 
-		return JSON.parse(localStorage.getItem("ZELDA"));
+		return JSON.parse(localStorage.getItem(`ZELDA-${slot}`));
 	}
 }

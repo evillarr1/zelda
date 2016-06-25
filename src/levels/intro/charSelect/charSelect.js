@@ -5,7 +5,7 @@ import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
 import SaveLoad from "../../../core/SaveLoad";
 
-const pos = [70, 100, 130, 175, 190];
+const POS = [70, 100, 130, 175, 190];
 
 export default class NameSelect {
 	constructor() {
@@ -28,27 +28,30 @@ export default class NameSelect {
 		this.frameIndex = 0;
 		this.yPosIndex = 0;
 
-		let char = SaveLoad.load();
+		this.char = [];
 
-		if (char) {
-			this.char = char;
+		// Load the save states
+		for (let i = 0; i < 3; i++) {
+			this.char.push(SaveLoad.load(i));
 		}
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
-				let registerName = new RegisterName(this.music);
+				if (this.yPosIndex < 3) {
+					let registerName = new RegisterName(this.music, this.yPosIndex);
 
-				Sound.play("menu/select");
-				State.pop();
-				State.push(registerName);
+					Sound.play("menu/select");
+					State.pop();
+					State.push(registerName);
+				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				Sound.play("menu/cursor");
-				this.yPosIndex = (this.yPosIndex + 1) % pos.length;
+				this.yPosIndex = (this.yPosIndex + 1) % POS.length;
 			} else if (event.keyCode === KeyCodes.UP) {
 				Sound.play("menu/cursor");
 				if (--this.yPosIndex < 0) {
-					this.yPosIndex = pos.length - 1;
+					this.yPosIndex = POS.length - 1;
 				}
 			}
 		};
@@ -127,40 +130,44 @@ export default class NameSelect {
 			16,
 			16,
 			30,
-			pos[this.yPosIndex],
+			POS[this.yPosIndex],
 			16,
 			16);
 
 		// Draw char info
-		if (this.char) {
-			// Draw Link
-			Context.drawImage(
-				this.linkSheet,
-				907,
-				0,
-				16,
-				21,
-				60,
-				67,
-				16,
-				21);
+		for (let i = 0; i < 3; i++) {
+			let char = this.char[i];
 
-			// Draw hearts
-			for (let i = 0; i < this.char.hearts; i++) {
+			if (char) {
+				// Draw Link
 				Context.drawImage(
-					this.nameSelectSheet,
-					253,
-					232,
-					8,
-					7,
-					150 + (i * 9),
-					70,
-					8,
-					7);
-			}
+					this.linkSheet,
+					907,
+					0,
+					16,
+					21,
+					60,
+					POS[i] - (this.char.length - i),
+					16,
+					21);
 
-			// Draw text
-			Text.write(this.char.charName, 100, 70)
+				// Draw hearts
+				for (let j = 0; j < char.hearts; j++) {
+					Context.drawImage(
+						this.nameSelectSheet,
+						266,
+						232,
+						8,
+						7,
+						150 + (j * 9),
+						POS[i] + (i * 2),
+						8,
+						7);
+				}
+
+				// Draw text
+				Text.write(char.charName, 100, POS[i] + (i * 2));
+			}
 		}
 	}
 }
