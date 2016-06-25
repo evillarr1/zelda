@@ -40,9 +40,12 @@ export default class NameSelect {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				if (this.yPosIndex < 3) {
 					let registerName = new RegisterName(this.music, this.yPosIndex);
+					let options = {
+						keepMusic: true
+					};
 
 					Sound.play("menu/select");
-					State.pop();
+					State.pop(options);
 					State.push(registerName);
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
