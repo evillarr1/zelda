@@ -28,10 +28,10 @@ export default class RegisterName {
 
 		// This page depends on music from the previous page
 		this.music = music || new Howl({
-			urls: ["/music/intro/nameSelect/nameSelect.mp4"],
-			autoplay: true,
-			loop: true
-		});
+				urls: ["/music/intro/nameSelect/nameSelect.mp4"],
+				autoplay: true,
+				loop: true
+			});
 
 		// This page depends on the save slot from the previous page selected
 		this.slot = slot;
@@ -59,7 +59,7 @@ export default class RegisterName {
 				this.cursorMoveCount--;
 				this.secondCursorMoveCount--;
 			} else if (event.keyCode === KeyCodes.RIGHT) {
-				this.cursorMoveCount ++;
+				this.cursorMoveCount++;
 				this.secondCursorMoveCount++;
 
 			} else if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A].indexOf(event.keyCode) !== -1) {
@@ -68,7 +68,11 @@ export default class RegisterName {
 				this.nameText[this.currentCharIndex] = [this.barXPos, POS[this.barIndex]];
 				this.currentCharIndex = (this.currentCharIndex + 1) % MAX_CHAR;
 			} else if (event.keyCode === KeyCodes.START) {
-				if (this.nameText.length === 0) {
+				let isValid = this.nameText.reduce((prev, cur) => {
+					return prev || CHAR_MAP[cur[0]][cur[1]][2].length > 0;
+				}, false);
+
+				if (this.nameText.length === 0 || !isValid) {
 					Sound.play("menu/error");
 				} else {
 					let name = this.nameText.reduce((prev, val) => {
@@ -92,7 +96,6 @@ export default class RegisterName {
 				}
 			}
 		};
-
 	}
 
 	update() {
@@ -101,9 +104,9 @@ export default class RegisterName {
 	}
 
 	resetCursorIndex() {
-		if (this.cursorMoveCount === 32){
+		if (this.cursorMoveCount === 32) {
 			this.cursorMoveCount = 0;
-		 	this.secondCursorMoveCount = -32;
+			this.secondCursorMoveCount = -32;
 		}
 		if (this.cursorMoveCount === -3) {
 			this.secondCursorMoveCount = 29;
@@ -166,7 +169,7 @@ export default class RegisterName {
 		// Draw letters
 		Context.drawImage(
 			this.registerNameSheet,
-		 	this.cursorXPos + this.cursorMoveCount * 16,
+			this.cursorXPos + this.cursorMoveCount * 16,
 			310,
 			200,
 			62,
