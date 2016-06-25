@@ -76,6 +76,8 @@ export default class RegisterName {
 						hearts: 3
 					};
 
+					SaveLoad.save(state);
+
 					let nameSelect = new NameSelect();
 
 					Sound.play(("menu/select"));
@@ -83,8 +85,6 @@ export default class RegisterName {
 					// Go back to the name select screen
 					State.pop();
 					State.push(nameSelect);
-
-					SaveLoad.save(state);
 				}
 			}
 		};
