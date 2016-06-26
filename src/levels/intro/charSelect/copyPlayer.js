@@ -11,8 +11,8 @@ const FINAL_POS = [170, 190];
 export default class CopyPlayer {
 	constructor(music) {
 		// Create a new image for the name select screen
-		this.nameSelectSheet = new Image();
-		this.nameSelectSheet.src = "img/intro/charSelect/charSelect.png";
+		this.charSelectSheet = new Image();
+		this.charSelectSheet.src = "img/intro/charSelect/charSelect.png";
 		this.showWhichWindow = false;
 		this.showCopyOK = false;
 		this.music = music;
@@ -143,7 +143,7 @@ export default class CopyPlayer {
 
 		// Draw the background
 		Context.drawImage(
-			this.nameSelectSheet,
+			this.charSelectSheet,
 			264,
 			1,
 			Constants.GAME_WIDTH,
@@ -156,7 +156,7 @@ export default class CopyPlayer {
 		if (!this.showWhichWindow) {
 			// Draw fairy
 			Context.drawImage(
-				this.nameSelectSheet,
+				this.charSelectSheet,
 				150 + (19 * this.frameIndex),
 				265,
 				16,
@@ -188,7 +188,7 @@ export default class CopyPlayer {
 		if (this.showWhichWindow) {
 			// Show which window box
 			Context.drawImage(
-				this.nameSelectSheet,
+				this.charSelectSheet,
 				275,
 				225,
 				99,
@@ -224,7 +224,7 @@ export default class CopyPlayer {
 			if (!this.showCopyOK) {
 				// Draw fairy
 				Context.drawImage(
-					this.nameSelectSheet,
+					this.charSelectSheet,
 					150 + (19 * this.frameIndex),
 					265,
 					16,
@@ -239,7 +239,7 @@ export default class CopyPlayer {
 		if (this.showCopyOK) {
 			// Draw fairy
 			Context.drawImage(
-				this.nameSelectSheet,
+				this.charSelectSheet,
 				150 + (19 * this.frameIndex),
 				265,
 				16,

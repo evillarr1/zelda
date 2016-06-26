@@ -10,8 +10,8 @@ const FINAL_POS = [170, 190];
 export default class ErasePlayer {
 	constructor(music) {
 		// Create a new image for the name select screen
-		this.nameSelectSheet = new Image();
-		this.nameSelectSheet.src = "img/intro/charSelect/charSelect.png";
+		this.charSelectSheet = new Image();
+		this.charSelectSheet.src = "img/intro/charSelect/charSelect.png";
 		this.showConfirm = false;
 		this.music = music;
 
@@ -115,7 +115,7 @@ export default class ErasePlayer {
 
 		// Draw the background
 		Context.drawImage(
-			this.nameSelectSheet,
+			this.charSelectSheet,
 			264,
 			1,
 			Constants.GAME_WIDTH,
@@ -128,7 +128,7 @@ export default class ErasePlayer {
 		if (!this.showConfirm) {
 			// Draw fairy
 			Context.drawImage(
-				this.nameSelectSheet,
+				this.charSelectSheet,
 				150 + (19 * this.frameIndex),
 				265,
 				16,
@@ -152,6 +152,20 @@ export default class ErasePlayer {
 				if (!this.showConfirm || this.yPosIndex === i) {
 					// Draw name text
 					Text.write(`${i + 1}.${char.charName}`, 50, POS[i]);
+
+					// Draw hearts
+					for (let j = 0; j < char.hearts; j++) {
+						Context.drawImage(
+							this.charSelectSheet,
+							266,
+							232,
+							8,
+							7,
+							150 + (j * 9),
+							POS[i],
+							8,
+							7);
+					}
 				}
 			} else if (!this.showConfirm) {
 				Text.write(`${i + 1}.`, 50, POS[i]);
@@ -162,7 +176,7 @@ export default class ErasePlayer {
 		if (this.showConfirm) {
 			// Draw fairy
 			Context.drawImage(
-				this.nameSelectSheet,
+				this.charSelectSheet,
 				150 + (19 * this.frameIndex),
 				265,
 				16,
