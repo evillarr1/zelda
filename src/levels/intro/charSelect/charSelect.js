@@ -6,6 +6,7 @@ import RegisterName from "./registerName";
 import SaveLoad from "../../../core/SaveLoad";
 import CopyPlayer from "./copyPlayer";
 import ErasePlayer from "./erasePlayer";
+import LightWorld from "../../lightWorld/LightWorld";
 
 const POS = [70, 100, 130, 175, 190];
 
@@ -25,39 +26,43 @@ export default class NameSelect {
 			volume: 0.7
 		});
 
-		// Keep track of fairy animation
-		this.numOfFrames = 6;
-		this.frames = 0;
-		this.frameIndex = 0;
-		this.yPosIndex = 0;
-
-		this.loadChars();
+		this.loadState();
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				if (this.yPosIndex < 3) {
-					let registerName = new RegisterName(this.music, this.yPosIndex);
-
 					Sound.play("menu/select");
-					State.push(registerName);
-				} else if (this.yPosIndex === 3) {
-					if (this.numOfChars === 0) {
-						Sound.play("menu/error");
-					} else {
-						let copyPlayer = new CopyPlayer(this.music);
-						Sound.play("menu/select");
+					let newChar = SaveLoad.load(this.yPosIndex);
 
-						State.push(copyPlayer);
+					// Start the game if the user selects an already created state
+					if (newChar) {
+						State.pop();
+						window.Zelda = newChar;
+
+						new LightWorld();
+					} else {
+						let registerName = new RegisterName(this.music, this.yPosIndex);
+
+						State.push(registerName);
 					}
-				} else if (this.yPosIndex === 4) {
-					if (this.numOfChars === 0) {
+				} else {
+					// If no characters are found then play the error sound
+					if (this.chars.length === 0) {
 						Sound.play("menu/error");
 					} else {
-						let erasePlayer = new ErasePlayer(this.music);
+						let newState;
+
 						Sound.play("menu/select");
 
-						State.push(erasePlayer);
+						// If characters are found then processed with the corresponding selected fielda
+						if (this.yPosIndex === 3) {
+							newState = new CopyPlayer(this.music);
+						} else if (this.yPosIndex === 4) {
+							newState = new ErasePlayer(this.music);
+						}
+
+						State.push(newState);
 					}
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
@@ -73,21 +78,30 @@ export default class NameSelect {
 	}
 
 	loadState() {
+		// Keep track of fairy animation
+		this.numOfFrames = 6;
+		this.frames = 0;
+		this.frameIndex = 0;
+
+		// Keep track of cursor
+		this.yPosIndex = 0;
+
 		this.loadChars();
 	}
 
 	loadChars() {
-		this.char = [];
-		this.numOfChars = 0;
+		this.chars = [];
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			this.char.push(SaveLoad.load(i));
-			if (this.char.peek()) {
-				this.numOfChars++;
+			let char = SaveLoad.load(i);
+
+			if (char) {
+				this.chars.push(char);
 			}
 		}
 	}
+
 	update() {
 		this.animateFairy();
 	}
@@ -103,102 +117,38 @@ export default class NameSelect {
 	}
 
 	draw() {
+		// Clear screen
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 
 		// Draw the background
-		Context.drawImage(
-			this.charSelectSheet,
-			264,
-			1,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT,
-			0,
-			0,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT);
+		Context.drawImage(this.charSelectSheet, 264, 1, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
 		// Draw numbers
-		Context.drawImage(
-			this.charSelectSheet,
-			226,
-			229,
-			12,
-			78,
-			80,
-			70,
-			12,
-			78);
+		Context.drawImage(this.charSelectSheet, 226, 229, 12, 78, 80, 70, 12, 78);
 
 		// Draw copy/erase player text
-		Context.drawImage(
-			this.charSelectSheet,
-			3,
-			261,
-			94,
-			30,
-			54,
-			174,
-			94,
-			30);
+		Context.drawImage(this.charSelectSheet, 3, 261, 94, 30, 54, 174, 94, 30);
 
 		// Draw player select text
-		Context.drawImage(
-			this.charSelectSheet,
-			3,
-			245,
-			111,
-			13,
-			40,
-			24,
-			111,
-			13);
+		Context.drawImage(this.charSelectSheet, 3, 245, 111, 13, 40, 24, 111, 13);
 
 		// Draw fairy
-		Context.drawImage(
-			this.charSelectSheet,
-			150 + (19 * this.frameIndex),
-			265,
-			16,
-			16,
-			30,
-			POS[this.yPosIndex],
-			16,
-			16);
+		Context.drawImage(this.charSelectSheet, 150 + (19 * this.frameIndex), 265, 16, 16, 30, POS[this.yPosIndex], 16, 16);
 
 		// Draw char info
-		for (let i = 0; i < 3; i++) {
-			let char = this.char[i];
+		for (let i = 0; i < this.chars.length; i++) {
+			let char = this.chars[i];
 
-			if (char) {
-				// Draw Link
-				Context.drawImage(
-					this.linkSheet,
-					907,
-					0,
-					16,
-					21,
-					60,
-					POS[i] - (this.char.length - i),
-					16,
-					21);
+			// Draw Link
+			Context.drawImage(this.linkSheet, 907, 0, 16, 21, 60, POS[char.slot] - (this.chars.length - char.slot), 16, 21);
 
-				// Draw hearts
-				for (let j = 0; j < char.hearts; j++) {
-					Context.drawImage(
-						this.charSelectSheet,
-						266,
-						232,
-						8,
-						7,
-						150 + (j * 9),
-						POS[i] + (i * 2),
-						8,
-						7);
-				}
-
-				// Draw name text
-				Text.write(char.charName, 100, POS[i] + (i * 2));
+			// Draw hearts
+			for (let j = 0; j < char.hearts; j++) {
+				Context.drawImage(this.charSelectSheet, 266, 232, 8, 7, 150 + (j * 9), POS[char.slot] + (char.slot * 2), 8, 7);
 			}
+
+			// Draw name text
+			Text.write(char.charName, 100, POS[char.slot] + (char.slot * 2));
 		}
 	}
 }

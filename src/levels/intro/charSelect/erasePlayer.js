@@ -22,29 +22,23 @@ export default class ErasePlayer {
 		this.yPosIndex = 0;
 		this.confirmIndex = 0;
 
-		this.loadChars();
+		this.loadState();
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				Sound.play("menu/select");
 
-				if (!this.showConfirm) {
-					if (this.yPosIndex === this.fairyPositions.length - 1) {
-						State.pop({
-							dontPause: true
-						});
-					}
+				// If the confirm dialogue is not displayed and a character slot is selected, display the confirm dialogue
+				if (!this.showConfirm && this.yPosIndex !== this.fairyPositions.length - 1) {
 					this.showConfirm = true;
-				} else if (this.showConfirm) {
-					if (this.confirmIndex === 0) {
-						let chars = this.char.filter((val) => {
-							return val;
-						});
-
-						SaveLoad.remove(chars[this.yPosIndex].slot);
+				} else {
+					// If the confirm dialogue is displayed and confirm is selected, then remove the player slot
+					if (this.showConfirm && this.confirmIndex === 0) {
+						SaveLoad.remove(this.chars[this.yPosIndex].slot);
 					}
 
+					// Return back to the previous screen
 					State.pop({
 						dontPause: true
 					});
@@ -70,21 +64,20 @@ export default class ErasePlayer {
 	};
 
 	loadState() {
+		this.fairyPositions = [];
 		this.loadChars();
 	}
 
 	loadChars() {
-		this.char = [];
-		this.numOfChars = 0;
-		this.fairyPositions = [];
+		this.chars = [];
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			this.char.push(SaveLoad.load(i));
+			let char = SaveLoad.load(i);
 
-			if (this.char.peek()) {
+			if (char) {
+				this.chars.push(char);
 				this.fairyPositions.push(POS[i]);
-				this.numOfChars++;
 			}
 		}
 
@@ -114,79 +107,41 @@ export default class ErasePlayer {
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 
 		// Draw the background
-		Context.drawImage(
-			this.charSelectSheet,
-			264,
-			1,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT,
-			0,
-			0,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT);
-
-		if (!this.showConfirm) {
-			// Draw fairy
-			Context.drawImage(
-				this.charSelectSheet,
-				150 + (19 * this.frameIndex),
-				265,
-				16,
-				16,
-				30,
-				this.fairyPositions[this.yPosIndex],
-				16,
-				16);
-		}
+		Context.drawImage(this.charSelectSheet, 264, 1, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
 		Text.write("ERASE  PLAYER", 40, 23);
 		Text.write("WHICH PLAYER DO YOU WANT", 30, 64);
 		Text.write("TO ERASE ?", 30, 84);
 		Text.write("QUIT", 50, 190);
 
-		// Draw char info
-		for (let i = 0; i < 3; i++) {
-			let char = this.char[i];
+		if (this.showConfirm) {
+			Text.write("ERASE THIS PLAYER", 50, 170);
+		}
 
-			if (char) {
-				if (!this.showConfirm || this.yPosIndex === i) {
+		// Draw char info
+		for (let i = 0, j = 0; i < 3; i++) {
+			let char = this.chars[j];
+
+			if (char && i === char.slot) {
+				if (!this.showConfirm || this.yPosIndex === j) {
 					// Draw name text
 					Text.write(`${i + 1}.${char.charName}`, 50, POS[i]);
 
 					// Draw hearts
-					for (let j = 0; j < char.hearts; j++) {
-						Context.drawImage(
-							this.charSelectSheet,
-							266,
-							232,
-							8,
-							7,
-							150 + (j * 9),
-							POS[i],
-							8,
-							7);
+					for (let k = 0; k < char.hearts; k++) {
+						Context.drawImage(this.charSelectSheet, 266, 232, 8, 7, 150 + (k * 9), POS[i], 8, 7);
 					}
 				}
+
+				j++;
 			} else if (!this.showConfirm) {
 				Text.write(`${i + 1}.`, 50, POS[i]);
 			}
 		}
-		
 
-		if (this.showConfirm) {
-			// Draw fairy
-			Context.drawImage(
-				this.charSelectSheet,
-				150 + (19 * this.frameIndex),
-				265,
-				16,
-				16,
-				30,
-				FINAL_POS[this.confirmIndex],
-				16,
-				16);
+		let fairyPos = !this.showConfirm ? this.fairyPositions[this.yPosIndex] : FINAL_POS[this.confirmIndex];
 
-			Text.write("ERASE THIS PLAYER", 50, 170);
-		}
+		// Draw fairy
+		Context.drawImage(this.charSelectSheet, 150 + (19 * this.frameIndex), 265, 16, 16, 30, fairyPos, 16, 16);
 	}
 }

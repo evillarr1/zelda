@@ -26,7 +26,7 @@ export default class CopyPlayer {
 		this.confirmIndex = 0;
 		this.textAnimationCount = 0;
 
-		this.loadChars();
+		this.loadState();
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
@@ -43,20 +43,9 @@ export default class CopyPlayer {
 				} else if (this.showCopyOK) {
 					if (this.confirmIndex === 0) {
 						let stateIndex = [0, 1, 2];
-						let count = 0;
-						let state;
+						let state = this.chars[this.yPosIndex];
 
-						for (let i = 0; i < stateIndex.length; i++) {
-							if (this.char[i]) {
-								count++;
-							}
-
-							if (!state && count === this.yPosIndex + 1) {
-								state = this.char[i];
-								stateIndex.splice(i, 1);
-							}
-						}
-
+						stateIndex.splice(state.slot, 1);
 						state.slot = stateIndex[this.subYPosIndex];
 						SaveLoad.save(state, stateIndex[this.subYPosIndex]);
 					}
@@ -98,21 +87,20 @@ export default class CopyPlayer {
 	};
 
 	loadState() {
+		this.fairyPositions = [];
 		this.loadChars();
 	}
 
 	loadChars() {
-		this.char = [];
-		this.numOfChars = 0;
-		this.fairyPositions = [];
+		this.chars = [];
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			this.char.push(SaveLoad.load(i));
+			let char = SaveLoad.load(i);
 
-			if (this.char.peek()) {
+			if (char) {
+				this.chars.push(char);
 				this.fairyPositions.push(POS[i]);
-				this.numOfChars++;
 			}
 		}
 
@@ -142,44 +130,27 @@ export default class CopyPlayer {
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 
 		// Draw the background
-		Context.drawImage(
-			this.charSelectSheet,
-			264,
-			1,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT,
-			0,
-			0,
-			Constants.GAME_WIDTH,
-			Constants.GAME_HEIGHT);
-
-		if (!this.showWhichWindow) {
-			// Draw fairy
-			Context.drawImage(
-				this.charSelectSheet,
-				150 + (19 * this.frameIndex),
-				265,
-				16,
-				16,
-				30,
-				this.fairyPositions[this.yPosIndex],
-				16,
-				16);
-		}
+		Context.drawImage(this.charSelectSheet, 264, 1, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
 		Text.write("COPY  PLAYER", 40, 23);
 		Text.write("(WHICH?)", 30, 64);
 		Text.write("QUIT", 50, 190);
 
-		// Draw char info
-		for (let i = 0; i < 3; i++) {
-			let char = this.char[i];
+		if (this.showCopyOK) {
+			Text.write("COPY OK", 50, 170);
+		}
 
-			if (char) {
-				if (!this.showWhichWindow || this.yPosIndex === i) {
+		// Draw char info
+		for (let i = 0, j = 0; i < 3; i++) {
+			let char = this.chars[j];
+
+			if (char && i === char.slot) {
+				if (!this.showWhichWindow || this.yPosIndex === j) {
 					// Draw name text
 					Text.write(`${i + 1}. ${char.charName}`, 65, POS[i]);
 				}
+
+				j++;
 			} else if (!this.showWhichWindow) {
 				Text.write(`${i + 1}.`, 65, POS[i]);
 			}
@@ -187,69 +158,43 @@ export default class CopyPlayer {
 
 		if (this.showWhichWindow) {
 			// Show which window box
-			Context.drawImage(
-				this.charSelectSheet,
-				275,
-				225,
-				99,
-				77,
-				130,
-				70,
-				99,
-				77);
+			Context.drawImage(this.charSelectSheet, 275, 225, 99, 77, 130, 70, 99, 77);
 
-			if (this.showCopyOK || this.textAnimationCount > 14) {
+			if (this.textAnimationCount > 14) {
 				Text.write("(TO WHICH?)", 137, 80);
 			}
 
-			let count = 0;
-			let removeName = 0;
-
-			// Draw numbers and names
-			for (let i = 0; i < 3; i++) {
-				let char = this.char[i].charName || "";
+			// Draw char info inside which window
+			for (let i = 0, j = 0, k = 0; i < 3; i++) {
+				let char = this.chars[j];
 
 				if (char) {
-					removeName++;
-				}
+					if (i !== char.slot) {
+						Text.write(`${i + 1}.`, 160, 102 + (k++ * 22), 6);
+					} else {
+						if (this.chars[this.yPosIndex].slot !== char.slot) {
+							Text.write(`${i + 1}. ${char.charName}`, 160, 102 + (k++ * 22), 6);
+						}
 
-				if (removeName !== (this.yPosIndex + 1)) {
-					Text.write(`${i + 1}. ${char}`, 160, 102 + (count * 22), 6);
-					count++;
-				} else if (removeName === this.yPosIndex + 1) {
-					removeName++;
+						j++;
+					}
+				} else {
+					Text.write(`${i + 1}.`, 160, 102 + (k++ * 22), 6);
 				}
-			}
-
-			if (!this.showCopyOK) {
-				// Draw fairy
-				Context.drawImage(
-					this.charSelectSheet,
-					150 + (19 * this.frameIndex),
-					265,
-					16,
-					16,
-					SUB_POS[this.subYPosIndex][0],
-					SUB_POS[this.subYPosIndex][1],
-					16,
-					16);
 			}
 		}
+
+		let fairyPositions;
 
 		if (this.showCopyOK) {
-			// Draw fairy
-			Context.drawImage(
-				this.charSelectSheet,
-				150 + (19 * this.frameIndex),
-				265,
-				16,
-				16,
-				30,
-				FINAL_POS[this.confirmIndex],
-				16,
-				16);
-
-			Text.write("COPY OK", 50, 170);
+			fairyPositions = [30, FINAL_POS[this.confirmIndex]];
+		} else if (this.showWhichWindow) {
+			fairyPositions = [SUB_POS[this.subYPosIndex][0], SUB_POS[this.subYPosIndex][1]];
+		} else {
+			fairyPositions = [30, this.fairyPositions[this.yPosIndex]];
 		}
+
+		// Draw fairy
+		Context.drawImage(this.charSelectSheet, 150 + (19 * this.frameIndex), 265, 16, 16, fairyPositions[0], fairyPositions[1], 16, 16);
 	}
 }
