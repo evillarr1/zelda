@@ -5,6 +5,7 @@ import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
 import SaveLoad from "../../../core/SaveLoad";
 import CopyPlayer from "./copyPlayer";
+import ErasePlayer from "./erasePlayer";
 
 const POS = [70, 100, 130, 175, 190];
 
@@ -20,7 +21,8 @@ export default class NameSelect {
 		this.music = new Howl({
 			urls: ["/music/intro/charSelect/charSelect.mp4"],
 			autoplay: true,
-			loop: true
+			loop: true,
+			volume: 0.7
 		});
 
 		// Keep track of fairy animation
@@ -52,7 +54,10 @@ export default class NameSelect {
 					if (this.numOfChars === 0) {
 						Sound.play("menu/error");
 					} else {
+						let erasePlayer = new ErasePlayer(this.music);
 						Sound.play("menu/select");
+
+						State.push(erasePlayer);
 					}
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {

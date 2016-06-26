@@ -12,4 +12,8 @@ export default class SaveLoad {
 
 		return JSON.parse(localStorage.getItem(`ZELDA-${slot}`));
 	}
+
+	static remove(slot) {
+		localStorage.removeItem(`ZELDA-${slot}`);
+	}
 }

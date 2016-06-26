@@ -4,17 +4,15 @@ import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 import SaveLoad from "../../../core/SaveLoad";
 
-const POS = [90, 120, 150, 190];
-const SUB_POS = [[140, 100], [140, 120], [30, 190]];
+const POS = [110, 130, 150, 190];
 const FINAL_POS = [170, 190];
 
-export default class CopyPlayer {
+export default class ErasePlayer {
 	constructor(music) {
 		// Create a new image for the name select screen
 		this.nameSelectSheet = new Image();
 		this.nameSelectSheet.src = "img/intro/charSelect/charSelect.png";
-		this.showWhichWindow = false;
-		this.showCopyOK = false;
+		this.showConfirm = false;
 		this.music = music;
 
 		// Keep track of fairy animation
@@ -22,9 +20,7 @@ export default class CopyPlayer {
 		this.frames = 0;
 		this.frameIndex = 0;
 		this.yPosIndex = 0;
-		this.subYPosIndex = 0;
 		this.confirmIndex = 0;
-		this.textAnimationCount = 0;
 
 		this.loadChars();
 
@@ -33,63 +29,39 @@ export default class CopyPlayer {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				Sound.play("menu/select");
 
-				if (!this.showWhichWindow) {
+				if (!this.showConfirm) {
 					if (this.yPosIndex === this.fairyPositions.length - 1) {
 						State.pop({
 							dontPause: true
 						});
 					}
-					this.showWhichWindow = true;
-				} else if (this.showCopyOK) {
+					this.showConfirm = true;
+				} else if (this.showConfirm) {
 					if (this.confirmIndex === 0) {
-						let stateIndex = [0, 1, 2];
-						let count = 0;
-						let state;
+						let chars = this.char.filter((val) => {
+							return val;
+						});
 
-						for (let i = 0; i < stateIndex.length; i++) {
-							if (this.char[i]) {
-								count++;
-							}
-
-							if (!state && count === this.yPosIndex + 1) {
-								state = this.char[i];
-								stateIndex.splice(i, 1);
-							}
-						}
-
-						state.slot = stateIndex[this.subYPosIndex];
-						SaveLoad.save(state, stateIndex[this.subYPosIndex]);
+						SaveLoad.remove(chars[this.yPosIndex].slot);
 					}
 
 					State.pop({
 						dontPause: true
 					});
-				} else if (this.showWhichWindow) {
-					if (this.subYPosIndex === 2) {
-						State.pop({
-							dontPause: true
-						});
-					} else {
-						this.showCopyOK = true;
-					}
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				Sound.play("menu/cursor");
 
-				if (this.showCopyOK) {
+				if (this.showConfirm) {
 					this.confirmIndex = (this.confirmIndex + 1) % FINAL_POS.length;
-				} else if (this.showWhichWindow) {
-					this.subYPosIndex = (this.subYPosIndex + 1) % SUB_POS.length;
 				} else {
 					this.yPosIndex = (this.yPosIndex + 1) % this.fairyPositions.length;
 				}
 			} else if (event.keyCode === KeyCodes.UP) {
 				Sound.play("menu/cursor");
 
-				if (this.showCopyOK) {
+				if (this.showConfirm) {
 					this.confirmIndex = (this.confirmIndex - 1) < 0 ? FINAL_POS.length - 1 : this.confirmIndex - 1;
-				} else if (this.showWhichWindow) {
-					this.subYPosIndex = (this.subYPosIndex - 1) < 0 ? SUB_POS.length - 1 : this.subYPosIndex - 1;
 				} else if (--this.yPosIndex < 0) {
 					this.yPosIndex = this.fairyPositions.length - 1;
 				}
@@ -153,7 +125,7 @@ export default class CopyPlayer {
 			Constants.GAME_WIDTH,
 			Constants.GAME_HEIGHT);
 
-		if (!this.showWhichWindow) {
+		if (!this.showConfirm) {
 			// Draw fairy
 			Context.drawImage(
 				this.nameSelectSheet,
@@ -167,8 +139,9 @@ export default class CopyPlayer {
 				16);
 		}
 
-		Text.write("COPY  PLAYER", 40, 23);
-		Text.write("(WHICH?)", 30, 64);
+		Text.write("ERASE  PLAYER", 40, 23);
+		Text.write("WHICH PLAYER DO YOU WANT", 30, 64);
+		Text.write("TO ERASE ?", 30, 84);
 		Text.write("QUIT", 50, 190);
 
 		// Draw char info
@@ -176,67 +149,17 @@ export default class CopyPlayer {
 			let char = this.char[i];
 
 			if (char) {
-				if (!this.showWhichWindow || this.yPosIndex === i) {
+				if (!this.showConfirm || this.yPosIndex === i) {
 					// Draw name text
-					Text.write(`${i + 1}. ${char.charName}`, 65, POS[i]);
+					Text.write(`${i + 1}.${char.charName}`, 50, POS[i]);
 				}
-			} else if (!this.showWhichWindow) {
-				Text.write(`${i + 1}.`, 65, POS[i]);
+			} else if (!this.showConfirm) {
+				Text.write(`${i + 1}.`, 50, POS[i]);
 			}
 		}
+		
 
-		if (this.showWhichWindow) {
-			// Show which window box
-			Context.drawImage(
-				this.nameSelectSheet,
-				275,
-				225,
-				99,
-				77,
-				130,
-				70,
-				99,
-				77);
-
-			if (this.showCopyOK || this.textAnimationCount > 14) {
-				Text.write("(TO WHICH?)", 137, 80);
-			}
-
-			let count = 0;
-			let removeName = 0;
-
-			// Draw numbers and names
-			for (let i = 0; i < 3; i++) {
-				let char = this.char[i].charName || "";
-
-				if (char) {
-					removeName++;
-				}
-
-				if (removeName !== (this.yPosIndex + 1)) {
-					Text.write(`${i + 1}. ${char}`, 160, 102 + (count * 22), 6);
-					count++;
-				} else if (removeName === this.yPosIndex + 1) {
-					removeName++;
-				}
-			}
-
-			if (!this.showCopyOK) {
-				// Draw fairy
-				Context.drawImage(
-					this.nameSelectSheet,
-					150 + (19 * this.frameIndex),
-					265,
-					16,
-					16,
-					SUB_POS[this.subYPosIndex][0],
-					SUB_POS[this.subYPosIndex][1],
-					16,
-					16);
-			}
-		}
-
-		if (this.showCopyOK) {
+		if (this.showConfirm) {
 			// Draw fairy
 			Context.drawImage(
 				this.nameSelectSheet,
@@ -249,7 +172,7 @@ export default class CopyPlayer {
 				16,
 				16);
 
-			Text.write("COPY OK", 50, 170);
+			Text.write("ERASE THIS PLAYER", 50, 170);
 		}
 	}
 }
