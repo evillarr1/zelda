@@ -6,6 +6,7 @@ import "howler";
 import State from "./State";
 import Sound from "./Sound";
 import Text from "./Text";
+import Structure from "./Structure"
 
 export default class Game {
 	constructor() {
@@ -37,6 +38,9 @@ export default class Game {
 
 		// Setup the text engine
 		window.Text = new Text();
+
+		// Setup the structure engine
+		window.Structure = new Structure();
 
 		// Store the canvas/context elements on the window to make it available to every page
 		window.Canvas = document.getElementById("canvas");
