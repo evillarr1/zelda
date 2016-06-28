@@ -64,15 +64,18 @@ const ITEM = {
 	},
 	CHEST_CLOSED: {
 		TOP: [104, 659, 16, 16]
+	},
+	HOUSE_FLOOR: {
+		TOP: [323, 518, 16, 16]
 	}
 };
 
 const WALL = {
 	HOUSE: {
-		TOP: [[24, 88, 16, 24, 39, 30], [190, 216, 24, 24, 15, 30], [215, 216, 24, 24, 215, 30]],
-		BOTTOM: [[24, 128, 16, 24, 39, 198],[190, 243, 24, 24, 15, 198],[215, 243, 24, 24, 215, 198]],
-		LEFT: [[0, 112, 24, 16, 15, 54], [166, 217, 24, 24, 15, 30], [166, 242, 24, 24, 15, 198]],
-		RIGHT: [[40, 112, 24, 16, 215, 54], [239, 217, 24, 24, 215, 30],[239, 242, 24, 24, 215, 198]]
+		TOP: [[542, 623, 16, 32, 39, 30], [478, 702, 24, 24, 15, 30], [503, 702, 24, 24, 215, 30]],
+		BOTTOM: [[525, 623, 16, 32, 39, 190], [478, 729, 24, 24, 15, 198], [503, 729, 24, 24, 215, 198]],
+		LEFT: [[559, 623, 32, 16, 15, 54], [454, 703, 24, 24, 15, 30], [454, 728, 24, 24, 15, 198]],
+		RIGHT: [[559, 640, 32, 16, 207, 54], [527, 703, 24, 24, 215, 30], [527, 728, 24, 24, 215, 198]]
 	}
 };
 
@@ -80,7 +83,7 @@ export default class Structure {
 	constructor() {
 		// Create a new image for the name select screen
 		this.house = new Image();
-		this.house.src = "img/generic/houseInterior.png";
+		this.house.src = "img/mainSheet.png";
 	}
 
 	draw(item, direction, xPos, yPos) {
@@ -113,6 +116,12 @@ export default class Structure {
 				yPos + (separator * i * leftRight),
 				xWidth,
 				yWidth);
+		}
+	}
+
+	drawFloor(type) {
+		for (let i = 0; i < 8; i++) {
+			this.drawX(type, "TOP", 47, 62 + (i * 16), 16, 10);
 		}
 	}
 
