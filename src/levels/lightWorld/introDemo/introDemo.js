@@ -30,10 +30,10 @@ export default class IntroDemo {
 	constructor() {
 		// Create the music element for the screen
 		this.music = new Howl({
-			urls: ["/sounds/weather/wind.m4a"],
+			urls: ["/sounds/weather/rain.m4a"],
 			autoplay: true,
 			loop: true,
-			volume: 0.6
+			volume: 0.3
 		});
 
 		let blueMask = () => {
