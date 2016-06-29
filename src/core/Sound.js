@@ -16,6 +16,9 @@ export default class Sound {
 			});
 		}
 
-		sound.play();
+		// Only play the sound if it isn't already playing already
+		if (sound._audioNode[0].paused) {
+			sound.play();
+		}
 	}
 }

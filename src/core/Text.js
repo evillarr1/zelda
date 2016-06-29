@@ -88,7 +88,7 @@ export default class Text {
 		this.scrollStr = "";
 		this.isScrolling = 0;
 		this.scrollingTick = 0;
-		this.displayComplete = true;
+		this.displayComplete = false;
 	}
 
 	write(text, xPos, yPos, displayComplete) {
@@ -162,7 +162,7 @@ export default class Text {
 
 		// Don't do anything if we don't have anymore text
 		if (!this.scrollStr) {
-			return;
+			return true;
 		}
 
 		// Split the string into the first 4 lines
@@ -173,12 +173,17 @@ export default class Text {
 			displayComplete = true;
 
 			if (this.isScrolling === 0) {
+				// Only play the complete sound once
+				if (!this.displayComplete) {
+					Sound.play("menu/textDone");
+				}
 				this.displayComplete = true;
 			}
 		} else if (this.charTick++ >= TICK) {
 			// Slowly increase the number of characters using the interval
 			this.charTick = 0;
 			this.charInterval++;
+			Sound.play("menu/textLetter");
 		}
 
 		// Cut out only the characters needed in this interval
@@ -190,7 +195,7 @@ export default class Text {
 	animateScroll() {
 		// Don't do anything if we don't have anymore text or if the text is currently animating/displaying
 		if (!this.scrollStr || !this.displayComplete) {
-			return;
+			return true;
 		}
 
 		// If no new lines exist in the paragraph, then just remove the line

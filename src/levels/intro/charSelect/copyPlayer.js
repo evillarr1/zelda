@@ -2,7 +2,7 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
-import SaveLoad from "../../../core/SaveLoad";
+import Storage from "../../../core/Storage";
 
 const POS = [90, 120, 150, 190];
 const SUB_POS = [[140, 100], [140, 120], [30, 190]];
@@ -47,7 +47,7 @@ export default class CopyPlayer {
 
 						stateIndex.splice(state.slot, 1);
 						state.slot = stateIndex[this.subYPosIndex];
-						SaveLoad.save(state, stateIndex[this.subYPosIndex]);
+						Storage.save(state, stateIndex[this.subYPosIndex]);
 					}
 
 					State.pop({
@@ -96,7 +96,7 @@ export default class CopyPlayer {
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			let char = SaveLoad.load(i);
+			let char = Storage.load(i);
 
 			if (char) {
 				this.chars.push(char);

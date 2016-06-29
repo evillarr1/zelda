@@ -3,7 +3,7 @@
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
 import RegisterName from "./registerName";
-import SaveLoad from "../../../core/SaveLoad";
+import Storage from "../../../core/Storage";
 import CopyPlayer from "./copyPlayer";
 import ErasePlayer from "./erasePlayer";
 import LightWorld from "../../lightWorld/LightWorld";
@@ -33,7 +33,7 @@ export default class NameSelect {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				if (this.yPosIndex < 3) {
 					Sound.play("menu/select");
-					let newChar = SaveLoad.load(this.yPosIndex);
+					let newChar = Storage.load(this.yPosIndex);
 
 					// Start the game if the user selects an already created state
 					if (newChar) {
@@ -94,7 +94,7 @@ export default class NameSelect {
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			let char = SaveLoad.load(i);
+			let char = Storage.load(i);
 
 			if (char) {
 				this.chars.push(char);

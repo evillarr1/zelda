@@ -2,7 +2,7 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
-import SaveLoad from "../../../core/SaveLoad";
+import Storage from "../../../core/Storage";
 
 const POS = [110, 130, 150, 190];
 const FINAL_POS = [170, 190];
@@ -35,7 +35,7 @@ export default class ErasePlayer {
 				} else {
 					// If the confirm dialogue is displayed and confirm is selected, then remove the player slot
 					if (this.showConfirm && this.confirmIndex === 0) {
-						SaveLoad.remove(this.chars[this.yPosIndex].slot);
+						Storage.remove(this.chars[this.yPosIndex].slot);
 					}
 
 					// Return back to the previous screen
@@ -73,7 +73,7 @@ export default class ErasePlayer {
 
 		// Load the save states
 		for (let i = 0; i < 3; i++) {
-			let char = SaveLoad.load(i);
+			let char = Storage.load(i);
 
 			if (char) {
 				this.chars.push(char);

@@ -36,6 +36,32 @@ export default class IntroDemo {
 			volume: 0.6
 		});
 
+		let blueMask = () => {
+			Context.beginPath();
+			Context.globalAlpha = 0.6;
+			Context.fillStyle = "#040188";
+			Context.fillRect(0, 0, Canvas.width, Canvas.height);
+			Context.fill();
+			Context.globalAlpha = 1;
+			Context.closePath();
+		};
+
+		this.storyState = [() => {
+			blueMask();
+
+			if (Animate.openingCircle(this)) {
+				this.storyState.shift();
+			}
+		}, () => {
+			blueMask();
+
+			if (Text.drawScrollText(38, 145)) {
+				this.storyState.shift();
+			}
+		}, () => {
+
+		}];
+
 		Text.setScrollText(DIALOGUE.SCROLL);
 
 		// Setup the key bindings
@@ -53,7 +79,8 @@ export default class IntroDemo {
 		IntroDemo.bottomWall();
 		IntroDemo.topWall();
 		IntroDemo.rightWall();
-		Text.drawScrollText(38, 145);
+
+		this.storyState[0]();
 	}
 
 	static floor() {

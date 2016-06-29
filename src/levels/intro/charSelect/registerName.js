@@ -2,7 +2,7 @@
 
 import Constants from "../../../constants/Constants";
 import KeyCodes from "../../../constants/KeyCodes";
-import SaveLoad from "../../../core/SaveLoad";
+import Storage from "../../../core/Storage";
 
 const POS = [132, 148, 164, 180];
 const MAIN_DISTANCE = 16;
@@ -79,7 +79,7 @@ export default class RegisterName {
 						slot: this.slot
 					};
 
-					SaveLoad.save(state, slot);
+					Storage.save(state, slot);
 
 					Sound.play(("menu/select"));
 

@@ -1,6 +1,6 @@
 "use strict";
 
-export default class SaveLoad {
+export default class Storage {
 	static save(state, slot = 0) {
 		localStorage.setItem(`ZELDA-${slot}`, JSON.stringify(state));
 	}
