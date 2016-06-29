@@ -60,7 +60,8 @@ function webserver() {
 
 	gulp.src("build")
 		.pipe(server({
-			livereload: true
+			livereload: true,
+			open: true
 		}));
 }
 
