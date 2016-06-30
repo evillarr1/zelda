@@ -13,6 +13,13 @@ export default class Game {
 	constructor() {
 		this.configure();
 		new Intro();
+
+		// Preload this user for development
+		window.Link = {
+			charName: "Link",
+			hearts: 3,
+			slot: 999
+		}
 	}
 
 	configure() {

@@ -23,7 +23,10 @@ seal. ... ...
 I am in the dungeon of the
 castle.
 
-Please help me...`
+Please help me...`,
+	ZELDA: `, I'm going out for a
+while. I'll be back by morning.
+Don't leave the house.`
 };
 
 export default class IntroDemo {
@@ -63,10 +66,21 @@ export default class IntroDemo {
 			blueMask();
 
 			if (Text.drawScrollText(38, 145)) {
-				this.storyState.shift();
 				this.music.openingDemo.play();
+				this.jumpOffBed = false;
+				this.storyState.shift();
 			}
 		}, () => {
+			if (Animate.linkSnoozing(this, 56, 61)) {
+				Animate.linkJumpingOffBed(this, 56, 66, false);
+				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152);
+
+				if (this.jumpOffBed) {
+					this.storyState.shift();
+				}
+			}
+		}, () => {
+			Animate.linkJumpingOffBed(this, 56, 66, true);
 		}];
 
 		Text.setScrollText(DIALOGUE.SCROLL);
@@ -75,6 +89,9 @@ export default class IntroDemo {
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				Text.animateScroll();
+				if (this.jumpOffBed === false) {
+					this.jumpOffBed = true;
+				}
 			}
 		};
 	}

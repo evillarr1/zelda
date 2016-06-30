@@ -40,7 +40,7 @@ export default class NameSelect {
 					// Start the game if the user selects an already created state
 					if (newChar) {
 						State.pop();
-						window.Zelda = newChar;
+						window.Link = newChar;
 
 						new LightWorld();
 					} else {

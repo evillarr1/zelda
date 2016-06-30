@@ -2,6 +2,8 @@
 
 export default class Animate {
 	constructor() {
+		this.link = new Image();
+		this.link.src = "img/link.png";
 	}
 
 	openingCircle(obj) {
@@ -26,4 +28,53 @@ export default class Animate {
 		ContextMask.restore();
 		ContextMask.closePath();
 	}
+
+	linkSnoozing(obj, xPos, yPos) {
+		if (obj["LINK_WAKING_COUNTER"] >= 50) {
+			return true;
+		}
+
+		if (!obj["LINK_WAKING_COUNTER"]) {
+			obj["LINK_WAKING_COUNTER"] = 0;
+		}
+
+		Context.drawImage(
+			this.link,
+			12 + (36 * Math.floor(obj["LINK_WAKING_COUNTER"]++ / 2)),
+			4,
+			30,
+			45,
+			xPos,
+			yPos,
+			30,
+			45
+		)
+	}
+
+	linkJumpingOffBed(obj, xPos, yPos, animate) {
+		if (obj["LINK_JUMPING_OFF_BED_COUNTER"] >= 34) {
+			return true;
+		}
+
+		if (!obj["LINK_JUMPING_OFF_BED_COUNTER"]) {
+			obj["LINK_JUMPING_OFF_BED_COUNTER"] = 0;
+		}
+
+		Context.drawImage(
+			this.link,
+			50 * Math.floor(obj["LINK_JUMPING_OFF_BED_COUNTER"] / 2),
+			55,
+			50,
+			50,
+			xPos,
+			yPos,
+			50,
+			50
+		)
+
+		if (animate) {
+			obj["LINK_JUMPING_OFF_BED_COUNTER"]++;
+		}
+	}
+
 }
