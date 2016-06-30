@@ -41,8 +41,14 @@ export default class IntroDemo {
 			}),
 			"openingDemo": new Howl({
 				urls: ["/music/lightWorld/introDemo/openingDemo.m4a"],
-				loop: true,
-				volume: 0.5
+				volume: 0.5,
+				sprite: {
+					complete: [0, 27141],
+					riseOnly: [6800, 27141]
+				},
+				onend: () => {
+					this.music.openingDemo.play("riseOnly");
+				}
 			})
 		};
 
@@ -67,8 +73,9 @@ export default class IntroDemo {
 		}, () => {
 			blueMask();
 
+			Paint.draw("LINK_SLEEPING_IN_BED", "TOP", 56, 72, "link");
 			if (Text.drawScrollText(38, 145)) {
-				this.music.openingDemo.play();
+				this.music.openingDemo.play("complete");
 				this.jumpOffBed = false;
 				this.storyState.shift();
 				this.storyStateIndex++;

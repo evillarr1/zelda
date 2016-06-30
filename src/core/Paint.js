@@ -79,6 +79,9 @@ const ITEM = {
 	TEXT_BOX_FRAME: {
 		TOP: [627, 667, 190, 67]
 	},
+	LINK_SLEEPING_IN_BED: {
+		TOP: [12, 15, 30, 31]
+	},
 	LINK_SITTIN_IN_BED: {
 		TOP: [0, 55, 50, 50]
 	},

@@ -70,6 +70,8 @@ function watch() {
 	gulp.watch(paths.mainHtml, gulp.series(html));
 	gulp.watch(paths.allImages, gulp.series(images));
 	gulp.watch(paths.allStyles, gulp.series(styles));
+	gulp.watch(paths.allMusic, gulp.series(music));
+	gulp.watch(paths.allSounds, gulp.series(music));
 }
 
 gulp.task("build", gulp.series(clean, html, images, styles, scripts, music, sounds));
