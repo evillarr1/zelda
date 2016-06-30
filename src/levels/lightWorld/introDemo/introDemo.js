@@ -73,7 +73,7 @@ export default class IntroDemo {
 		}, () => {
 			if (Animate.linkSnoozing(this, 56, 61)) {
 				Animate.linkJumpingOffBed(this, 56, 66, false);
-				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152);
+				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 
 				if (this.jumpOffBed) {
 					this.storyState.shift();

@@ -83,6 +83,9 @@ export default class Text {
 		// Create a new image for the name select screen
 		this.text = new Image();
 		this.text.src = "img/characters.png";
+		this.mainSheet = new Image();
+		this.mainSheet.src = "img/mainSheet.png";
+
 		this.charTick = 0;
 		this.charInterval = 0;
 		this.scrollStr = "";
@@ -91,7 +94,7 @@ export default class Text {
 		this.displayComplete = false;
 	}
 
-	write(text, xPos, yPos, displayComplete) {
+	write(text, xPos, yPos, displayComplete, showFrame = false) {
 		let offset = 0;
 		let newLine = 0;
 
@@ -103,6 +106,19 @@ export default class Text {
 				offset = 0;
 			} else {
 				let [xCor, yCor, width, height]= CHAR_MAP[text[i]];
+
+				if (showFrame) {
+					Context.drawImage(
+						this.mainSheet,
+						627,
+						667,
+						190,
+						67,
+						xPos - 8,
+						yPos - 9,
+						190,
+						67);
+				}
 
 				// If the text is currently animating and it is the first line, perform a clipping animation on it
 				if (this.isScrolling && newLine === 0) {
