@@ -19,12 +19,14 @@ export default class NameSelect {
 		this.linkSheet.src = "img/link.png";
 
 		// Create the music element for the screen
-		this.music = new Howl({
-			urls: ["/music/intro/charSelect/charSelect.mp4"],
-			autoplay: true,
-			loop: true,
-			volume: 0.7
-		});
+		this.music = {
+			"charSelect": new Howl({
+				urls: ["/music/intro/charSelect/charSelect.mp4"],
+				autoplay: true,
+				loop: true,
+				volume: 0.7
+			})
+		};
 
 		this.loadState();
 

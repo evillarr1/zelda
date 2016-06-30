@@ -11,11 +11,13 @@ export default class Title {
 		this.titleSheet.src = "img/intro/title/title.png";
 
 		// Create the music element for the screen
-		this.music = new Howl({
-			urls: ["/music/intro/title/title.mp4"],
-			autoplay: true,
-			loop: false
-		});
+		this.music = {
+			"title": new Howl({
+				urls: ["/music/intro/title/title.mp4"],
+				autoplay: true,
+				loop: false
+			})
+		};
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {

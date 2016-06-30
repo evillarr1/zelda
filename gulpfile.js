@@ -6,7 +6,7 @@ const webpackConfig = require("./webpack.config.js");
 
 const paths = {
 	allScripts: ["src/**/*.js"],
-	allMusic: ["src/levels/**/*.mp4", "src/levels/**/*.mp3"],
+	allMusic: ["src/levels/**/*.m*"],
 	allSounds: ["src/assets/sounds/**/*"],
 	entryScript: ["src/app.js"],
 	allImages: ["src/levels/**/*.png", "src/assets/icons/**/*", "src/assets/img/*.png"],
