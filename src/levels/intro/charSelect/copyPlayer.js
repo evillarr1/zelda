@@ -10,7 +10,7 @@ const FINAL_POS = [170, 190];
 
 export default class CopyPlayer {
 	constructor(music) {
-		// Create a new image for the name select screen
+		// Create a new image
 		this.charSelectSheet = new Image();
 		this.charSelectSheet.src = "img/intro/charSelect/charSelect.png";
 		this.showWhichWindow = false;

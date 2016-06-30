@@ -12,7 +12,7 @@ const POS = [70, 100, 130, 175, 190];
 
 export default class NameSelect {
 	constructor() {
-		// Create a new image for the name select screen
+		// Create a new image
 		this.charSelectSheet = new Image();
 		this.charSelectSheet.src = "img/intro/charSelect/charSelect.png";
 		this.linkSheet = new Image();

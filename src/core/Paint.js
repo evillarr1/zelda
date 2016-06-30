@@ -101,7 +101,7 @@ const WALL = {
 
 export default class Paint {
 	constructor() {
-		// Create a new image for the name select screen
+		// Create a new image
 		this.house = new Image();
 		this.house.src = "img/mainSheet.png";
 		this.link = new Image();

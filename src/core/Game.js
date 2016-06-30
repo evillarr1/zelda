@@ -8,6 +8,7 @@ import Sound from "./Sound";
 import Text from "./Text";
 import Paint from "./Paint"
 import Animate from "./Animate";
+import Characters from "./Characters";
 
 export default class Game {
 	constructor() {
@@ -47,7 +48,7 @@ export default class Game {
 		// Setup the game's state handler
 		window.State = new State();
 
-		// Setup the game's sound engine
+		// Setup the sound service
 		window.Sound = new Sound();
 
 		// Setup the text service
@@ -58,5 +59,8 @@ export default class Game {
 
 		// Setup the animation service
 		window.Animate = new Animate();
+
+		// Setup character/npc service
+		window.Characters = new Characters();
 	}
 }

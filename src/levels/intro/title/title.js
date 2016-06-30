@@ -6,7 +6,7 @@ import NameSelect from "../charSelect/charSelect";
 
 export default class Title {
 	constructor() {
-		// Create a new image for the title screen
+		// Create a new image
 		this.titleSheet = new Image();
 		this.titleSheet.src = "img/intro/title/title.png";
 

@@ -80,7 +80,7 @@ const HORIZONTAL_SPACE = 16;
 
 export default class Text {
 	constructor() {
-		// Create a new image for the name select screen
+		// Create a new image
 		this.text = new Image();
 		this.text.src = "img/characters.png";
 		this.mainSheet = new Image();

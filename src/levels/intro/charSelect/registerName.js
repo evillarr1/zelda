@@ -21,7 +21,7 @@ export default class RegisterName {
 	constructor(music, slot = 0) {
 		this.nameText = [];
 
-		// Create a new image for the name select screen
+		// Create a new image
 		this.registerNameSheet = new Image();
 		this.registerNameSheet.src = "img/intro/charSelect/charSelect.png";
 
