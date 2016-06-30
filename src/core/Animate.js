@@ -51,7 +51,7 @@ export default class Animate {
 		)
 	}
 
-	linkJumpingOffBed(obj, xPos, yPos, animate) {
+	linkJumpingOffBed(obj, xPos, yPos) {
 		if (obj["LINK_JUMPING_OFF_BED_COUNTER"] >= 34) {
 			return true;
 		}
@@ -62,7 +62,7 @@ export default class Animate {
 
 		Context.drawImage(
 			this.link,
-			50 * Math.floor(obj["LINK_JUMPING_OFF_BED_COUNTER"] / 2),
+			50 * Math.floor(obj["LINK_JUMPING_OFF_BED_COUNTER"]++ / 2),
 			55,
 			50,
 			50,
@@ -71,10 +71,5 @@ export default class Animate {
 			50,
 			50
 		)
-
-		if (animate) {
-			obj["LINK_JUMPING_OFF_BED_COUNTER"]++;
-		}
 	}
-
 }

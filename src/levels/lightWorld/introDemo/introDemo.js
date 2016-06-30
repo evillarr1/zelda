@@ -56,11 +56,13 @@ export default class IntroDemo {
 			Context.closePath();
 		};
 
+		this.storyStateIndex = 0;
 		this.storyState = [() => {
 			blueMask();
 
 			if (Animate.openingCircle(this)) {
 				this.storyState.shift();
+				this.storyStateIndex++;
 			}
 		}, () => {
 			blueMask();
@@ -69,18 +71,26 @@ export default class IntroDemo {
 				this.music.openingDemo.play();
 				this.jumpOffBed = false;
 				this.storyState.shift();
+				this.storyStateIndex++;
 			}
 		}, () => {
 			if (Animate.linkSnoozing(this, 56, 61)) {
-				Animate.linkJumpingOffBed(this, 56, 66, false);
+				Paint.draw("LINK_SITTIN_IN_BED", "TOP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 
 				if (this.jumpOffBed) {
 					this.storyState.shift();
+					this.storyStateIndex++;
 				}
 			}
 		}, () => {
-			Animate.linkJumpingOffBed(this, 56, 66, true);
+			if (Animate.linkJumpingOffBed(this, 56, 66)) {
+				Paint.draw("UNCOVERED_COMFORTER", "TOP", 56, 86, "link");
+				this.storyState.shift();
+				this.storyStateIndex++;
+			}
+		}, () => {
+			Paint.draw("UNCOVERED_COMFORTER", "TOP", 56, 86, "link");
 		}];
 
 		Text.setScrollText(DIALOGUE.SCROLL);
@@ -89,7 +99,7 @@ export default class IntroDemo {
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				Text.animateScroll();
-				if (this.jumpOffBed === false) {
+				if (this.storyStateIndex === 2) {
 					this.jumpOffBed = true;
 				}
 			}
@@ -98,7 +108,7 @@ export default class IntroDemo {
 
 	draw() {
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-		Structure.drawFloor("HOUSE_FLOOR");
+		Paint.drawFloor("HOUSE_FLOOR");
 
 		IntroDemo.leftWall();
 		IntroDemo.rightWall();
@@ -111,46 +121,46 @@ export default class IntroDemo {
 
 	static floor() {
 		// Static elements
-		Structure.drawX("POT_STAND", "LEFT", 39, 70, 16, 3);
-		Structure.draw("BED", "TOP", 55, 70);
-		Structure.draw("TABLE_LARGE", "TOP", 151, 110);
-		Structure.draw("TABLE_SMALL", "TOP", 55, 158);
-		Structure.draw("BENCH", "TOP", 167, 142);
-		Structure.draw("BENCH", "TOP", 167, 94);
+		Paint.drawX("POT_STAND", "LEFT", 39, 70, 16, 3);
+		Paint.draw("BED", "TOP", 55, 70);
+		Paint.draw("TABLE_LARGE", "TOP", 151, 110);
+		Paint.draw("TABLE_SMALL", "TOP", 55, 158);
+		Paint.draw("BENCH", "TOP", 167, 142);
+		Paint.draw("BENCH", "TOP", 167, 94);
 
 		// Dynamic elements
-		Structure.draw("POT", "TOP", 39, 70);
-		Structure.draw("POT", "TOP", 39, 86);
-		Structure.draw("POT", "TOP", 39, 102);
-		Structure.draw("CHEST_CLOSED", "TOP", 190, 158);
+		Paint.draw("POT", "TOP", 39, 70);
+		Paint.draw("POT", "TOP", 39, 86);
+		Paint.draw("POT", "TOP", 39, 102);
+		Paint.draw("CHEST_CLOSED", "TOP", 190, 158);
 	}
 
 	static topWall() {
-		Structure.drawWall("HOUSE", "TOP");
+		Paint.drawWall("HOUSE", "TOP");
 
-		Structure.draw("MOLDING", "TOP", 63, 46);
-		Structure.draw("CABINET_LARGE", "TOP", 103, 46);
-		Structure.draw("WELL", "TOP", 167, 46);
+		Paint.draw("MOLDING", "TOP", 63, 46);
+		Paint.draw("CABINET_LARGE", "TOP", 103, 46);
+		Paint.draw("WELL", "TOP", 167, 46);
 	}
 
 	static leftWall() {
-		Structure.drawWall("HOUSE", "LEFT");
+		Paint.drawWall("HOUSE", "LEFT");
 
-		Structure.draw("WINDOW", "LEFT", 15, 118);
+		Paint.draw("WINDOW", "LEFT", 15, 118);
 	}
 
 	static bottomWall() {
-		Structure.drawWall("HOUSE", "BOTTOM");
+		Paint.drawWall("HOUSE", "BOTTOM");
 
-		Structure.draw("WINDOW", "BOTTOM", 48, 198);
-		Structure.draw("WINDOW", "BOTTOM", 174, 198);
-		Structure.draw("DOOR", "BOTTOM", 112, 198);
-		Structure.draw("DOOR_FRAME", "BOTTOM", 112, 198);
+		Paint.draw("WINDOW", "BOTTOM", 48, 198);
+		Paint.draw("WINDOW", "BOTTOM", 174, 198);
+		Paint.draw("DOOR", "BOTTOM", 112, 198);
+		Paint.draw("DOOR_FRAME", "BOTTOM", 112, 198);
 	}
 
 	static rightWall() {
-		Structure.drawWall("HOUSE", "RIGHT");
+		Paint.drawWall("HOUSE", "RIGHT");
 
-		Structure.draw("WINDOW", "RIGHT", 215, 118);
+		Paint.draw("WINDOW", "RIGHT", 215, 118);
 	}
 }

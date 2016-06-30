@@ -108,16 +108,7 @@ export default class Text {
 				let [xCor, yCor, width, height]= CHAR_MAP[text[i]];
 
 				if (showFrame) {
-					Context.drawImage(
-						this.mainSheet,
-						627,
-						667,
-						190,
-						67,
-						xPos - 8,
-						yPos - 9,
-						190,
-						67);
+					Paint.draw("TEXT_BOX_FRAME", "TOP", xPos - 8, yPos - 9);
 				}
 
 				// If the text is currently animating and it is the first line, perform a clipping animation on it

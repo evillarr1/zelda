@@ -75,6 +75,15 @@ const ITEM = {
 		BOTTOM: [442, 346, 32, 40],
 		LEFT: [476, 337, 40, 32],
 		RIGHT: [476, 304, 40, 32]
+	},
+	TEXT_BOX_FRAME: {
+		TOP: [627, 667, 190, 67]
+	},
+	LINK_SITTIN_IN_BED: {
+		TOP: [0, 55, 50, 50]
+	},
+	UNCOVERED_COMFORTER: {
+		TOP: [800, 75, 30, 17]
 	}
 };
 
@@ -87,18 +96,20 @@ const WALL = {
 	}
 };
 
-export default class Structure {
+export default class Paint {
 	constructor() {
 		// Create a new image for the name select screen
 		this.house = new Image();
 		this.house.src = "img/mainSheet.png";
+		this.link = new Image();
+		this.link.src = "img/link.png";
 	}
 
-	draw(item, direction, xPos, yPos) {
+	draw(item, direction, xPos, yPos, imageSet = "house") {
 		let [xCor, yCor, xWidth, yWidth]= ITEM[item][direction];
 
 		Context.drawImage(
-			this.house,
+			this[imageSet],
 			xCor,
 			yCor,
 			xWidth,

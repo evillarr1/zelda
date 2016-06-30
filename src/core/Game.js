@@ -6,7 +6,7 @@ import "howler";
 import State from "./State";
 import Sound from "./Sound";
 import Text from "./Text";
-import Structure from "./Structure"
+import Paint from "./Paint"
 import Animate from "./Animate";
 
 export default class Game {
@@ -53,8 +53,8 @@ export default class Game {
 		// Setup the text service
 		window.Text = new Text();
 
-		// Setup the structure service
-		window.Structure = new Structure();
+		// Setup the Paint service
+		window.Paint = new Paint();
 
 		// Setup the animation service
 		window.Animate = new Animate();
