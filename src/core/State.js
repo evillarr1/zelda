@@ -21,7 +21,11 @@ export default class State {
 
 		// Pause the music if it is currently playing
 		if (el.music && !options.dontPause) {
-			el.music.pause()
+			let keys = Object.keys(el.music);
+
+			for (let i = 0; i < keys.length; i++) {
+				el.music[keys[i]].pause()
+			}
 		}
 
 		// Remove any key bindings from the previous event handler
