@@ -104,7 +104,7 @@ export default class IntroDemo {
 
 		Text.setScrollText(DIALOGUE.SCROLL);
 
-		this.currentStrokes = {};
+		this.currentStrokes = new Map();
 
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
@@ -116,66 +116,69 @@ export default class IntroDemo {
 				}
 			}
 
+			// Don't take more than two keystrokes
+			if (this.currentStrokes.size >= 2) {
+				return false;
+			}
+
 			if (event.keyCode === KeyCodes.DOWN) {
-				this.currentStrokes["DOWN"] = true;
+				this.currentStrokes.delete("UP");
+				this.currentStrokes.set("DOWN", true);
 			}
 
 			if (event.keyCode === KeyCodes.UP) {
-				this.currentStrokes["UP"] = true;
+				this.currentStrokes.delete("DOWN");
+				this.currentStrokes.set("UP", true);
 			}
 
 			if (event.keyCode === KeyCodes.LEFT) {
-				this.currentStrokes["LEFT"] = true;
+				this.currentStrokes.delete("RIGHT");
+				this.currentStrokes.set("LEFT", true);
 			}
 
 			if (event.keyCode === KeyCodes.RIGHT) {
-				this.currentStrokes["RIGHT"] = true;
+				this.currentStrokes.delete("LEFT");
+				this.currentStrokes.set("RIGHT", true);
 			}
 		};
 
 		document.onkeyup = (event) => {
 			if (event.keyCode === KeyCodes.DOWN) {
-				this.currentStrokes["DOWN"] = false;
+				this.currentStrokes.delete("DOWN");
 			}
 
 			if (event.keyCode === KeyCodes.UP) {
-				this.currentStrokes["UP"] = false;
+				this.currentStrokes.delete("UP");
 			}
 
 			if (event.keyCode === KeyCodes.LEFT) {
-				this.currentStrokes["LEFT"] = false;
+				this.currentStrokes.delete("LEFT");
 			}
 
 			if (event.keyCode === KeyCodes.RIGHT) {
-				this.currentStrokes["RIGHT"] = false;
+				this.currentStrokes.delete("RIGHT");
 			}
 		}
 	}
 
 	update() {
-		let arrowStrokes = 0;
-
-		if (this.currentStrokes["DOWN"]) {
-			arrowStrokes++;
+		if (this.currentStrokes.has("DOWN")) {
 			Player.action("STEP", "DOWN");
 		}
 
-		if (this.currentStrokes["UP"]) {
-			arrowStrokes++;
+		if (this.currentStrokes.has("UP")) {
 			Player.action("STEP", "UP");
 		}
 
-		if (this.currentStrokes["LEFT"]) {
-			arrowStrokes++;
+		if (this.currentStrokes.has("LEFT")) {
 			Player.action("STEP", "LEFT");
 		}
 
-		if (this.currentStrokes["RIGHT"]) {
-			arrowStrokes++;
+		if (this.currentStrokes.has("RIGHT")) {
 			Player.action("STEP", "RIGHT");
 		}
 
-		if (arrowStrokes === 0) {
+		if (this.currentStrokes.size === 0) {
 			Player.action("STAND");
 		}
 	}
