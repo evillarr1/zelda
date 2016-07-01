@@ -8,7 +8,7 @@ import Sound from "./Sound";
 import Text from "./Text";
 import Paint from "./Paint"
 import Animate from "./Animate";
-import Characters from "./Characters";
+import Player from "./Player";
 
 export default class Game {
 	constructor() {
@@ -61,6 +61,6 @@ export default class Game {
 		window.Animate = new Animate();
 
 		// Setup character/npc service
-		window.Characters = new Characters();
+		window.Player = new Player();
 	}
 }

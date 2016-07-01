@@ -108,7 +108,7 @@ export default class Text {
 				let [xCor, yCor, width, height]= CHAR_MAP[text[i]];
 
 				if (showFrame) {
-					Paint.draw("TEXT_BOX_FRAME", "TOP", xPos - 8, yPos - 9);
+					Paint.draw("TEXT_BOX_FRAME", "UP", xPos - 8, yPos - 9);
 				}
 
 				// If the text is currently animating and it is the first line, perform a clipping animation on it

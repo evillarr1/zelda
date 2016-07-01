@@ -1,99 +1,105 @@
 "use strict";
 
 const BLOCKS = {
-	TOP: 11,
-	BOTTOM: 11,
+	UP: 11,
+	DOWN: 11,
 	LEFT: 8,
 	RIGHT: 8
 };
 
 const ITEM = {
 	WINDOW: {
-		TOP: [494, 503, 32, 24],
-		BOTTOM: [494, 528, 32, 24],
+		UP: [494, 503, 32, 24],
+		DOWN: [494, 528, 32, 24],
 		LEFT: [468, 523, 24, 32],
 		RIGHT: [443, 523, 24, 32]
 	},
 	WELL: {
-		TOP: [517, 304, 32, 32],
-		BOTTOM: [517, 337, 32, 32],
+		UP: [517, 304, 32, 32],
+		DOWN: [517, 337, 32, 32],
 		LEFT: [550, 337, 32, 32],
 		RIGHT: [550, 304, 32, 32]
 	},
 	MOLDING: {
-		TOP: [612, 403, 16, 16],
-		BOTTOM: [663, 403, 16, 16],
+		UP: [612, 403, 16, 16],
+		DOWN: [663, 403, 16, 16],
 		LEFT: [629, 403, 16, 16],
 		RIGHT: [646, 403, 16, 16]
 	},
 	CABINET_LARGE: {
-		TOP: [443, 387, 48, 32],
-		BOTTOM: [443, 421, 48, 32],
+		UP: [443, 387, 48, 32],
+		DOWN: [443, 421, 48, 32],
 		LEFT: [527, 398, 32, 48],
 		RIGHT: [493, 398, 32, 48]
 	},
 	DOOR_FRAME: {
-		TOP: [578, 486, 32, 24],
-		BOTTOM: [578, 511, 32, 24],
+		UP: [578, 486, 32, 24],
+		DOWN: [578, 511, 32, 24],
 		LEFT: [528, 503, 24, 32],
 		RIGHT: [553, 503, 24, 32]
 	},
 	DOOR: {
-		TOP: [561, 437, 32, 24],
-		BOTTOM: [561, 462, 32, 24],
+		UP: [561, 437, 32, 24],
+		DOWN: [561, 462, 32, 24],
 		LEFT: [560, 404, 24, 32],
 		RIGHT: [585, 404, 24, 32]
 	},
 	TABLE_SMALL: {
-		TOP: [479, 557, 32, 24]
+		UP: [479, 557, 32, 24]
 	},
 	TABLE_LARGE: {
-		TOP: [429, 557, 48, 34]
+		UP: [429, 557, 48, 34]
 	},
 	BENCH: {
-		TOP: [425, 361, 16, 16]
+		UP: [425, 361, 16, 16]
 	},
 	POT: {
-		TOP: [31, 706, 16, 16],
+		UP: [31, 706, 16, 16],
 		LEFT: [31, 706, 16, 16]
 	},
 	POT_STAND: {
-		TOP: [48, 706, 16, 16],
+		UP: [48, 706, 16, 16],
 		LEFT: [48, 706, 16, 16]
 	},
 	CHEST_CLOSED: {
-		TOP: [121, 659, 16, 16]
+		UP: [121, 659, 16, 16]
 	},
 	CHEST_OPEN: {
-		TOP: [104, 659, 16, 16]
+		UP: [104, 659, 16, 16]
 	},
 	HOUSE_FLOOR: {
-		TOP: [323, 518, 16, 16]
+		UP: [323, 518, 16, 16]
 	},
 	BED: {
-		TOP: [442, 304, 32, 40],
-		BOTTOM: [442, 346, 32, 40],
+		UP: [442, 304, 32, 40],
+		DOWN: [442, 346, 32, 40],
 		LEFT: [476, 337, 40, 32],
 		RIGHT: [476, 304, 40, 32]
 	},
 	TEXT_BOX_FRAME: {
-		TOP: [627, 667, 190, 67]
+		UP: [627, 667, 190, 67]
 	},
 	LINK_SLEEPING_IN_BED: {
-		TOP: [12, 15, 30, 31]
+		UP: [12, 15, 30, 31]
 	},
 	LINK_SITTIN_IN_BED: {
-		TOP: [0, 55, 50, 50]
+		UP: [0, 55, 50, 50]
 	},
 	UNCOVERED_COMFORTER: {
-		TOP: [800, 75, 30, 17]
+		UP: [800, 75, 30, 17]
+	},
+	LINK_STANDING: {
+		UP: [516, 125, 16, 22],
+		RIGHT: [847, 120, 16, 23],
+		DOWN: [138, 121, 16, 22],
+		LEFT: [1323, 120, 16, 23]
 	}
 };
 
 const WALL = {
 	HOUSE: {
-		TOP: [[542, 623, 16, 32, 39, 46], [478, 702, 24, 24, 15, 46], [503, 702, 24, 24, 215, 46]],
-		BOTTOM: [[525, 623, 16, 32, 39, 190], [478, 729, 24, 24, 15, 198], [503, 729, 24, 24, 215, 198]],
+		UP: [[542, 623, 16, 32, 39, 46], [478, 702, 24, 24, 15, 46], [503, 702, 24, 24, 215, 46]],
+		DOWN: [[525, 623, 16, 32, 39, 190], [478, 729, 24, 24, 15, 198], [503, 729, 24, 24, 215, 198]],
 		LEFT: [[559, 623, 32, 16, 15, 70], [454, 703, 24, 24, 15, 46], [454, 728, 24, 24, 15, 198]],
 		RIGHT: [[559, 640, 32, 16, 207, 70], [527, 703, 24, 24, 215, 46], [527, 728, 24, 24, 215, 198]]
 	}
@@ -125,7 +131,7 @@ export default class Paint {
 
 	drawX(item, direction, xPos, yPos, separator, x) {
 		let [xCor, yCor, xWidth, yWidth]= ITEM[item][direction];
-		let [topBot, leftRight] = ["TOP", "BOTTOM"].indexOf(direction) !== -1 ? [1, 0] : [0, 1];
+		let [topBot, leftRight] = ["UP", "DOWN"].indexOf(direction) !== -1 ? [1, 0] : [0, 1];
 
 		for (let i = 0; i < x; i++) {
 			Context.drawImage(
@@ -143,13 +149,13 @@ export default class Paint {
 
 	drawFloor(type) {
 		for (let i = 0; i < 8; i++) {
-			this.drawX(type, "TOP", 47, 62 + (i * 16), 16, 10);
+			this.drawX(type, "UP", 47, 62 + (i * 16), 16, 10);
 		}
 	}
 
 	drawWall(type, direction) {
 		let [main, firstEdge, secondEdge]= WALL[type][direction];
-		let [topBot, leftRight] = ["TOP", "BOTTOM"].indexOf(direction) !== -1 ? [1, 0] : [0, 1];
+		let [topBot, leftRight] = ["UP", "DOWN"].indexOf(direction) !== -1 ? [1, 0] : [0, 1];
 
 		for (let i = 0; i < BLOCKS[direction]; i++) {
 			Context.drawImage(

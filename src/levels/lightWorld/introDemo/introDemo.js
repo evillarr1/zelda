@@ -73,7 +73,7 @@ export default class IntroDemo {
 		}, () => {
 			blueMask();
 
-			Paint.draw("LINK_SLEEPING_IN_BED", "TOP", 56, 72, "link");
+			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
 			if (Text.drawScrollText(38, 145)) {
 				this.music.openingDemo.play("complete");
 				this.jumpOffBed = false;
@@ -82,7 +82,7 @@ export default class IntroDemo {
 			}
 		}, () => {
 			if (Animate.linkSnoozing(this, 56, 61)) {
-				Paint.draw("LINK_SITTIN_IN_BED", "TOP", 56, 66, "link");
+				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 
 				if (this.jumpOffBed) {
@@ -92,13 +92,20 @@ export default class IntroDemo {
 			}
 		}, () => {
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
-				Paint.draw("UNCOVERED_COMFORTER", "TOP", 56, 86, "link");
+				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
 				this.storyStateIndex++;
+				Player.action("TURN", "RIGHT");
+				Player.postion(90, 75);
+				Player.draw();
 			}
 		}, () => {
-			Paint.draw("UNCOVERED_COMFORTER", "TOP", 56, 86, "link");
+			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
+			Player.draw();
 		}];
+
+		this.storyState.splice(0, 0);
+		this.storyStateIndex += 0;
 
 		Text.setScrollText(DIALOGUE.SCROLL);
 
@@ -129,25 +136,25 @@ export default class IntroDemo {
 	static floor() {
 		// Static elements
 		Paint.drawX("POT_STAND", "LEFT", 39, 70, 16, 3);
-		Paint.draw("BED", "TOP", 55, 70);
-		Paint.draw("TABLE_LARGE", "TOP", 151, 110);
-		Paint.draw("TABLE_SMALL", "TOP", 55, 158);
-		Paint.draw("BENCH", "TOP", 167, 142);
-		Paint.draw("BENCH", "TOP", 167, 94);
+		Paint.draw("BED", "UP", 55, 70);
+		Paint.draw("TABLE_LARGE", "UP", 151, 110);
+		Paint.draw("TABLE_SMALL", "UP", 55, 158);
+		Paint.draw("BENCH", "UP", 167, 142);
+		Paint.draw("BENCH", "UP", 167, 94);
 
 		// Dynamic elements
-		Paint.draw("POT", "TOP", 39, 70);
-		Paint.draw("POT", "TOP", 39, 86);
-		Paint.draw("POT", "TOP", 39, 102);
-		Paint.draw("CHEST_CLOSED", "TOP", 190, 158);
+		Paint.draw("POT", "UP", 39, 70);
+		Paint.draw("POT", "UP", 39, 86);
+		Paint.draw("POT", "UP", 39, 102);
+		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 
 	static topWall() {
-		Paint.drawWall("HOUSE", "TOP");
+		Paint.drawWall("HOUSE", "UP");
 
-		Paint.draw("MOLDING", "TOP", 63, 46);
-		Paint.draw("CABINET_LARGE", "TOP", 103, 46);
-		Paint.draw("WELL", "TOP", 167, 46);
+		Paint.draw("MOLDING", "UP", 63, 46);
+		Paint.draw("CABINET_LARGE", "UP", 103, 46);
+		Paint.draw("WELL", "UP", 167, 46);
 	}
 
 	static leftWall() {
@@ -157,12 +164,12 @@ export default class IntroDemo {
 	}
 
 	static bottomWall() {
-		Paint.drawWall("HOUSE", "BOTTOM");
+		Paint.drawWall("HOUSE", "DOWN");
 
-		Paint.draw("WINDOW", "BOTTOM", 48, 198);
-		Paint.draw("WINDOW", "BOTTOM", 174, 198);
-		Paint.draw("DOOR", "BOTTOM", 112, 198);
-		Paint.draw("DOOR_FRAME", "BOTTOM", 112, 198);
+		Paint.draw("WINDOW", "DOWN", 48, 198);
+		Paint.draw("WINDOW", "DOWN", 174, 198);
+		Paint.draw("DOOR", "DOWN", 112, 198);
+		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 	}
 
 	static rightWall() {
