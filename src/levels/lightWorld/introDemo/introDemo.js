@@ -116,6 +116,14 @@ export default class IntroDemo {
 				if (this.storyStateIndex === 2) {
 					this.jumpOffBed = true;
 				}
+			} else if (event.keyCode === KeyCodes.DOWN) {
+				Player.action("TURN", "DOWN");
+			} else if (event.keyCode === KeyCodes.UP) {
+				Player.action("TURN", "UP");
+			} else if (event.keyCode === KeyCodes.LEFT) {
+				Player.action("TURN", "LEFT");
+			} else if (event.keyCode === KeyCodes.RIGHT) {
+				Player.action("TURN", "RIGHT");
 			}
 		};
 	}
