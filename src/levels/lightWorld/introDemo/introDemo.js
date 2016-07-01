@@ -66,6 +66,7 @@ export default class IntroDemo {
 		this.storyState = [() => {
 			blueMask();
 
+			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
 			if (Animate.openingCircle(this)) {
 				this.storyState.shift();
 				this.storyStateIndex++;
@@ -76,7 +77,6 @@ export default class IntroDemo {
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
 			if (Text.drawScrollText(38, 145)) {
 				this.music.openingDemo.play("complete");
-				this.jumpOffBed = false;
 				this.storyState.shift();
 				this.storyStateIndex++;
 			}
@@ -84,11 +84,6 @@ export default class IntroDemo {
 			if (Animate.linkSnoozing(this, 56, 61)) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
-
-				if (this.jumpOffBed) {
-					this.storyState.shift();
-					this.storyStateIndex++;
-				}
 			}
 		}, () => {
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
@@ -114,7 +109,8 @@ export default class IntroDemo {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
 				Text.animateScroll();
 				if (this.storyStateIndex === 2) {
-					this.jumpOffBed = true;
+					this.storyState.shift();
+					this.storyStateIndex++;
 				}
 			} else if (event.keyCode === KeyCodes.DOWN) {
 				Player.action("TURN", "DOWN");
