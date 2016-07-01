@@ -190,8 +190,9 @@ export default class IntroDemo {
 		IntroDemo.topWall();
 		IntroDemo.floor();
 
-		IntroDemo.traitOverlay();
 		this.storyState[0]();
+		IntroDemo.traitOverlay();
+
 
 	}
 
