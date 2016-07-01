@@ -116,11 +116,6 @@ export default class IntroDemo {
 				}
 			}
 
-			// Don't take more than two keystrokes
-			if (this.currentStrokes.size >= 2) {
-				return false;
-			}
-
 			if (event.keyCode === KeyCodes.DOWN) {
 				this.currentStrokes.delete("UP");
 				this.currentStrokes.set("DOWN", true);
