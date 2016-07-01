@@ -90,7 +90,7 @@ export default class IntroDemo {
 				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
 				this.storyStateIndex++;
-				Player.action("TURN", "RIGHT");
+				Player.action("STAND", "RIGHT");
 				Player.postion(90, 75);
 				Player.draw();
 			}
@@ -104,6 +104,8 @@ export default class IntroDemo {
 
 		Text.setScrollText(DIALOGUE.SCROLL);
 
+		this.currentStrokes = {};
+
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
@@ -112,16 +114,70 @@ export default class IntroDemo {
 					this.storyState.shift();
 					this.storyStateIndex++;
 				}
-			} else if (event.keyCode === KeyCodes.DOWN) {
-				Player.action("TURN", "DOWN");
-			} else if (event.keyCode === KeyCodes.UP) {
-				Player.action("TURN", "UP");
-			} else if (event.keyCode === KeyCodes.LEFT) {
-				Player.action("TURN", "LEFT");
-			} else if (event.keyCode === KeyCodes.RIGHT) {
-				Player.action("TURN", "RIGHT");
+			}
+
+			if (event.keyCode === KeyCodes.DOWN) {
+				this.currentStrokes["DOWN"] = true;
+			}
+
+			if (event.keyCode === KeyCodes.UP) {
+				this.currentStrokes["UP"] = true;
+			}
+
+			if (event.keyCode === KeyCodes.LEFT) {
+				this.currentStrokes["LEFT"] = true;
+			}
+
+			if (event.keyCode === KeyCodes.RIGHT) {
+				this.currentStrokes["RIGHT"] = true;
 			}
 		};
+
+		document.onkeyup = (event) => {
+			if (event.keyCode === KeyCodes.DOWN) {
+				this.currentStrokes["DOWN"] = false;
+			}
+
+			if (event.keyCode === KeyCodes.UP) {
+				this.currentStrokes["UP"] = false;
+			}
+
+			if (event.keyCode === KeyCodes.LEFT) {
+				this.currentStrokes["LEFT"] = false;
+			}
+
+			if (event.keyCode === KeyCodes.RIGHT) {
+				this.currentStrokes["RIGHT"] = false;
+			}
+		}
+	}
+
+	update() {
+		let arrowStrokes = 0;
+
+		if (this.currentStrokes["DOWN"]) {
+			arrowStrokes++;
+			Player.action("STEP", "DOWN");
+		}
+
+		if (this.currentStrokes["UP"]) {
+			arrowStrokes++;
+			Player.action("STEP", "UP");
+		}
+
+		if (this.currentStrokes["LEFT"]) {
+			arrowStrokes++;
+			Player.action("STEP", "LEFT");
+		}
+
+		if (this.currentStrokes["RIGHT"]) {
+			arrowStrokes++;
+			Player.action("STEP", "RIGHT");
+		}
+
+		if (arrowStrokes === 0) {
+			Player.action("STAND");
+		}
 	}
 
 	draw() {
