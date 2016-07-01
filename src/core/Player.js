@@ -45,22 +45,31 @@ export default class Player {
 		this.yPos = yPos;
 	}
 
-	walk(direction) {
-		this.direction = direction;
-
-		switch (direction) {
-			case "DOWN":
-				this.yPos += 1.5;
-				break;
-			case "UP":
-				this.yPos -= 1.5;
-				break;
-			case "LEFT":
-				this.xPos -= 1.5;
-				break;
-			case "RIGHT":
-				this.xPos += 1.5;
-				break;
+	walk(directions) {
+		// Skip if no directions are passed in
+		if (directions.length === 0) {
+			return;
 		}
+
+		// Run at different speeds if more than one direction is triggered at the same time
+		let pos = directions.length === 1 ? 1.5 : 1.1;
+		this.direction = directions[directions.length - 1];
+
+		directions.forEach((direction) => {
+			switch (direction) {
+				case "DOWN":
+					this.yPos += pos;
+					break;
+				case "UP":
+					this.yPos -= pos;
+					break;
+				case "LEFT":
+					this.xPos -= pos;
+					break;
+				case "RIGHT":
+					this.xPos += pos;
+					break;
+			}
+		});
 	};
 }

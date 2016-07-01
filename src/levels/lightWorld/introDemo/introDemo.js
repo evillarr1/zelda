@@ -162,21 +162,7 @@ export default class IntroDemo {
 	}
 
 	update() {
-		if (this.currentStrokes.has("DOWN")) {
-			Player.action("STEP", "DOWN");
-		}
-
-		if (this.currentStrokes.has("UP")) {
-			Player.action("STEP", "UP");
-		}
-
-		if (this.currentStrokes.has("LEFT")) {
-			Player.action("STEP", "LEFT");
-		}
-
-		if (this.currentStrokes.has("RIGHT")) {
-			Player.action("STEP", "RIGHT");
-		}
+		Player.action("STEP", Array.from(this.currentStrokes.keys()).reverse());
 
 		if (this.currentStrokes.size === 0) {
 			Player.action("STAND");
