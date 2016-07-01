@@ -88,6 +88,13 @@ const ITEM = {
 	UNCOVERED_COMFORTER: {
 		UP: [800, 75, 30, 17]
 	},
+	TRAIT: {
+		LEFT: [0, 934, 52, 70],
+		MIDDLE_ARROW: [300, 930, 20, 7],
+		MIDDLE_RUPEE: [317, 929, 18, 7],
+		MIDDLE_BOMB: [331, 928, 16, 7],
+		RIGHT: [52, 938, 65, 7]
+	},
 	LINK_STANDING: {
 		UP: [515, 123, 16, 24],
 		RIGHT: [844, 119, 17, 24],

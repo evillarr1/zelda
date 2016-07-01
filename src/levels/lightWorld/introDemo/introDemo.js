@@ -190,7 +190,9 @@ export default class IntroDemo {
 		IntroDemo.topWall();
 		IntroDemo.floor();
 
+		IntroDemo.traitOverlay();
 		this.storyState[0]();
+
 	}
 
 	static floor() {
@@ -236,5 +238,13 @@ export default class IntroDemo {
 		Paint.drawWall("HOUSE", "RIGHT");
 
 		Paint.draw("WINDOW", "RIGHT", 215, 118);
+	}
+
+	static traitOverlay() {
+		Paint.draw("TRAIT", "LEFT", 9, 20);
+		Paint.draw("TRAIT", "MIDDLE_RUPEE", 67, 21);
+		Paint.draw("TRAIT", "MIDDLE_BOMB", 92, 21);
+		Paint.draw("TRAIT", "MIDDLE_ARROW", 114, 20);
+		Paint.draw("TRAIT", "RIGHT", 166, 17);
 	}
 }
