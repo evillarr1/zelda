@@ -89,11 +89,12 @@ const ITEM = {
 		UP: [800, 75, 30, 17]
 	},
 	TRAIT: {
-		LEFT: [0, 934, 52, 70],
-		MIDDLE_ARROW: [300, 930, 20, 7],
-		MIDDLE_RUPEE: [317, 929, 18, 7],
-		MIDDLE_BOMB: [331, 928, 16, 7],
-		RIGHT: [52, 938, 65, 7]
+		LEFT: [12, 936, 16, 37],
+		LEFT2: [29, 937, 22, 22],
+		MIDDLE_ARROW: [304, 929, 17, 8],
+		MIDDLE_RUPEE: [322, 928, 8, 8],
+		MIDDLE_BOMB: [337, 927, 8, 8],
+		RIGHT: [62, 939, 57, 7]
 	},
 	LINK_STANDING: {
 		UP: [515, 123, 16, 24],

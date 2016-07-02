@@ -246,6 +246,7 @@ export default class IntroDemo {
 
 	static traitOverlay() {
 		Paint.draw("TRAIT", "LEFT", 9, 20);
+		Paint.draw("TRAIT", "LEFT2", 26, 20);
 		Paint.draw("TRAIT", "MIDDLE_RUPEE", 67, 21);
 		Paint.draw("TRAIT", "MIDDLE_BOMB", 92, 21);
 		Paint.draw("TRAIT", "MIDDLE_ARROW", 114, 20);
