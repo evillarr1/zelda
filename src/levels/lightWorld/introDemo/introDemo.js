@@ -29,6 +29,23 @@ while. I'll be back by morning.
 Don't leave the house.`
 };
 
+const OBJECTS = {
+	neutral: [
+		[55, 70, 32, 40],
+		[151, 110, 48, 34],
+		[55, 158, 32, 24],
+		[167, 142, 16, 16],
+		[167, 94, 16, 16],
+		[167, 46, 32, 32],
+		[190, 158, 16, 16],
+	],
+	movable: [
+		[39, 70, 16, 16],
+		[39, 86, 16, 16],
+		[39, 102, 16, 16]
+	]
+};
+
 export default class IntroDemo {
 	constructor() {
 		// Create the music elements for the screen
@@ -51,6 +68,8 @@ export default class IntroDemo {
 				}
 			})
 		};
+
+		Player.setLevelObjects(OBJECTS);
 
 		let blueMask = () => {
 			Context.beginPath();
@@ -157,7 +176,7 @@ export default class IntroDemo {
 	}
 
 	update() {
-		Player.action("STEP", Array.from(this.currentStrokes.keys()).reverse());
+		Player.action("STEP", Array.from(this.currentStrokes.keys()));
 
 		if (this.currentStrokes.size === 0) {
 			Player.action("STAND");
@@ -180,7 +199,9 @@ export default class IntroDemo {
 
 	static floor() {
 		// Static elements
-		Paint.drawX("POT_STAND", "LEFT", 39, 70, 16, 3);
+		Paint.draw("POT_STAND", "LEFT", 39, 70);
+		Paint.draw("POT_STAND", "LEFT", 39, 86);
+		Paint.draw("POT_STAND", "LEFT", 39, 102);
 		Paint.draw("BED", "UP", 55, 70);
 		Paint.draw("TABLE_LARGE", "UP", 151, 110);
 		Paint.draw("TABLE_SMALL", "UP", 55, 158);

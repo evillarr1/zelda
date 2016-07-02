@@ -18,6 +18,7 @@ export default class Player {
 		this.direction = DIRECTION.DOWN;
 		this.walkingIndex = 0;
 		this.currentAction = "LINK_STANDING";
+		this.mapObjects = {};
 	}
 
 	action(action, ...args) {
@@ -46,30 +47,51 @@ export default class Player {
 	}
 
 	walk(directions) {
+		let pos = directions.length === 1 ? 1.5 : 1.1;
+
 		// Skip if no directions are passed in
 		if (directions.length === 0) {
 			return;
 		}
 
-		// Run at different speeds if more than one direction is triggered at the same time
-		let pos = directions.length === 1 ? 1.5 : 1.1;
-		this.direction = directions[directions.length - 1];
+		let collisions = {};
 
-		directions.forEach((direction) => {
-			switch (direction) {
-				case "DOWN":
-					this.yPos += pos;
-					break;
-				case "UP":
-					this.yPos -= pos;
-					break;
-				case "LEFT":
-					this.xPos -= pos;
-					break;
-				case "RIGHT":
-					this.xPos += pos;
-					break;
+		this.mapObjects.neutral.forEach(([posX, posY, x, y]) => {
+			let response = Game.collision("UNIT", [this.xPos, this.yPos + 14, 16, 10], [posX, posY, x, y]);
+
+			if (response !== true) {
+				if (response.overlapV.y > 0.1) {
+					collisions.UP = true;
+				}
+				if (response.overlapV.y < -0.1) {
+					collisions.DOWN = true;
+				}
+				if (response.overlapV.x > 0.1) {
+					collisions.LEFT = true;
+				}
+				if (response.overlapV.x < -0.1) {
+					collisions.RIGHT = true;
+				}
 			}
 		});
+
+		// Run at different speeds if more than one direction is triggered at the same time
+		this.direction = directions[0];
+
+		directions.forEach((direction) => {
+			if (direction === "DOWN" && !collisions.UP) {
+				this.yPos += pos;
+			} else if (direction === "UP" && !collisions.DOWN) {
+				this.yPos -= pos;
+			} else if (direction === "LEFT" && !collisions.RIGHT) {
+				this.xPos -= pos;
+			} else if (direction === "RIGHT" && !collisions.LEFT) {
+				this.xPos += pos;
+			}
+		});
+	};
+
+	setLevelObjects(mapObjects) {
+		this.mapObjects = mapObjects;
 	};
 }

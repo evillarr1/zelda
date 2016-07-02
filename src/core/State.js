@@ -43,6 +43,9 @@ export default class State {
 			}
 		}
 
+		// Clear the objects from the level
+		Player.mapObjects = {};
+
 		return el;
 	}
 }

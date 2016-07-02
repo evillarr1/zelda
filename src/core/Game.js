@@ -9,6 +9,7 @@ import Text from "./Text";
 import Paint from "./Paint"
 import Animate from "./Animate";
 import Player from "./Player";
+import SAT from "sat";
 
 export default class Game {
 	constructor() {
@@ -62,5 +63,17 @@ export default class Game {
 
 		// Setup character/npc service
 		window.Player = new Player();
+	}
+
+	collision(type, unit, ...others) {
+		switch(type) {
+			case "UNIT":
+				let [xPos, yPos, width, height] = others[0];
+				let unitSat = new SAT.Box(new SAT.Vector(unit[0], unit[1]), unit[2], unit[3]).toPolygon();
+				let otherSat = new SAT.Box(new SAT.Vector(xPos, yPos), width, height).toPolygon();
+				let response = new SAT.Response();
+
+				return !SAT.testPolygonPolygon(unitSat, otherSat, response) || response;
+		}
 	}
 }
