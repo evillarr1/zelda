@@ -176,8 +176,6 @@ export default class IntroDemo {
 
 		this.storyState[0]();
 		IntroDemo.traitOverlay();
-
-
 	}
 
 	static floor() {
