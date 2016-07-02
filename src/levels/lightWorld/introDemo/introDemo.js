@@ -31,13 +31,18 @@ Don't leave the house.`
 
 const OBJECTS = {
 	neutral: [
+		[39, 70, 1, 160], //left
+		[214, 70, 1, 160], //right
+		[39, 76, 200, 1], //up
+		[39, 198, 81, 50], //down
+		[136, 196, 80, 50], //down
 		[55, 70, 32, 40],
-		[151, 110, 48, 34],
-		[55, 158, 32, 24],
-		[167, 142, 16, 16],
-		[167, 94, 16, 16],
+		[151, 110, 48, 34], //large table
+		[55, 158, 32, 24], //small table
+		[167, 142, 16, 16], //bottom stool
+		[167, 95, 16, 16], //top stool
 		[167, 46, 32, 32],
-		[190, 158, 16, 16],
+		[190, 159, 16, 16],
 	],
 	movable: [
 		[39, 70, 16, 16],
@@ -195,6 +200,7 @@ export default class IntroDemo {
 
 		this.storyState[0]();
 		IntroDemo.traitOverlay();
+		IntroDemo.specialObjects();
 	}
 
 	static floor() {
@@ -207,12 +213,6 @@ export default class IntroDemo {
 		Paint.draw("TABLE_SMALL", "UP", 55, 158);
 		Paint.draw("BENCH", "UP", 167, 142);
 		Paint.draw("BENCH", "UP", 167, 94);
-
-		// Dynamic elements
-		Paint.draw("POT", "UP", 39, 70);
-		Paint.draw("POT", "UP", 39, 86);
-		Paint.draw("POT", "UP", 39, 102);
-		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 
 	static topWall() {
@@ -235,7 +235,6 @@ export default class IntroDemo {
 		Paint.draw("WINDOW", "DOWN", 48, 198);
 		Paint.draw("WINDOW", "DOWN", 174, 198);
 		Paint.draw("DOOR", "DOWN", 112, 198);
-		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 	}
 
 	static rightWall() {
@@ -251,5 +250,13 @@ export default class IntroDemo {
 		Paint.draw("TRAIT", "MIDDLE_BOMB", 92, 21);
 		Paint.draw("TRAIT", "MIDDLE_ARROW", 114, 20);
 		Paint.draw("TRAIT", "RIGHT", 166, 17);
+	}
+
+	static specialObjects() {
+		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+		Paint.draw("POT", "UP", 41, 70);
+		Paint.draw("POT", "UP", 41, 86);
+		Paint.draw("POT", "UP", 41, 102);
+		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 }

@@ -1,13 +1,13 @@
 body {
 	background: black;
+	overflow: hidden;
 }
 
 #canvas, #canvas-mask {
 	position: absolute;
-	left: 10%;
-	top: 0;
+	left: 18%;
+	top: 6px;
 	height: 100%;
-	width: 80%;
 	margin: auto;
 
 	@media (max-width: 769px) {

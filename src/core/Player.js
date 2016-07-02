@@ -47,7 +47,12 @@ export default class Player {
 	}
 
 	walk(directions) {
-		let pos = directions.length === 1 ? 1.5 : 1.1;
+		// Run at different speeds if more than one direction is triggered at the same time
+		let pos = directions.length === 1 ? 1.5 : 1;
+
+		// Used to help calculate the precise position of link
+		let lenY = Math.floor(this.yPos).toString().length + 1;
+		let lenX = Math.floor(this.xPos).toString().length + 1;
 
 		// Skip if no directions are passed in
 		if (directions.length === 0) {
@@ -57,36 +62,29 @@ export default class Player {
 		let collisions = {};
 
 		this.mapObjects.neutral.forEach(([posX, posY, x, y]) => {
-			let response = Game.collision("UNIT", [this.xPos, this.yPos + 14, 16, 10], [posX, posY, x, y]);
+			let response = Game.collision("UNIT", [this.xPos, this.yPos + 10, 17, 16], [posX, posY, x, y]);
 
 			if (response !== true) {
-				if (response.overlapV.y > 0.1) {
-					collisions.UP = true;
-				}
-				if (response.overlapV.y < -0.1) {
-					collisions.DOWN = true;
-				}
-				if (response.overlapV.x > 0.1) {
-					collisions.LEFT = true;
-				}
-				if (response.overlapV.x < -0.1) {
-					collisions.RIGHT = true;
-				}
+				collisions.DOWN |= response.overlapV.y > 0.5;
+				collisions.UP |= response.overlapV.y < -0.5;
+				collisions.RIGHT |= response.overlapV.x > 0.5;
+				collisions.LEFT |= response.overlapV.x < -0.5;
 			}
 		});
 
-		// Run at different speeds if more than one direction is triggered at the same time
 		this.direction = directions[0];
 
+		// Move in the direction the user chooses, if no collisions are detected
+		// If a valid movement, round the new position to the nearest position to two decimal points
 		directions.forEach((direction) => {
-			if (direction === "DOWN" && !collisions.UP) {
-				this.yPos += pos;
-			} else if (direction === "UP" && !collisions.DOWN) {
-				this.yPos -= pos;
-			} else if (direction === "LEFT" && !collisions.RIGHT) {
-				this.xPos -= pos;
-			} else if (direction === "RIGHT" && !collisions.LEFT) {
-				this.xPos += pos;
+			if (direction === "DOWN" && !collisions.DOWN) {
+				this.yPos = Number((this.yPos + pos).toPrecision(lenY));
+			} else if (direction === "UP" && !collisions.UP) {
+				this.yPos = Number((this.yPos - pos).toPrecision(lenY));
+			} else if (direction === "LEFT" && !collisions.LEFT) {
+				this.xPos = Number((this.xPos - pos).toPrecision(lenX));
+			} else if (direction === "RIGHT" && !collisions.RIGHT) {
+				this.xPos = Number((this.xPos + pos).toPrecision(lenX));
 			}
 		});
 	};
