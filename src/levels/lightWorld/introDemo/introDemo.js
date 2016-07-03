@@ -31,11 +31,11 @@ Don't leave the house.`
 
 const OBJECTS = {
 	neutral: [
-		[39, 70, 1, 160], //left
-		[214, 70, 1, 160], //right
-		[39, 76, 200, 1], //up
+		[30, 70, 10, 160], //left
+		[214, 70, 10, 160], //right
+		[39, 65, 200, 10], //up
 		[39, 198, 81, 50], //down
-		[136, 196, 80, 50], //down
+		[136, 198, 80, 50], //down
 		[55, 70, 32, 40],
 		[151, 110, 48, 34], //large table
 		[55, 158, 32, 24], //small table
@@ -197,10 +197,11 @@ export default class IntroDemo {
 		IntroDemo.bottomWall();
 		IntroDemo.topWall();
 		IntroDemo.floor();
+		IntroDemo.specialObjects();
 
 		this.storyState[0]();
 		IntroDemo.traitOverlay();
-		IntroDemo.specialObjects();
+		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 	}
 
 	static floor() {
@@ -253,7 +254,6 @@ export default class IntroDemo {
 	}
 
 	static specialObjects() {
-		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		Paint.draw("POT", "UP", 41, 70);
 		Paint.draw("POT", "UP", 41, 86);
 		Paint.draw("POT", "UP", 41, 102);

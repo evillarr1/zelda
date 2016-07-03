@@ -59,35 +59,115 @@ export default class Player {
 			return;
 		}
 
+		// Find the collisions and the offset of each
 		let collisions = {};
-
+		let edgeCollision = {};
 		this.mapObjects.neutral.forEach(([posX, posY, x, y]) => {
-			let response = Game.collision("UNIT", [this.xPos, this.yPos + 10, 17, 16], [posX, posY, x, y]);
+			let response = Game.collision("UNIT", [this.xPos, this.yPos + 10, 16, 16], [posX, posY, x, y]);
+			let edgeResponse = Game.collision("UNIT", [this.xPos + 1.5, this.yPos + 11.5, 13, 13], [posX, posY, x, y]);
+
+			if (edgeResponse !== true) {
+				if (edgeResponse.overlapV.y > 0) {
+					edgeCollision.DOWN = edgeResponse.overlapV.y;
+				} else if (edgeResponse.overlapV.y < 0) {
+					edgeCollision.UP = edgeResponse.overlapV.y;
+				} else if (edgeResponse.overlapV.x > 0) {
+					edgeCollision.RIGHT = edgeResponse.overlapV.x;
+				} else if (edgeResponse.overlapV.x < 0) {
+					edgeCollision.LEFT = edgeResponse.overlapV.x;
+				}
+			}
 
 			if (response !== true) {
-				collisions.DOWN |= response.overlapV.y > 0.5;
-				collisions.UP |= response.overlapV.y < -0.5;
-				collisions.RIGHT |= response.overlapV.x > 0.5;
-				collisions.LEFT |= response.overlapV.x < -0.5;
+				if (response.overlapV.y > 0) {
+					collisions.DOWN = {
+						overlap: response.overlapV.y,
+						coordinates: [posX, posY, x, y]
+					};
+				} else if (response.overlapV.y < 0) {
+					collisions.UP = {
+						overlap: response.overlapV.y,
+						coordinates: [posX, posY, x, y]
+					};
+				} else if (response.overlapV.x > 0) {
+					collisions.RIGHT = {
+						overlap: response.overlapV.x,
+						coordinates: [posX, posY, x, y]
+					};
+				} else if (response.overlapV.x < 0) {
+					collisions.LEFT = {
+						overlap: response.overlapV.x,
+						coordinates: [posX, posY, x, y]
+					};
+				}
 			}
 		});
 
+		// Set the direction the player should be facing
 		this.direction = directions[0];
 
 		// Move in the direction the user chooses, if no collisions are detected
 		// If a valid movement, round the new position to the nearest position to two decimal points
 		directions.forEach((direction) => {
-			if (direction === "DOWN" && !collisions.DOWN) {
-				this.yPos = Number((this.yPos + pos).toPrecision(lenY));
-			} else if (direction === "UP" && !collisions.UP) {
-				this.yPos = Number((this.yPos - pos).toPrecision(lenY));
-			} else if (direction === "LEFT" && !collisions.LEFT) {
-				this.xPos = Number((this.xPos - pos).toPrecision(lenX));
-			} else if (direction === "RIGHT" && !collisions.RIGHT) {
-				this.xPos = Number((this.xPos + pos).toPrecision(lenX));
+			if (direction === "DOWN") {
+				if (!collisions.DOWN) {
+					this._moveDown(pos, lenY);
+				} else if (!Object.keys(edgeCollision).length) {
+					if (this.xPos < collisions.DOWN.coordinates[0] - 8) {
+						this._moveLeft(pos, lenX);
+					} else if (this.xPos > collisions.DOWN.coordinates[0] + collisions.DOWN.coordinates[2] - 8) {
+						this._moveRight(pos, lenX);
+					}
+				}
+			} else if (direction === "UP") {
+				if (!collisions.UP) {
+					this._moveUp(pos, lenY);
+				} else if (!Object.keys(edgeCollision).length) {
+					if (this.xPos < collisions.UP.coordinates[0] - 8) {
+						this._moveLeft(pos, lenX);
+					} else if (this.xPos > collisions.UP.coordinates[0] + collisions.UP.coordinates[2] - 8) {
+						this._moveRight(pos, lenX);
+					}
+				}
+			} else if (direction === "LEFT") {
+				if (!collisions.LEFT) {
+					this._moveLeft(pos, lenX);
+				} else if (!Object.keys(edgeCollision).length) {
+					if (this.yPos < collisions.LEFT.coordinates[1] - 14) {
+						this._moveUp(pos, lenY);
+					} else if (this.yPos > collisions.LEFT.coordinates[1] + collisions.LEFT.coordinates[3] - 22) {
+						this._moveDown(pos, lenY);
+					}
+				}
+			} else if (direction === "RIGHT") {
+				if (!collisions.RIGHT) {
+					this._moveRight(pos, lenX);
+				} else if (!Object.keys(edgeCollision).length) {
+					if (this.yPos < collisions.RIGHT.coordinates[1] - 14) {
+						this._moveUp(pos, lenY);
+					} else if (this.yPos > collisions.RIGHT.coordinates[1] + collisions.RIGHT.coordinates[3] - 22) {
+						this._moveDown(pos, lenY);
+					}
+				}
 			}
 		});
 	};
+
+	_moveDown(pos, lenY) {
+		this.yPos = Number((this.yPos + pos).toPrecision(lenY));
+	}
+
+	_moveUp(pos, lenY) {
+		this.yPos = Number((this.yPos - pos).toPrecision(lenY));
+	}
+
+	_moveLeft(pos, lenX) {
+		this.xPos = Number((this.xPos - pos).toPrecision(lenX));
+	}
+
+	_moveRight(pos, lenX) {
+		this.xPos = Number((this.xPos + pos).toPrecision(lenX))
+	}
 
 	setLevelObjects(mapObjects) {
 		this.mapObjects = mapObjects;
