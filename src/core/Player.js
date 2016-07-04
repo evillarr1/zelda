@@ -142,7 +142,7 @@ export default class Player {
 	_moveDown(pos, lenY, shouldTransform, direction) {
 		if (shouldTransform) {
 			if (!direction || direction.overlap.y < .4) {
-				this.yPos = pos + (Number((this.yPos - pos)) + .2);
+				this.yPos = pos + (Number((this.yPos - pos)) + .4);
 			} else if (direction.overlap.y < .5) {
 				this.yPos = pos + (Number((this.yPos - pos) + direction.overlap.y));
 			}
@@ -154,7 +154,7 @@ export default class Player {
 	_moveUp(pos, lenY, shouldTransform, direction) {
 		if (shouldTransform) {
 			if (!direction || direction.overlap.y < .4) {
-				this.yPos = pos - (Number((pos - this.yPos)) + .2);
+				this.yPos = pos - (Number((pos - this.yPos)) + .4);
 			} else if (direction.overlap.y > .5) {
 				this.yPos = pos - (Number((pos - this.yPos) + direction.overlap.y));
 			}
@@ -166,7 +166,7 @@ export default class Player {
 	_moveLeft(pos, lenX, shouldTransform, direction) {
 		if (shouldTransform) {
 			if (!direction|| direction.overlap.x < .4) {
-				this.xPos = pos - (Number((pos - this.xPos)) + .2);
+				this.xPos = pos - (Number((pos - this.xPos)) + .4);
 			} else if (direction.overlap.x > .5) {
 				this.xPos = pos - (Number((pos - this.xPos) + direction.overlap.x));
 			}
@@ -178,7 +178,7 @@ export default class Player {
 	_moveRight(pos, lenX, shouldTransform, direction) {
 		if (shouldTransform) {
 			if (!direction|| direction.overlap.x < .4) {
-				this.xPos = pos + (Number((this.xPos - pos)) + .2);
+				this.xPos = pos + (Number((this.xPos - pos)) + .4);
 			} else if (direction.overlap.x > .5) {
 				this.xPos = pos - (Number((pos - this.xPos) + direction.overlap.x));
 			}
