@@ -21,7 +21,7 @@ export default class NameSelect {
 		// Create the music element for the screen
 		this.music = {
 			"charSelect": new Howl({
-				urls: ["/music/intro/charSelect/charSelect.mp4"],
+				src: ["/music/intro/charSelect/charSelect.mp4"],
 				autoplay: true,
 				loop: true,
 				volume: 0.7

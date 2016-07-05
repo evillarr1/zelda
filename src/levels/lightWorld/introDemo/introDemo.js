@@ -57,20 +57,26 @@ export default class IntroDemo {
 		// Create the music elements for the screen
 		this.music = {
 			"rain": new Howl({
-				urls: ["/sounds/weather/rain.m4a"],
+				src: ["/sounds/weather/rain.m4a"],
 				autoplay: true,
 				loop: true,
 				volume: 0.3
 			}),
 			"openingDemo": new Howl({
-				urls: ["/music/lightWorld/introDemo/openingDemo.m4a"],
+				src: ["/music/lightWorld/introDemo/openingDemo.m4a"],
 				volume: 0.5,
 				sprite: {
-					complete: [0, 27141],
-					riseOnly: [6800, 27141]
+					intro: [0, 6800]
 				},
 				onend: () => {
-					this.music.openingDemo.play("riseOnly");
+					this.music.openingDemoRise.play("rise");
+				}
+			}),
+			"openingDemoRise": new Howl({
+				src: ["/music/lightWorld/introDemo/openingDemo.m4a"],
+				volume: 0.5,
+				sprite: {
+					rise: [6800, 27141, true]
 				}
 			})
 		};
@@ -98,7 +104,7 @@ export default class IntroDemo {
 
 			if (Animate.openingCircle(this)) {
 				if (Text.drawScrollText(38, 145)) {
-					this.music.openingDemo.play("complete");
+					this.music.openingDemo.play("intro");
 					this.storyState.shift();
 					this.storyStateIndex++;
 				}

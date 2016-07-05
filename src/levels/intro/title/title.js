@@ -13,7 +13,7 @@ export default class Title {
 		// Create the music element for the screen
 		this.music = {
 			"title": new Howl({
-				urls: ["/music/intro/title/title.mp4"],
+				src: ["/music/intro/title/title.mp4"],
 				autoplay: true,
 				loop: false
 			})
