@@ -264,30 +264,26 @@ export default class RegisterName {
 
 			} else if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A].indexOf(event.keyCode) !== -1) {
 				Sound.play(("link/lowHealth"));
+				if (this.nameText.length < 6){
+					for (let i = 0; i < MAX_CHAR; i++){
+						if (this.nameText[i] === undefined){
+							this.nameText[i] = [4, 132];
+						}
+					}
+				}
 				this.nameText[this.currentCharIndex] = [this.cursorTotalMoveCount, POS[this.barIndex]];
-
 				// If cursor was positioned at 'END' at the time of  (Y or B or X or A) pressed
 				if (this.nameText[this.currentCharIndex].equals([2, 180])||(this.nameText[this.currentCharIndex].equals([3, 180]))
 					||(this.nameText[this.currentCharIndex].equals([14, 180]))||(this.nameText[this.currentCharIndex].equals([15, 180]))
 					||(this.nameText[this.currentCharIndex].equals([21, 180]))||(this.nameText[this.currentCharIndex].equals([22, 180]))) {
+
 					this._terminate();
 				}
 
 				// If cursor was positioned at '<' at the time of (Y or B or X or A) pressed
 				if (this.nameText[this.currentCharIndex].equals([-1, 180])||(this.nameText[this.currentCharIndex].equals([11, 180]))
 					||(this.nameText[this.currentCharIndex].equals([18, 180]))) {
-
-					this.nameText[this.currentCharIndex] = [this.horizontalStorage[this.currentCharIndex], this.verticalStorage[this.currentCharIndex]];
 					if (this.currentCharIndex === 0){
-
-						if(this.xPosHolder.length !== MAX_CHAR) {
-						 this.xPosHolder.length = MAX_CHAR;
-						 this.xPosHolder.fill(5, this.yPosHolder.length, this.xPosHolder.length);
-						 let yLength = this.yPosHolder.length;
-						 this.yPosHolder.length = MAX_CHAR;
-						 this.yPosHolder.fill(359, yLength, this.xPosHolder.length);
-						 }
-
 						this.currentCharIndex = this.currentCharIndex + 4;
 						this.loopCharIndex = this.loopCharIndex + 4;
 					} else {
@@ -298,7 +294,7 @@ export default class RegisterName {
 				// If cursor was positioned at '>' at the time of (Y or B or X or A) pressed
 				else if (this.nameText[this.currentCharIndex].equals([0, 180])||(this.nameText[this.currentCharIndex].equals([12, 180]))
 					||(this.nameText[this.currentCharIndex].equals([19, 180]))) {
-					this.nameText[this.loopCharIndex] = [this.horizontalStorage[this.loopCharIndex], this.verticalStorage[this.loopCharIndex]];
+
 				}
 
 				this.currentCharIndex = (this.currentCharIndex + 1) % MAX_CHAR;
@@ -316,6 +312,10 @@ export default class RegisterName {
 	}
 
 	_terminate() {
+		/*for(let i = 0; i < MAX_CHAR; i++){
+			this.nameText[i] = [this.horizontalStorage[i],this.verticalStorage[i]];
+		}*/
+
 		let isValid = this.nameText.reduce((prev, cur) => {
 			return prev || CHAR_MAP[cur[0]][cur[1]][2].length > 0;
 		}, false);
@@ -329,7 +329,10 @@ export default class RegisterName {
 			let state = {
 				charName: name,
 				hearts: 3,
-				slot: this.slot
+				slot: this.slot,
+				bomb: 0,
+				arrow: 0,
+				rupee: 0
 			};
 
 			Storage.save(state, this.slot);
@@ -477,6 +480,8 @@ export default class RegisterName {
 			let [xCor, yCor] = CHAR_MAP[x][y];
 			if (((xCor === 85)||(xCor === 101)||(xCor === 277)||(xCor === 293)||(xCor === 389)||(xCor === 405))
 				&& (yCor === 359)){
+				this.horizontalStorage[this.i] = 4;
+				this.verticalStorage[this.i] = 132;
 			} else {
 				this.yPosHolder[this.i] = yCor;
 				this.xPosHolder[this.i] = xCor;
@@ -494,8 +499,7 @@ export default class RegisterName {
 			}
 		}
 		// Display all characters, using previous x,y coordinates
-		for (let j = 0; j < 6; j++) {
-			console.log(this.xPosHolder[j],this.nameText);
+		for (let j = 0; j < MAX_CHAR; j++) {
 			//console.log(this.xPosHolder.slice(-1)[0]);
 			Context.drawImage(
 				this.registerNameSheet,

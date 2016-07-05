@@ -10,6 +10,7 @@ import Paint from "./Paint"
 import Animate from "./Animate";
 import Player from "./Player";
 import SAT from "sat";
+import MenuOverlay from "./MenuOverlay";
 
 export default class Game {
 	constructor() {
@@ -20,7 +21,10 @@ export default class Game {
 		window.Link = {
 			charName: "Link",
 			hearts: 3,
-			slot: 999
+			slot: 999,
+			bomb: 0,
+			arrow: 0,
+			rupee: 0
 		}
 	}
 
@@ -63,6 +67,9 @@ export default class Game {
 
 		// Setup character/npc service
 		window.Player = new Player();
+
+		// Setup the Menu Overlay
+		window.MenuOverlay = new MenuOverlay();
 	}
 
 	collision(type, collisions, unit, ...others) {

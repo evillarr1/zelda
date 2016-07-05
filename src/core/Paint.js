@@ -88,14 +88,6 @@ const ITEM = {
 	UNCOVERED_COMFORTER: {
 		UP: [800, 75, 30, 17]
 	},
-	TRAIT: {
-		LEFT: [12, 936, 16, 37],
-		LEFT2: [29, 937, 22, 22],
-		MIDDLE_ARROW: [304, 929, 17, 8],
-		MIDDLE_RUPEE: [322, 928, 8, 8],
-		MIDDLE_BOMB: [337, 927, 8, 8],
-		RIGHT: [62, 939, 57, 7]
-	},
 	LINK_STANDING: {
 		UP: [515, 123, 16, 24],
 		RIGHT: [844, 119, 17, 24],
@@ -143,6 +135,19 @@ const ITEM = {
 		RIGHT: [822, 119, 17, 24],
 		DOWN: [138, 119, 16, 24],
 		LEFT: [1296, 118, 17, 24]
+	},
+	HEART: [293, 865, 8, 8],
+	NUMBERS: {
+		1: [302, 856, 7, 7],
+		2: [311, 856, 7, 7],
+		3: [318, 856, 7, 7],
+		4: [326, 856, 8, 7],
+		5: [334, 856, 8, 7],
+		6: [342, 856, 8, 7],
+		7: [350, 856, 8, 7],
+		8: [358, 856, 8, 7],
+		9: [366, 856, 8, 7],
+		0: [296, 856, 7, 7],
 	}
 };
 
@@ -165,8 +170,7 @@ export default class Paint {
 	}
 
 	draw(item, direction, xPos, yPos, imageSet = "house") {
-		let [xCor, yCor, xWidth, yWidth]= ITEM[item][direction];
-
+		let [xCor, yCor, xWidth, yWidth] =  direction ? ITEM[item][direction] : ITEM[item];
 		Context.drawImage(
 			this[imageSet],
 			xCor,
@@ -177,6 +181,7 @@ export default class Paint {
 			yPos,
 			xWidth,
 			yWidth);
+
 	}
 
 	drawX(item, direction, xPos, yPos, separator, x) {
@@ -243,4 +248,6 @@ export default class Paint {
 			secondEdge[2],
 			secondEdge[3]);
 	}
+
+
 }

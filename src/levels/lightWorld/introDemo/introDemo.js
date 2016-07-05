@@ -200,7 +200,7 @@ export default class IntroDemo {
 		IntroDemo.specialObjects();
 
 		this.storyState[0]();
-		IntroDemo.traitOverlay();
+		MenuOverlay.drawDefaultOverlay();
 		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 	}
 
@@ -242,15 +242,6 @@ export default class IntroDemo {
 		Paint.drawWall("HOUSE", "RIGHT");
 
 		Paint.draw("WINDOW", "RIGHT", 215, 118);
-	}
-
-	static traitOverlay() {
-		Paint.draw("TRAIT", "LEFT", 9, 20);
-		Paint.draw("TRAIT", "LEFT2", 26, 20);
-		Paint.draw("TRAIT", "MIDDLE_RUPEE", 67, 21);
-		Paint.draw("TRAIT", "MIDDLE_BOMB", 92, 21);
-		Paint.draw("TRAIT", "MIDDLE_ARROW", 114, 20);
-		Paint.draw("TRAIT", "RIGHT", 166, 17);
 	}
 
 	static specialObjects() {
