@@ -25,38 +25,43 @@ export default class Player {
 		this.pushCounter = 0;
 		this.collisions = {};
 
-		Keyboard.setContext("Player");
 		Keyboard.withContext("Player", () => {
-			Keyboard.bind("down", () => {
+			Keyboard.bind(["down"], (event) => {
+				event.preventRepeat();
+
 				this.currentStrokes.delete("UP");
 				this.currentStrokes.set("DOWN", true);
 			}, () => {
 				this.currentStrokes.delete("DOWN");
 			});
 
-			Keyboard.bind("up", () => {
+			Keyboard.bind("up", (event) => {
+				event.preventRepeat();
+
 				this.currentStrokes.delete("DOWN");
 				this.currentStrokes.set("UP", true);
 			}, () => {
 				this.currentStrokes.delete("UP");
 			});
 
-			Keyboard.bind("right", () => {
+			Keyboard.bind("right", (event) => {
+				event.preventRepeat();
+
 				this.currentStrokes.delete("LEFT");
 				this.currentStrokes.set("RIGHT", true);
 			}, () => {
 				this.currentStrokes.delete("RIGHT");
 			});
 
-			Keyboard.bind("left", () => {
+			Keyboard.bind("left", (event) => {
+				event.preventRepeat();
+
 				this.currentStrokes.delete("RIGHT");
 				this.currentStrokes.set("LEFT", true);
 			}, () => {
 				this.currentStrokes.delete("LEFT");
 			});
 		});
-
-		Keyboard.setContext("global");
 	}
 
 	update() {

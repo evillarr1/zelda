@@ -91,28 +91,28 @@ export default class IntroDemo {
 
 		this.storyStateIndex = 0;
 		this.storyState = [() => {
+			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 			blueMask();
 
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
+
 			if (Animate.openingCircle(this)) {
-				this.storyState.shift();
-				this.storyStateIndex++;
+				if (Text.drawScrollText(38, 145)) {
+					this.music.openingDemo.play("complete");
+					this.storyState.shift();
+					this.storyStateIndex++;
+				}
 			}
 		}, () => {
-			blueMask();
+			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 
-			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
-			if (Text.drawScrollText(38, 145)) {
-				this.music.openingDemo.play("complete");
-				this.storyState.shift();
-				this.storyStateIndex++;
-			}
-		}, () => {
 			if (Animate.linkSnoozing(this, 56, 61)) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 			}
 		}, () => {
+			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
 				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
@@ -122,6 +122,7 @@ export default class IntroDemo {
 		}, () => {
 			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 			Player.draw();
+			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		}];
 
 		this.storyState.splice(0, 0);
@@ -132,17 +133,17 @@ export default class IntroDemo {
 		this.currentStrokes = new Map();
 
 		// Setup the key bindings
-		Keyboard.setContext("level");
 		Keyboard.withContext("level", () => {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
 				Text.animateScroll();
-				if (this.storyStateIndex === 2) {
+				if (this.storyStateIndex === 1) {
 					this.storyState.shift();
 					this.storyStateIndex++;
 					Keyboard.setContext("Player");
 				}
 			});
 		});
+		Keyboard.setContext("level");
 	}
 
 	update() {
@@ -162,7 +163,6 @@ export default class IntroDemo {
 
 		this.storyState[0]();
 		MenuOverlay.drawDefaultOverlay();
-		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 	}
 
 	static floor() {
