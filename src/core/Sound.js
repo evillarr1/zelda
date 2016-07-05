@@ -5,7 +5,7 @@ export default class Sound {
 		this.sounds = {};
 	}
 
-	play(soundName) {
+	play(soundName, whenReady) {
 		let sound;
 
 		if (this.sounds[soundName]) {
@@ -16,8 +16,8 @@ export default class Sound {
 			});
 		}
 
-		// Only play the sound if it isn't already playing already
-		if (sound.playing()) {
+		// If whenReady is set, then only play the sound if it isn't already playing
+		if (!whenReady || (whenReady && !sound.playing())) {
 			sound.play();
 		}
 	}

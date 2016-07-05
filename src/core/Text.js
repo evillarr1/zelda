@@ -182,7 +182,7 @@ export default class Text {
 			if (this.isScrolling === 0) {
 				// Only play the complete sound once
 				if (!this.displayComplete) {
-					Sound.play("menu/textDone");
+					Sound.play("menu/textDone", true);
 				}
 				this.displayComplete = true;
 			}
@@ -190,7 +190,7 @@ export default class Text {
 			// Slowly increase the number of characters using the interval
 			this.charTick = 0;
 			this.charInterval++;
-			Sound.play("menu/textLetter");
+			Sound.play("menu/textLetter", true);
 		}
 
 		// Cut out only the characters needed in this interval
