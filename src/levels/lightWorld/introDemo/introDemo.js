@@ -120,6 +120,7 @@ export default class IntroDemo {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
+				Keyboard.setContext("Player");
 				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
 				this.storyStateIndex++;
@@ -145,7 +146,6 @@ export default class IntroDemo {
 				if (this.storyStateIndex === 1) {
 					this.storyState.shift();
 					this.storyStateIndex++;
-					Keyboard.setContext("Player");
 				}
 			});
 		});
