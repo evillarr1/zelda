@@ -14,9 +14,6 @@ import MenuOverlay from "./MenuOverlay";
 
 export default class Game {
 	constructor() {
-		this.configure();
-		new Intro();
-
 		// Preload this user for development
 		window.Link = {
 			charName: "Link",
@@ -25,7 +22,10 @@ export default class Game {
 			bomb: 0,
 			arrow: 0,
 			rupee: 0
-		}
+		};
+
+		this.configure();
+		new Intro();
 	}
 
 	configure() {
