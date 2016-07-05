@@ -47,6 +47,11 @@ export default class Player {
 	}
 
 	walk(directions) {
+		// Skip if no directions are passed in
+		if (directions.length === 0) {
+			return;
+		}
+
 		// Run at different speeds if more than one direction is triggered at the same time
 		let pos = directions.length === 1 ? 1.5 : 1;
 
@@ -54,39 +59,11 @@ export default class Player {
 		let lenY = Math.floor(this.yPos).toString().length + 1;
 		let lenX = Math.floor(this.xPos).toString().length + 1;
 
-		// Skip if no directions are passed in
-		if (directions.length === 0) {
-			return;
-		}
-
 		// Find the collisions and the offset of each
 		let collisions = {};
-		this.mapObjects.neutral.forEach(([posX, posY, x, y]) => {
-			let response = Game.collision("UNIT", [this.xPos, this.yPos + 10, 16, 16], [posX, posY, x, y]);
-
-			if (response !== true) {
-				if (response.overlapV.y > 0) {
-					collisions.DOWN = {
-						overlap: response.overlapV,
-						coordinates: [posX, posY, x, y]
-					};
-				} else if (response.overlapV.y < 0) {
-					collisions.UP = {
-						overlap: response.overlapV,
-						coordinates: [posX, posY, x, y]
-					};
-				} else if (response.overlapV.x > 0) {
-					collisions.RIGHT = {
-						overlap: response.overlapV,
-						coordinates: [posX, posY, x, y]
-					};
-				} else if (response.overlapV.x < 0) {
-					collisions.LEFT = {
-						overlap: response.overlapV,
-						coordinates: [posX, posY, x, y]
-					};
-				}
-			}
+		let playerUnit = [this.xPos, this.yPos + 10, 16, 16];
+		this.mapObjects.neutral.forEach((otherUnit) => {
+			Game.collision("UNIT", collisions, playerUnit, otherUnit);
 		});
 
 		// Set the direction the player should be facing

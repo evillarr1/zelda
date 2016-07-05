@@ -65,15 +65,39 @@ export default class Game {
 		window.Player = new Player();
 	}
 
-	collision(type, unit, ...others) {
-		switch(type) {
+	collision(type, collisions, unit, ...others) {
+		switch (type) {
 			case "UNIT":
 				let [xPos, yPos, width, height] = others[0];
 				let unitSat = new SAT.Box(new SAT.Vector(unit[0], unit[1]), unit[2], unit[3]).toPolygon();
 				let otherSat = new SAT.Box(new SAT.Vector(xPos, yPos), width, height).toPolygon();
 				let response = new SAT.Response();
 
-				return !SAT.testPolygonPolygon(unitSat, otherSat, response) || response;
+				return !SAT.testPolygonPolygon(unitSat, otherSat, response) || this.unitCollision(collisions, response, others[0]);
+		}
+	}
+
+	unitCollision(collisions, response, otherUnit) {
+		if (response.overlapV.y > 0) {
+			collisions.DOWN = {
+				overlap: response.overlapV,
+				coordinates: otherUnit
+			};
+		} else if (response.overlapV.y < 0) {
+			collisions.UP = {
+				overlap: response.overlapV,
+				coordinates: otherUnit
+			};
+		} else if (response.overlapV.x > 0) {
+			collisions.RIGHT = {
+				overlap: response.overlapV,
+				coordinates: otherUnit
+			};
+		} else if (response.overlapV.x < 0) {
+			collisions.LEFT = {
+				overlap: response.overlapV,
+				coordinates: otherUnit
+			};
 		}
 	}
 }
