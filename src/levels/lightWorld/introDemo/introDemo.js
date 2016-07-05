@@ -1,6 +1,7 @@
 "use strict";
 
 import KeyCodes from "../../../constants/KeyCodes";
+import Keyboard from "keyboardjs";
 
 const DIALOGUE = {
 	SCROLL: `Help me...
@@ -75,6 +76,8 @@ export default class IntroDemo {
 		};
 
 		Player.setLevelObjects(OBJECTS);
+		Player.action("STAND", "RIGHT");
+		Player.postion(90, 75);
 
 		let blueMask = () => {
 			Context.beginPath();
@@ -114,8 +117,6 @@ export default class IntroDemo {
 				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
 				this.storyStateIndex++;
-				Player.action("STAND", "RIGHT");
-				Player.postion(90, 75);
 				Player.draw();
 			}
 		}, () => {
@@ -131,61 +132,21 @@ export default class IntroDemo {
 		this.currentStrokes = new Map();
 
 		// Setup the key bindings
-		this.keyboard = document.onkeydown = (event) => {
-			if ([KeyCodes.Y, KeyCodes.B, KeyCodes.X, KeyCodes.A, KeyCodes.START].indexOf(event.keyCode) !== -1) {
+		Keyboard.setContext("level");
+		Keyboard.withContext("level", () => {
+			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
 				Text.animateScroll();
 				if (this.storyStateIndex === 2) {
 					this.storyState.shift();
 					this.storyStateIndex++;
+					Keyboard.setContext("Player");
 				}
-			}
-
-			if (event.keyCode === KeyCodes.DOWN) {
-				this.currentStrokes.delete("UP");
-				this.currentStrokes.set("DOWN", true);
-			}
-
-			if (event.keyCode === KeyCodes.UP) {
-				this.currentStrokes.delete("DOWN");
-				this.currentStrokes.set("UP", true);
-			}
-
-			if (event.keyCode === KeyCodes.LEFT) {
-				this.currentStrokes.delete("RIGHT");
-				this.currentStrokes.set("LEFT", true);
-			}
-
-			if (event.keyCode === KeyCodes.RIGHT) {
-				this.currentStrokes.delete("LEFT");
-				this.currentStrokes.set("RIGHT", true);
-			}
-		};
-
-		document.onkeyup = (event) => {
-			if (event.keyCode === KeyCodes.DOWN) {
-				this.currentStrokes.delete("DOWN");
-			}
-
-			if (event.keyCode === KeyCodes.UP) {
-				this.currentStrokes.delete("UP");
-			}
-
-			if (event.keyCode === KeyCodes.LEFT) {
-				this.currentStrokes.delete("LEFT");
-			}
-
-			if (event.keyCode === KeyCodes.RIGHT) {
-				this.currentStrokes.delete("RIGHT");
-			}
-		}
+			});
+		});
 	}
 
 	update() {
-		Player.action("STEP", Array.from(this.currentStrokes.keys()));
-
-		if (this.currentStrokes.size === 0) {
-			Player.action("STAND");
-		}
+		Player.update();
 	}
 
 	draw() {
