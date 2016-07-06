@@ -18,12 +18,26 @@ export default class Player {
 		this.xPos = 100;
 		this.yPos = 100;
 		this.direction = DIRECTION.DOWN;
-		this.actionIndex = 0;
 		this.currentAction = "LINK_STANDING";
-		this.mapObjects = {};
-		this.currentStrokes = new Map();
-		this.pushCounter = 0;
+
 		this.collisions = {};
+
+		// The objects for the current level
+		this.mapObjects = {};
+
+		// Current key strokes
+		this.currentStrokes = new Map();
+
+		// Action counters
+		this.pushCounter = 0;
+		this.pullCounter = 0;
+
+		// Counter used to animate player's actions
+		this.actionIndex = 0;
+
+		// Special offsets needed for certain animations
+		this.actionXOffset = 0;
+		this.actionYOffset = 0;
 
 		Keyboard.withContext("Player", () => {
 			Keyboard.bind(["down"], (event) => {
@@ -61,11 +75,36 @@ export default class Player {
 			}, () => {
 				this.currentStrokes.delete("LEFT");
 			});
+
+			Keyboard.bind("d", (event) => {
+				event.preventRepeat();
+
+				this.pullCounter = 1;
+			}, () => {
+				this.pullCounter = 0;
+				this.actionXOffset = 0;
+				this.actionYOffset = 0;
+			});
 		});
 	}
 
 	update() {
 		let directions = Array.from(this.currentStrokes.keys());
+
+		if (this.pullCounter > 0) {
+			if (this.collisions.hasOwnProperty(this.direction)) {
+				if (this.direction === "LEFT") {
+					this.actionXOffset = -2;
+				} else if (this.direction === "UP") {
+					this.actionYOffset = 4;
+				} else if (this.direction === "DOWN") {
+					this.actionYOffset = 4;
+				}
+
+				this.action("GRAB", this.direction);
+				return;
+			}
+		}
 
 		if (directions.length === 1 && this.collisions.hasOwnProperty(directions[0])) {
 			this.pushCounter++;
@@ -89,21 +128,24 @@ export default class Player {
 		switch (action) {
 			case "STEP":
 				this.walk(args[0]);
-				this.currentAction = `LINK_WALKING_${Math.floor(this.actionIndex / 2)}`;
 				this.actionIndex = (this.actionIndex + 1) % 14;
+				this.currentAction = "LINK_WALKING_" + Math.floor(this.actionIndex / 2);
 				break;
 			case "PUSH":
-				this.currentAction = `LINK_PUSHING_${Math.floor(this.actionIndex / 8)}`;
-
 				if (args[0][0] === "UP" || args[0][0] === "DOWN") {
 					this.actionIndex = (this.actionIndex + 1) % 24;
 				} else {
 					this.actionIndex = (this.actionIndex + 1) % 32;
 				}
+
+				this.currentAction = "LINK_PUSHING_" + Math.floor(this.actionIndex / 8);
 				break;
 			case "STAND":
 				this.currentAction = "LINK_STANDING";
 				this.direction = args[0] || this.direction;
+				break;
+			case "GRAB":
+				this.currentAction = "LINK_GRABBING";
 				break;
 			default:
 				break;
@@ -111,7 +153,7 @@ export default class Player {
 	}
 
 	draw() {
-		Paint.draw(this.currentAction, this.direction, this.xPos, this.yPos, "link");
+		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
 	}
 
 	postion(xPos, yPos) {
