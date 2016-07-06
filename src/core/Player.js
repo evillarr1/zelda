@@ -3,10 +3,10 @@
 import Keyboard from "keyboardjs";
 
 const DIRECTION = {
-	UP: "UP",
-	DOWN: "DOWN",
-	LEFT: "LEFT",
-	RIGHT: "RIGHT"
+	UP: ["UP", "DOWN"],
+	DOWN: ["DOWN", "UP"],
+	LEFT: ["LEFT", "RIGHT"],
+	RIGHT: ["RIGHT", "LEFT"]
 };
 
 export default class Player {
@@ -17,7 +17,7 @@ export default class Player {
 
 		this.xPos = 100;
 		this.yPos = 100;
-		this.direction = DIRECTION.DOWN;
+		this.direction = DIRECTION.DOWN[0];
 		this.currentAction = "LINK_STANDING";
 
 		this.collisions = {};
@@ -93,15 +93,7 @@ export default class Player {
 
 		if (this.pullCounter > 0) {
 			if (this.collisions.hasOwnProperty(this.direction)) {
-				if (this.direction === "LEFT") {
-					this.actionXOffset = -2;
-				} else if (this.direction === "UP") {
-					this.actionYOffset = 4;
-				} else if (this.direction === "DOWN") {
-					this.actionYOffset = 4;
-				}
-
-				this.action("GRAB", this.direction);
+				this.action("GRAB", directions);
 				return;
 			}
 		}
@@ -145,7 +137,34 @@ export default class Player {
 				this.direction = args[0] || this.direction;
 				break;
 			case "GRAB":
-				this.currentAction = "LINK_GRABBING";
+				// If the player if facing the opposite way he is facing, the pull
+				if (DIRECTION[this.direction][1] === args[0][0]) {
+					this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
+					this.actionIndex = (this.actionIndex + 1) % 24;
+
+					if (this.direction === "LEFT") {
+						this.actionXOffset = 2;
+					} else if (this.direction === "UP") {
+						this.actionYOffset = 5;
+						this.actionXOffset = -7;
+					} else if (this.direction === "DOWN") {
+						this.actionXOffset = -7;
+						this.actionYOffset = 3;
+					} else if (this.direction === "RIGHT") {
+						this.actionXOffset = -7;
+					}
+				} else {
+					this.currentAction = "LINK_GRABBING";
+					this.actionIndex = 0;
+
+					if (this.direction === "LEFT") {
+						this.actionXOffset = -2;
+					} else if (this.direction === "UP") {
+						this.actionYOffset = 4;
+					} else if (this.direction === "DOWN") {
+						this.actionYOffset = 4;
+					}
+				}
 				break;
 			default:
 				break;
@@ -154,6 +173,7 @@ export default class Player {
 
 	draw() {
 		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
+		this.actionXOffset = this.actionYOffset = 0;
 	}
 
 	postion(xPos, yPos) {
