@@ -139,31 +139,9 @@ export default class Player {
 			case "GRAB":
 				// If the player if facing the opposite way he is facing, the pull
 				if (DIRECTION[this.direction][1] === args[0][0]) {
-					this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
-					this.actionIndex = (this.actionIndex + 1) % 24;
-
-					if (this.direction === "LEFT") {
-						this.actionXOffset = 2;
-					} else if (this.direction === "UP") {
-						this.actionYOffset = 5;
-						this.actionXOffset = -7;
-					} else if (this.direction === "DOWN") {
-						this.actionXOffset = -7;
-						this.actionYOffset = 3;
-					} else if (this.direction === "RIGHT") {
-						this.actionXOffset = -7;
-					}
+					this._pull();
 				} else {
-					this.currentAction = "LINK_GRABBING";
-					this.actionIndex = 0;
-
-					if (this.direction === "LEFT") {
-						this.actionXOffset = -2;
-					} else if (this.direction === "UP") {
-						this.actionYOffset = 4;
-					} else if (this.direction === "DOWN") {
-						this.actionYOffset = 4;
-					}
+					this._grab();
 				}
 				break;
 			default:
@@ -318,6 +296,53 @@ export default class Player {
 			}
 		} else {
 			this.xPos = Number((this.xPos + pos).toPrecision(len.X))
+		}
+	}
+
+	_grab() {
+		let c = this.collisions[DIRECTION[this.direction][0]].coordinates;
+
+		// Only grab if the player is not off the edge
+		if (this.direction === "UP" || this.direction === "DOWN") {
+			if ((this.xPos < c[0] - 6) || (this.xPos > c[0] + c[2] - 10)) {
+				this.pullCounter = 0;
+
+				return;
+			}
+		} else {
+			if ((this.yPos < c[1] - 12) || (this.yPos > c[1] + c[3] - 22)) {
+				this.pullCounter = 0;
+
+				return;
+			}
+		}
+
+		this.currentAction = "LINK_GRABBING";
+		this.actionIndex = 0;
+
+		if (this.direction === "LEFT") {
+			this.actionXOffset = -2;
+		} else if (this.direction === "UP") {
+			this.actionYOffset = 4;
+		} else if (this.direction === "DOWN") {
+			this.actionYOffset = 4;
+		}
+	}
+
+	_pull() {
+		this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
+		this.actionIndex = (this.actionIndex + 1) % 24;
+
+		if (this.direction === "LEFT") {
+			this.actionXOffset = 2;
+		} else if (this.direction === "UP") {
+			this.actionYOffset = 5;
+			this.actionXOffset = -7;
+		} else if (this.direction === "DOWN") {
+			this.actionXOffset = -7;
+			this.actionYOffset = 3;
+		} else if (this.direction === "RIGHT") {
+			this.actionXOffset = -7;
 		}
 	}
 
