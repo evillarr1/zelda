@@ -42,7 +42,7 @@ const CHAR_MAP = {
 		132: [85, 311, "F"],
 		148: [85, 327, "P"],
 		164: [85, 343, "Z"],
-		180: [85, 359, ""]	//If you try to get rid of this one, you'll have an empty name.
+		180: [85, 359, ""]
 	},
 	0: {
 		132: [101, 311, "G"],
