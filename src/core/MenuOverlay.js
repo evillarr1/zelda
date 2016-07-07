@@ -36,7 +36,6 @@ export default class MenuOverlay {
 		this.menuBool = true;
 
 		// Take away Link's controls
-		console.log(this.tick);
 		Keyboard.withContext("Player", () => {
 			Keyboard.bind('enter', () => {
 				Keyboard.setContext("Menu");

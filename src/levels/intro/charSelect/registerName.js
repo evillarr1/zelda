@@ -500,7 +500,6 @@ export default class RegisterName {
 		}
 		// Display all characters, using previous x,y coordinates
 		for (let j = 0; j < MAX_CHAR; j++) {
-			//console.log(this.xPosHolder.slice(-1)[0]);
 			Context.drawImage(
 				this.registerNameSheet,
 				this.xPosHolder[j],
