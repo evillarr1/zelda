@@ -15,15 +15,19 @@ export default class Player {
 		this.linkSheet = new Image();
 		this.linkSheet.src = "img/link.png";
 
+		// Links position, current action and direction he is facing
 		this.xPos = 100;
 		this.yPos = 100;
 		this.direction = DIRECTION.DOWN[0];
 		this.currentAction = "LINK_STANDING";
 
-		this.collisions = {};
-
 		// The objects for the current level
 		this.mapObjects = {};
+
+		// Keep track of collisions whether they be static or special (movable) objects
+		this.collisions = {};
+		this.specialCollisions = {};
+		this.objectLifted = null;
 
 		// Current key strokes
 		this.currentStrokes = new Map();
@@ -80,6 +84,7 @@ export default class Player {
 				event.preventRepeat();
 
 				this.pullCounter = 1;
+				this.objectLifted = null;
 			}, () => {
 				this.pullCounter = 0;
 				this.actionXOffset = 0;
@@ -88,14 +93,15 @@ export default class Player {
 		});
 	}
 
+	setLevelObjects(mapObjects) {
+		this.mapObjects = mapObjects;
+	};
+
 	update() {
 		let directions = Array.from(this.currentStrokes.keys());
 
-		if (this.pullCounter > 0) {
-			if (this.collisions.hasOwnProperty(this.direction)) {
-				this.action("GRAB", directions);
-				return;
-			}
+		if (this.pullCounter > 0 && this.collisions.hasOwnProperty(this.direction)) {
+			return this.action("GRAB", directions);
 		}
 
 		if (directions.length === 1 && this.collisions.hasOwnProperty(directions[0])) {
@@ -137,8 +143,23 @@ export default class Player {
 				this.direction = args[0] || this.direction;
 				break;
 			case "GRAB":
-				// If the player if facing the opposite way he is facing, the pull
+				if (this.objectLifted) {
+					return this._lift();
+				}
+
+				if (this.specialCollisions[this.direction]) {
+					let special = this.mapObjects.special;
+
+					for (let i = 0; i < special.length; i++) {
+						if (this.specialCollisions[this.direction].prop[4] === special[i][4]) {
+							this.objectLifted = this.mapObjects.special.splice(i, 1);
+							return this._lift();
+						}
+					}
+				}
+
 				if (DIRECTION[this.direction][1] === args[0][0]) {
+					// If the player if facing the opposite way he is facing, the pull
 					this._pull();
 				} else {
 					this._grab();
@@ -178,12 +199,16 @@ export default class Player {
 
 		// Find the collisions and the offset of each
 		this.collisions = {};
+		this.specialCollisions = {};
+
 		this.mapObjects.static.forEach((otherUnit) => {
 			Game.collision("UNIT", this.collisions, playerUnit, otherUnit);
 		});
-		this.mapObjects.movable.forEach((otherUnit) => {
-			Game.collision("UNIT", this.collisions, playerUnit, otherUnit);
+		this.mapObjects.special.forEach((otherUnit) => {
+			Game.collision("UNIT", this.specialCollisions, playerUnit, otherUnit);
 		});
+		// Keep track of all the collisions in one variable
+		Object.assign(this.collisions, this.specialCollisions);
 
 		// Run at different speeds if more than one direction is triggered at the same time
 		let pos = directions.length === 1 ? 1.5 : 1;
@@ -195,7 +220,7 @@ export default class Player {
 				if (!this.collisions.DOWN) {
 					this._moveDown(pos, len.Y);
 				} else {
-					let downCol = this.collisions.DOWN.coordinates;
+					let downCol = this.collisions.DOWN.prop;
 
 					if (this.xPos < downCol[0] - 16 + (downCol[2] * 0.25)) {
 						this._moveLeft(downCol[0], len.X, true, this.collisions.LEFT);
@@ -207,7 +232,7 @@ export default class Player {
 				if (!this.collisions.UP) {
 					this._moveUp(pos, len.Y);
 				} else {
-					let upCol = this.collisions.UP.coordinates;
+					let upCol = this.collisions.UP.prop;
 
 					if (this.xPos < upCol[0] - 16 + (upCol[2] * 0.25)) {
 						this._moveLeft(upCol[0], len.X, true, this.collisions.LEFT);
@@ -219,7 +244,7 @@ export default class Player {
 				if (!this.collisions.LEFT) {
 					this._moveLeft(pos, len.X);
 				} else {
-					let leftCol = this.collisions.LEFT.coordinates;
+					let leftCol = this.collisions.LEFT.prop;
 
 					if (this.yPos < leftCol[1] - 24 + (leftCol[3] * 0.25)) {
 						this._moveUp(leftCol[1], len.Y, true, this.collisions.UP);
@@ -231,7 +256,7 @@ export default class Player {
 				if (!this.collisions.RIGHT) {
 					this._moveRight(pos, len.X);
 				} else {
-					let rightCol = this.collisions.RIGHT.coordinates;
+					let rightCol = this.collisions.RIGHT.prop;
 
 					if (this.yPos < rightCol[1] - 24 + (rightCol[3] * 0.25)) {
 						this._moveUp(rightCol[1], len.Y, true, this.collisions.UP);
@@ -300,17 +325,17 @@ export default class Player {
 	}
 
 	_grab() {
-		let c = this.collisions[DIRECTION[this.direction][0]].coordinates;
+		let props = this.collisions[DIRECTION[this.direction][0]].prop;
 
 		// Only grab if the player is not off the edge
 		if (this.direction === "UP" || this.direction === "DOWN") {
-			if ((this.xPos < c[0] - 6) || (this.xPos > c[0] + c[2] - 10)) {
+			if ((this.xPos < props[0] - 6) || (this.xPos > props[0] + props[2] - 10)) {
 				this.pullCounter = 0;
 
 				return;
 			}
 		} else {
-			if ((this.yPos < c[1] - 12) || (this.yPos > c[1] + c[3] - 22)) {
+			if ((this.yPos < props[1] - 12) || (this.yPos > props[1] + props[3] - 22)) {
 				this.pullCounter = 0;
 
 				return;
@@ -330,7 +355,6 @@ export default class Player {
 	}
 
 	_pull() {
-		this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
 		this.actionIndex = (this.actionIndex + 1) % 24;
 
 		if (this.direction === "LEFT") {
@@ -344,9 +368,26 @@ export default class Player {
 		} else if (this.direction === "RIGHT") {
 			this.actionXOffset = -7;
 		}
+
+		this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
 	}
 
-	setLevelObjects(mapObjects) {
-		this.mapObjects = mapObjects;
-	};
+	_lift() {
+		this.actionIndex = Math.min(this.actionIndex + 1, 47);
+
+		if (this.direction === "LEFT") {
+			this.actionYOffset = 2;
+			this.actionXOffset = -13;
+		} else if (this.direction === "UP") {
+			this.actionYOffset = 2;
+			this.actionXOffset = -9;
+		} else if (this.direction === "DOWN") {
+			this.actionXOffset = -7;
+			this.actionYOffset = 3;
+		} else if (this.direction === "RIGHT") {
+			this.actionXOffset = -7;
+		}
+
+		this.currentAction = "LINK_LIFTING_" + Math.floor(this.actionIndex / 8);
+	}
 }

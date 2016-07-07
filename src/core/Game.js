@@ -88,22 +88,22 @@ export default class Game {
 		if (response.overlapV.y > 0) {
 			collisions.DOWN = {
 				overlap: response.overlapV,
-				coordinates: otherUnit
+				prop: otherUnit
 			};
 		} else if (response.overlapV.y < 0) {
 			collisions.UP = {
 				overlap: response.overlapV,
-				coordinates: otherUnit
+				prop: otherUnit
 			};
 		} else if (response.overlapV.x > 0) {
 			collisions.RIGHT = {
 				overlap: response.overlapV,
-				coordinates: otherUnit
+				prop: otherUnit
 			};
 		} else if (response.overlapV.x < 0) {
 			collisions.LEFT = {
 				overlap: response.overlapV,
-				coordinates: otherUnit
+				prop: otherUnit
 			};
 		}
 	}
