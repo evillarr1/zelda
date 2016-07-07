@@ -42,6 +42,7 @@ export default class Game {
 			if (lastState && lastState.update) {
 				lastState.update();
 			}
+			window.MenuOverlay.update();
 		}).setDraw(() => {
 			let lastState = window.State.peek();
 
