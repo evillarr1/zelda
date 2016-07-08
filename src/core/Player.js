@@ -149,7 +149,7 @@ export default class Player {
 
 					for (let i = 0; i < keys.length; i++) {
 						if (this.specialCollisions[this.direction].prop[4] === special[keys[i]][4]) {
-							this.objectLifted = this.mapObjects.special[keys[i]];
+							this.objectLifted = this.mapObjects.special[keys[i]].slice(-1)[0];
 							delete this.mapObjects.special[keys[i]];
 							delete this.specialCollisions[this.direction];
 							delete this.collisions[this.direction];
@@ -174,6 +174,14 @@ export default class Player {
 	}
 
 	draw() {
+		if (this.objectLifted) {
+			Paint.draw(...this.objectLifted);
+		}
+
+		for (let key in this.mapObjects.special) {
+			Paint.draw(...this.mapObjects.special[key].slice(-1)[0]);
+		}
+
 		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
 		this.actionXOffset = this.actionYOffset = 0;
 	}

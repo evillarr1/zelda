@@ -1,6 +1,5 @@
 "use strict";
 
-import KeyCodes from "../../../constants/KeyCodes";
 import Keyboard from "keyboardjs";
 
 const DIALOGUE = {
@@ -30,25 +29,27 @@ while. I'll be back by morning.
 Don't leave the house.`
 };
 
-const OBJECTS = {
-	static: [
-		[30, 0, 10, 250], //left
-		[214, 0, 10, 250], //right
-		[-100, 65, 300, 10], //up
-		[0, 198, 120, 500], //down
-		[136, 198, 114, 500], //down
-		[54, 70, 34, 40],
-		[150, 110, 48, 34], //large table
-		[54, 158, 34, 24], //small table
-		[167, 142, 16, 16], //bottom stool
-		[167, 95, 16, 16], //top stool
-		[167, 46, 32, 32],
-		[190, 159, 16, 16],
-	],
-	special: {
-		"POT_1": [39, 70, 16, 16, "POT_1", "LIFT"],
-		"POT_2": [39, 86, 16, 16, "POT_2", "LIFT"],
-		"POT_3": [39, 102, 16, 16, "POT_3", "LIFT"]
+const OBJECTS = function () {
+	return {
+		static: [
+			[30, 0, 10, 250], //left
+			[214, 0, 10, 250], //right
+			[-100, 65, 300, 10], //up
+			[0, 198, 120, 500], //down
+			[136, 198, 114, 500], //down
+			[54, 70, 34, 40],
+			[150, 110, 48, 34], //large table
+			[54, 158, 34, 24], //small table
+			[167, 142, 16, 16], //bottom stool
+			[167, 95, 16, 16], //top stool
+			[167, 46, 32, 32],
+			[190, 159, 16, 16],
+		],
+		special: {
+			"POT_1": [39, 70, 16, 16, "POT_1", "LIFT", ["POT", "UP", 41, 70]],
+			"POT_2": [39, 86, 16, 16, "POT_2", "LIFT", ["POT", "UP", 41, 86]],
+			"POT_3": [39, 102, 16, 16, "POT_3", "LIFT", ["POT", "UP", 41, 102]]
+		}
 	}
 };
 
@@ -81,7 +82,7 @@ export default class IntroDemo {
 			})
 		};
 
-		Player.setLevelObjects(OBJECTS);
+		Player.setLevelObjects(new OBJECTS());
 		Player.action("STAND", "RIGHT");
 		Player.postion(90, 75);
 
@@ -100,6 +101,9 @@ export default class IntroDemo {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 			blueMask();
 
+			Paint.draw("POT", "UP", 41, 70);
+			Paint.draw("POT", "UP", 41, 86);
+			Paint.draw("POT", "UP", 41, 102);
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
 
 			if (Animate.openingCircle(this)) {
@@ -111,6 +115,9 @@ export default class IntroDemo {
 			}
 		}, () => {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+			Paint.draw("POT", "UP", 41, 70);
+			Paint.draw("POT", "UP", 41, 86);
+			Paint.draw("POT", "UP", 41, 102);
 
 			if (Animate.linkSnoozing(this, 56, 61)) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
@@ -118,6 +125,9 @@ export default class IntroDemo {
 			}
 		}, () => {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+			Paint.draw("POT", "UP", 41, 70);
+			Paint.draw("POT", "UP", 41, 86);
+			Paint.draw("POT", "UP", 41, 102);
 
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
 				Keyboard.setContext("Player");
@@ -212,17 +222,6 @@ export default class IntroDemo {
 	}
 
 	static specialObjects() {
-		if (Player.mapObjects.special["POT_1"] || (Player.objectLifted && Player.objectLifted[4] === "POT_1")) {
-			Paint.draw("POT", "UP", 41, 70);
-		}
-
-		if (Player.mapObjects.special["POT_2"] || (Player.objectLifted && Player.objectLifted[4] === "POT_2")) {
-			Paint.draw("POT", "UP", 41, 86);
-		}
-
-		if (Player.mapObjects.special["POT_3"] || (Player.objectLifted && Player.objectLifted[4] === "POT_3")) {
-			Paint.draw("POT", "UP", 41, 102);
-		}
 		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 }
