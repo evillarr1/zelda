@@ -11,10 +11,6 @@ const DIRECTION = {
 
 export default class Player {
 	constructor() {
-		// Create a new image
-		this.linkSheet = new Image();
-		this.linkSheet.src = "img/link.png";
-
 		// Links position, current action and direction he is facing
 		this.xPos = 100;
 		this.yPos = 100;
@@ -100,6 +96,10 @@ export default class Player {
 	update() {
 		let directions = Array.from(this.currentStrokes.keys());
 
+		if (this.objectLifted) {
+			return this.action("LIFT", directions);
+		}
+
 		if (this.pullCounter > 0 && this.collisions.hasOwnProperty(this.direction)) {
 			return this.action("GRAB", directions);
 		}
@@ -143,17 +143,17 @@ export default class Player {
 				this.direction = args[0] || this.direction;
 				break;
 			case "GRAB":
-				if (this.objectLifted) {
-					return this._lift();
-				}
-
 				if (this.specialCollisions[this.direction]) {
 					let special = this.mapObjects.special;
+					let keys = Object.keys(special);
 
-					for (let i = 0; i < special.length; i++) {
-						if (this.specialCollisions[this.direction].prop[4] === special[i][4]) {
-							this.objectLifted = this.mapObjects.special.splice(i, 1);
-							return this._lift();
+					for (let i = 0; i < keys.length; i++) {
+						if (this.specialCollisions[this.direction].prop[4] === special[keys[i]][4]) {
+							this.objectLifted = this.mapObjects.special[keys[i]];
+							delete this.mapObjects.special[keys[i]];
+							delete this.specialCollisions[this.direction];
+							delete this.collisions[this.direction];
+							return;
 						}
 					}
 				}
@@ -164,6 +164,9 @@ export default class Player {
 				} else {
 					this._grab();
 				}
+				break;
+			case "LIFT":
+				this._lift();
 				break;
 			default:
 				break;
@@ -204,8 +207,11 @@ export default class Player {
 		this.mapObjects.static.forEach((otherUnit) => {
 			Game.collision("UNIT", this.collisions, playerUnit, otherUnit);
 		});
-		this.mapObjects.special.forEach((otherUnit) => {
-			Game.collision("UNIT", this.specialCollisions, playerUnit, otherUnit);
+
+		let special = this.mapObjects.special;
+
+		Object.keys(special).forEach((key) => {
+			Game.collision("UNIT", this.specialCollisions, playerUnit, special[key]);
 		});
 		// Keep track of all the collisions in one variable
 		Object.assign(this.collisions, this.specialCollisions);

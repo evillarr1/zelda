@@ -45,11 +45,11 @@ const OBJECTS = {
 		[167, 46, 32, 32],
 		[190, 159, 16, 16],
 	],
-	special: [
-		[39, 70, 16, 16, "POT_1", "LIFT"],
-		[39, 86, 16, 16, "POT_2", "LIFT"],
-		[39, 102, 16, 16, "POT_3", "LIFT"]
-	]
+	special: {
+		"POT_1": [39, 70, 16, 16, "POT_1", "LIFT"],
+		"POT_2": [39, 86, 16, 16, "POT_2", "LIFT"],
+		"POT_3": [39, 102, 16, 16, "POT_3", "LIFT"]
+	}
 };
 
 export default class IntroDemo {
@@ -212,9 +212,17 @@ export default class IntroDemo {
 	}
 
 	static specialObjects() {
-		Paint.draw("POT", "UP", 41, 70);
-		Paint.draw("POT", "UP", 41, 86);
-		Paint.draw("POT", "UP", 41, 102);
+		if (Player.mapObjects.special["POT_1"] || (Player.objectLifted && Player.objectLifted[4] === "POT_1")) {
+			Paint.draw("POT", "UP", 41, 70);
+		}
+
+		if (Player.mapObjects.special["POT_2"] || (Player.objectLifted && Player.objectLifted[4] === "POT_2")) {
+			Paint.draw("POT", "UP", 41, 86);
+		}
+
+		if (Player.mapObjects.special["POT_3"] || (Player.objectLifted && Player.objectLifted[4] === "POT_3")) {
+			Paint.draw("POT", "UP", 41, 102);
+		}
 		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 }
