@@ -7,7 +7,7 @@ const BLOCKS = {
 	RIGHT: 8
 };
 
-const ITEM = {
+const ITEMS = {
 	WINDOW: {
 		UP: [494, 503, 32, 24],
 		DOWN: [494, 528, 32, 24],
@@ -249,10 +249,11 @@ export default class Paint {
 		this.house.src = "img/mainSheet.png";
 		this.link = new Image();
 		this.link.src = "img/link.png";
+		this.items = ITEMS;
 	}
 
 	draw(item, direction, xPos, yPos, imageSet = "house") {
-		let [xCor, yCor, xWidth, yWidth] =  direction ? ITEM[item][direction] : ITEM[item];
+		let [xCor, yCor, xWidth, yWidth] =  direction ? ITEMS[item][direction] : ITEMS[item];
 		Context.drawImage(
 			this[imageSet],
 			xCor,
@@ -267,7 +268,7 @@ export default class Paint {
 	}
 
 	drawX(item, direction, xPos, yPos, separator, x) {
-		let [xCor, yCor, xWidth, yWidth]= ITEM[item][direction];
+		let [xCor, yCor, xWidth, yWidth]= ITEMS[item][direction];
 		let [topBot, leftRight] = ["UP", "DOWN"].indexOf(direction) !== -1 ? [1, 0] : [0, 1];
 
 		for (let i = 0; i < x; i++) {

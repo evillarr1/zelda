@@ -9,6 +9,41 @@ const DIRECTION = {
 	RIGHT: ["RIGHT", "LEFT"]
 };
 
+const LIFT_OFFSET = {
+	UP: {
+		0: [0, 0],
+		1: [0, 0],
+		2: [0, 0],
+		3: [0, 0],
+		4: [0, -1],
+		5: [0, -1]
+	},
+	LEFT: {
+		0: [0, -3],
+		1: [0, 0],
+		2: [0, 0],
+		3: [1.5, -3],
+		4: [7.5, -4],
+		5: [5, -2]
+	},
+	RIGHT: {
+		0: [0, 0],
+		1: [0, 0],
+		2: [0, 0],
+		3: [0, 0],
+		4: [0, -1],
+		5: [0, -1]
+	},
+	DOWN: {
+		0: [0, 0],
+		1: [0, 0],
+		2: [0, 0],
+		3: [0, 0],
+		4: [0, -1],
+		5: [0, -1]
+	}
+};
+
 export default class Player {
 	constructor() {
 		// Links position, current action and direction he is facing
@@ -31,6 +66,7 @@ export default class Player {
 		// Action counters
 		this.pushCounter = 0;
 		this.pullCounter = 0;
+		this.liftCounter = 0;
 
 		// Counter used to animate player's actions
 		this.actionIndex = 0;
@@ -153,6 +189,7 @@ export default class Player {
 							delete this.mapObjects.special[keys[i]];
 							delete this.specialCollisions[this.direction];
 							delete this.collisions[this.direction];
+							this.liftCounter = 0;
 							return;
 						}
 					}
@@ -174,16 +211,16 @@ export default class Player {
 	}
 
 	draw() {
-		if (this.objectLifted) {
-			Paint.draw(...this.objectLifted);
-		}
-
 		for (let key in this.mapObjects.special) {
 			Paint.draw(...this.mapObjects.special[key].slice(-1)[0]);
 		}
 
 		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
 		this.actionXOffset = this.actionYOffset = 0;
+
+		if (this.objectLifted) {
+			Paint.draw(...this.objectLifted);
+		}
 	}
 
 	postion(xPos, yPos) {
@@ -387,7 +424,19 @@ export default class Player {
 	}
 
 	_lift() {
-		this.actionIndex = Math.min(this.actionIndex + 1, 47);
+		if (this.direction === "UP" || this.direction === "DOWN") {
+			this.objectLifted[2] = this.xPos + (Paint.items[this.objectLifted[0]][this.objectLifted[1]][2] / 6);
+		}
+
+		let liftCounter = this.liftCounter / 8;
+
+		if (Number.isInteger(liftCounter)) {
+			let [liftX, liftY] = LIFT_OFFSET[this.direction][liftCounter];
+			this.objectLifted[2] += liftX;
+			this.objectLifted[3] += liftY;
+		}
+
+		this.liftCounter = Math.min(this.liftCounter + 1, 41);
 
 		if (this.direction === "LEFT") {
 			this.actionYOffset = 2;
@@ -402,6 +451,6 @@ export default class Player {
 			this.actionXOffset = -7;
 		}
 
-		this.currentAction = "LINK_LIFTING_" + Math.floor(this.actionIndex / 8);
+		this.currentAction = "LINK_LIFTING_" + Math.floor(this.liftCounter / 8);
 	}
 }
