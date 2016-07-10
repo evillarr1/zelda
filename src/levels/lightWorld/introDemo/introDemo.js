@@ -83,7 +83,7 @@ export default class IntroDemo {
 		};
 
 		Player.setLevelObjects(new OBJECTS());
-		Player.action("STAND", "RIGHT");
+		Player.actions("STAND", "RIGHT");
 		Player.postion(90, 75);
 
 		let blueMask = () => {

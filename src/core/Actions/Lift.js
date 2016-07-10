@@ -40,46 +40,46 @@ const LIFT_OFFSET = {
 };
 
 export default class Lift {
-	constructor(player) {
-		this.player = player;
+	constructor(entity) {
+		this.entity = entity;
 	}
 
 	_lift() {
-		if (this.player.direction === "UP" || this.player.direction === "DOWN") {
-			this.player.objectLifted[2] = this.player.xPos + (Paint.items[this.player.objectLifted[0]][this.player.objectLifted[1]][2] / 6);
+		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
+			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6);
 		}
 
-		let liftCounter = this.player.liftCounter / 8;
+		let liftCounter = this.entity.liftCounter / 8;
 
 		if (Number.isInteger(liftCounter)) {
-			let [liftX, liftY] = LIFT_OFFSET[this.player.direction][liftCounter];
-			this.player.objectLifted[2] += liftX;
-			this.player.objectLifted[3] += liftY;
+			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][liftCounter];
+			this.entity.objectLifted[2] += liftX;
+			this.entity.objectLifted[3] += liftY;
 		}
 
-		if (this.player.liftCounter === 41) {
-			let [liftX, liftY] = LIFT_OFFSET[this.player.direction][6];
+		if (this.entity.liftCounter === 41) {
+			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][6];
 
-			this.player.objectLifted[2] = this.player.xPos + (Paint.items[this.player.objectLifted[0]][this.player.objectLifted[1]][2] / 6) + liftX;
-			this.player.objectLifted[3] = this.player.yPos + (Paint.items[this.player.objectLifted[0]][this.player.objectLifted[1]][2] / 6) + liftY;
+			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftX;
+			this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftY;
 		}
 
-		this.player.liftCounter = Math.min(this.player.liftCounter + 1, 41);
+		this.entity.liftCounter = Math.min(this.entity.liftCounter + 1, 41);
 
-		if (this.player.direction === "LEFT") {
-			this.player.actionYOffset = 2;
-			this.player.actionXOffset = -13;
-		} else if (this.player.direction === "UP") {
-			this.player.actionYOffset = 2;
-			this.player.actionXOffset = -9;
-		} else if (this.player.direction === "DOWN") {
-			this.player.actionYOffset = 2;
-			this.player.actionXOffset = -9;
-		} else if (this.player.direction === "RIGHT") {
-			this.player.actionXOffset = -7;
-			this.player.actionYOffset = 2;
+		if (this.entity.direction === "LEFT") {
+			this.entity.actionYOffset = 2;
+			this.entity.actionXOffset = -13;
+		} else if (this.entity.direction === "UP") {
+			this.entity.actionYOffset = 2;
+			this.entity.actionXOffset = -9;
+		} else if (this.entity.direction === "DOWN") {
+			this.entity.actionYOffset = 2;
+			this.entity.actionXOffset = -9;
+		} else if (this.entity.direction === "RIGHT") {
+			this.entity.actionXOffset = -7;
+			this.entity.actionYOffset = 2;
 		}
 
-		this.player.currentAction = "LINK_LIFTING_" + Math.floor(this.player.liftCounter / 8);
+		this.entity.currentAction = "LINK_LIFTING_" + Math.floor(this.entity.liftCounter / 8);
 	}
 }
