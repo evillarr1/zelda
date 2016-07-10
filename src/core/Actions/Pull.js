@@ -1,25 +1,21 @@
 "use strict";
 
 export default class Pull {
-	constructor(entity) {
-		this.entity = entity;
-	}
-
 	_pull() {
-		this.entity.actionIndex = (this.entity.actionIndex + 1) % 24;
+		this.actionIndex = (this.actionIndex + 1) % 24;
 
-		if (this.entity.direction === "LEFT") {
-			this.entity.actionXOffset = 2;
-		} else if (this.entity.direction === "UP") {
-			this.entity.actionYOffset = 5;
-			this.entity.actionXOffset = -7;
-		} else if (this.entity.direction === "DOWN") {
-			this.entity.actionXOffset = -7;
-			this.entity.actionYOffset = 3;
-		} else if (this.entity.direction === "RIGHT") {
-			this.entity.actionXOffset = -7;
+		if (this.direction === "LEFT") {
+			this.actionXOffset = 2;
+		} else if (this.direction === "UP") {
+			this.actionYOffset = 5;
+			this.actionXOffset = -7;
+		} else if (this.direction === "DOWN") {
+			this.actionXOffset = -7;
+			this.actionYOffset = 3;
+		} else if (this.direction === "RIGHT") {
+			this.actionXOffset = -7;
 		}
 
-		this.entity.currentAction = "LINK_TUGGING_" + Math.floor(this.entity.actionIndex / 8);
+		this.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
 	}
 }

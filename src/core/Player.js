@@ -47,10 +47,10 @@ export default class Player {
 		this.actionYOffset = 0;
 
 		this.action = {
-			"WALK": new Step(this),
-			"GRAB": new Grab(this),
-			"PULL": new Pull(this),
-			"LIFT": new Lift(this)
+			"WALK": (new Step(this))._walk.bind(this),
+			"GRAB": (new Grab(this))._grab.bind(this),
+			"PULL": (new Pull(this))._pull.bind(this),
+			"LIFT": (new Lift(this))._lift.bind(this)
 		};
 
 		Keyboard.withContext("Player", () => {
@@ -161,7 +161,7 @@ export default class Player {
 	actions(action, ...args) {
 		switch (action) {
 			case "STEP":
-				this.action["WALK"].walk(args[0]);
+				this.action["WALK"](args[0]);
 				this.actionIndex = (this.actionIndex + 1) % 14;
 				this.currentAction = "LINK_WALKING_" + Math.floor(this.actionIndex / 2);
 				break;
@@ -181,20 +181,20 @@ export default class Player {
 			case "GRAB":
 				if (DIRECTION[this.direction][1] === args[0][0]) {
 					// If the player if facing the opposite way he is facing, the pull
-					this.action["PULL"]._pull();
+					this.action["PULL"]();
 				} else {
-					this.action["GRAB"]._grab();
+					this.action["GRAB"]();
 				}
 				break;
 			case "LIFT":
-				this.action["LIFT"]._lift();
+				this.action["LIFT"]();
 				break;
 			case "LIFT_WALK":
-				this.action["WALK"].walk(args[0], 0.8);
+				this.action["WALK"](args[0], 0.8);
 				this.actionIndex = (this.actionIndex + 1) % 17;
 				this.currentAction = "LINK_WALKING_" + LIFT_WALKING[Math.floor(this.actionIndex / 6)];
 				this.actionXOffset = this.actionYOffset = 0;
-				this.action["LIFT"]._lift();
+				this.action["LIFT"]();
 				break;
 			default:
 				break;

@@ -2,41 +2,44 @@
 
 export default class Step {
 	constructor(entity) {
-		this.entity = entity;
+		entity._moveDown = this._moveDown;
+		entity._moveUp = this._moveUp;
+		entity._moveLeft = this._moveLeft;
+		entity._moveRight = this._moveRight;
 	}
 
-	walk(directions, newPace) {
+	_walk(directions, newPace) {
 		// Skip if no directions are passed in
 		if (directions.length === 0) {
 			return;
 		}
 
 		// Set the direction the entity should be facing
-		this.entity.direction = directions[0];
+		this.direction = directions[0];
 
 		// Used to help calculate the precise position of link
 		let len = {
-			Y: Math.floor(this.entity.yPos).toString().length + 1,
-			X: Math.floor(this.entity.xPos).toString().length + 1
+			Y: Math.floor(this.yPos).toString().length + 1,
+			X: Math.floor(this.xPos).toString().length + 1
 		};
 
-		let entityUnit = [this.entity.xPos, this.entity.yPos + 10, 16, 16];
+		let entityUnit = [this.xPos, this.yPos + 10, 16, 16];
 
 		// Find the collisions and the offset of each
-		this.entity.collisions = new Map();
-		this.entity.specialCollisions = new Map();
+		this.collisions = new Map();
+		this.specialCollisions = new Map();
 
-		this.entity.mapObjects.static.forEach((otherUnit) => {
-			Game.collision("UNIT", this.entity.collisions, entityUnit, otherUnit);
+		this.mapObjects.static.forEach((otherUnit) => {
+			Game.collision("UNIT", this.collisions, entityUnit, otherUnit);
 		});
 
-		let special = this.entity.mapObjects.special;
+		let special = this.mapObjects.special;
 
 		Object.keys(special).forEach((key) => {
-			Game.collision("UNIT", this.entity.specialCollisions, entityUnit, special[key]);
+			Game.collision("UNIT", this.specialCollisions, entityUnit, special[key]);
 		});
 		// Keep track of all the collisions in one variable
-		this.entity.collisions = new Map([...this.entity.collisions, ...this.entity.specialCollisions]);
+		this.collisions = new Map([...this.collisions, ...this.specialCollisions]);
 
 		// Run at different speeds if more than one direction is triggered at the same time
 		let pos = newPace || (directions.length === 1 ? 1.5 : 1);
@@ -45,51 +48,51 @@ export default class Step {
 		// If a valid movement, round the new position to the nearest position to two decimal points
 		directions.forEach((direction) => {
 			if (direction === "DOWN") {
-				if (!this.entity.collisions.has("DOWN")) {
+				if (!this.collisions.has("DOWN")) {
 					this._moveDown(pos, len.Y);
 				} else {
-					let downCol = this.entity.collisions.get("DOWN").prop;
+					let downCol = this.collisions.get("DOWN").prop;
 
-					if (this.entity.xPos < downCol[0] - 16 + (downCol[2] * 0.25)) {
-						this._moveLeft(downCol[0], len.X, true, this.entity.collisions.get("LEFT"));
-					} else if (this.entity.xPos > downCol[0] + downCol[2] - (downCol[2] * 0.25)) {
-						this._moveRight(downCol[0] + downCol[2], len.X, true, this.entity.collisions.get("RIGHT"));
+					if (this.xPos < downCol[0] - 16 + (downCol[2] * 0.25)) {
+						this._moveLeft(downCol[0], len.X, true, this.collisions.get("LEFT"));
+					} else if (this.xPos > downCol[0] + downCol[2] - (downCol[2] * 0.25)) {
+						this._moveRight(downCol[0] + downCol[2], len.X, true, this.collisions.get("RIGHT"));
 					}
 				}
 			} else if (direction === "UP") {
-				if (!this.entity.collisions.has("UP")) {
+				if (!this.collisions.has("UP")) {
 					this._moveUp(pos, len.Y);
 				} else {
-					let upCol = this.entity.collisions.get("UP").prop;
+					let upCol = this.collisions.get("UP").prop;
 
-					if (this.entity.xPos < upCol[0] - 16 + (upCol[2] * 0.25)) {
-						this._moveLeft(upCol[0], len.X, true, this.entity.collisions.get("LEFT"));
-					} else if (this.entity.xPos > upCol[0] + upCol[2] - (upCol[2] * 0.25)) {
-						this._moveRight(upCol[0] + upCol[2], len.X, true, this.entity.collisions.get("RIGHT"));
+					if (this.xPos < upCol[0] - 16 + (upCol[2] * 0.25)) {
+						this._moveLeft(upCol[0], len.X, true, this.collisions.get("LEFT"));
+					} else if (this.xPos > upCol[0] + upCol[2] - (upCol[2] * 0.25)) {
+						this._moveRight(upCol[0] + upCol[2], len.X, true, this.collisions.get("RIGHT"));
 					}
 				}
 			} else if (direction === "LEFT") {
-				if (!this.entity.collisions.has("LEFT")) {
+				if (!this.collisions.has("LEFT")) {
 					this._moveLeft(pos, len.X);
 				} else {
-					let leftCol = this.entity.collisions.get("LEFT").prop;
+					let leftCol = this.collisions.get("LEFT").prop;
 
-					if (this.entity.yPos < leftCol[1] - 24 + (leftCol[3] * 0.25)) {
-						this._moveUp(leftCol[1], len.Y, true, this.entity.collisions.get("UP"));
-					} else if (this.entity.yPos + 12 > leftCol[1] + leftCol[3] - (leftCol[3] * 0.25)) {
-						this._moveDown(leftCol[1] + leftCol[3], len.Y, true, this.entity.collisions.get("DOWN"));
+					if (this.yPos < leftCol[1] - 24 + (leftCol[3] * 0.25)) {
+						this._moveUp(leftCol[1], len.Y, true, this.collisions.get("UP"));
+					} else if (this.yPos + 12 > leftCol[1] + leftCol[3] - (leftCol[3] * 0.25)) {
+						this._moveDown(leftCol[1] + leftCol[3], len.Y, true, this.collisions.get("DOWN"));
 					}
 				}
 			} else if (direction === "RIGHT") {
-				if (!this.entity.collisions.has("RIGHT")) {
+				if (!this.collisions.has("RIGHT")) {
 					this._moveRight(pos, len.X);
 				} else {
-					let rightCol = this.entity.collisions.get("RIGHT").prop;
+					let rightCol = this.collisions.get("RIGHT").prop;
 
-					if (this.entity.yPos < rightCol[1] - 24 + (rightCol[3] * 0.25)) {
-						this._moveUp(rightCol[1], len.Y, true, this.entity.collisions.get("UP"));
-					} else if (this.entity.yPos + 12 > rightCol[1] + rightCol[3] - (rightCol[3] * 0.25)) {
-						this._moveDown(rightCol[1] + rightCol[3], len.Y, true, this.entity.collisions.get("DOWN"));
+					if (this.yPos < rightCol[1] - 24 + (rightCol[3] * 0.25)) {
+						this._moveUp(rightCol[1], len.Y, true, this.collisions.get("UP"));
+					} else if (this.yPos + 12 > rightCol[1] + rightCol[3] - (rightCol[3] * 0.25)) {
+						this._moveDown(rightCol[1] + rightCol[3], len.Y, true, this.collisions.get("DOWN"));
 					}
 				}
 			}
@@ -98,57 +101,57 @@ export default class Step {
 
 	_moveDown(pos, len, shouldTransform, direction) {
 		if (shouldTransform) {
-			this.entity.pushCounter = 0;
+			this.pushCounter = 0;
 
 			if (!direction || direction.overlap.y < 0.5) {
-				this.entity.yPos = pos + (Number((this.entity.yPos - pos)) + .5);
+				this.yPos = pos + (Number((this.yPos - pos)) + .5);
 			} else if (direction.overlap.y >= 0.5) {
-				this.entity.yPos = this.entity.yPos + (direction.overlap.y / 5);
+				this.yPos = this.yPos + (direction.overlap.y / 5);
 			}
 		} else {
-			this.entity.yPos = Number((this.entity.yPos + pos).toPrecision(len.Y));
+			this.yPos = Number((this.yPos + pos).toPrecision(len.Y));
 		}
 	}
 
 	_moveUp(pos, len, shouldTransform, direction) {
 		if (shouldTransform) {
-			this.entity.pushCounter = 0;
+			this.pushCounter = 0;
 
 			if (!direction || direction.overlap.y < 0.5) {
-				this.entity.yPos = pos - (Number((pos - this.entity.yPos)) + .5);
+				this.yPos = pos - (Number((pos - this.yPos)) + .5);
 			} else if (direction.overlap.y >= 0.5) {
-				this.entity.yPos = this.entity.yPos + (direction.overlap.y / 5);
+				this.yPos = this.yPos + (direction.overlap.y / 5);
 			}
 		} else {
-			this.entity.yPos = Number((this.entity.yPos - pos).toPrecision(len.Y));
+			this.yPos = Number((this.yPos - pos).toPrecision(len.Y));
 		}
 	}
 
 	_moveLeft(pos, len, shouldTransform, direction) {
 		if (shouldTransform) {
-			this.entity.pushCounter = 0;
+			this.pushCounter = 0;
 
 			if (!direction || direction.overlap.x < 0.5) {
-				this.entity.xPos = pos - (Number((pos - this.entity.xPos)) + .5);
+				this.xPos = pos - (Number((pos - this.xPos)) + .5);
 			} else if (direction.overlap.x >= 0.5) {
-				this.entity.xPos = this.entity.xPos + (direction.overlap.x / 5);
+				this.xPos = this.xPos + (direction.overlap.x / 5);
 			}
 		} else {
-			this.entity.xPos = Number((this.entity.xPos - pos).toPrecision(len.X));
+			this.xPos = Number((this.xPos - pos).toPrecision(len.X));
 		}
 	}
 
 	_moveRight(pos, len, shouldTransform, direction) {
 		if (shouldTransform) {
-			this.entity.pushCounter = 0;
+			this.pushCounter = 0;
 
 			if (!direction || direction.overlap.x < 0.5) {
-				this.entity.xPos = pos + (Number((this.entity.xPos - pos)) + .5);
+				this.xPos = pos + (Number((this.xPos - pos)) + .5);
 			} else if (direction.overlap.x >= 0.5) {
-				this.entity.xPos = this.entity.xPos + (direction.overlap.x / 5);
+				this.xPos = this.xPos + (direction.overlap.x / 5);
 			}
 		} else {
-			this.entity.xPos = Number((this.entity.xPos + pos).toPrecision(len.X))
+			this.xPos = Number((this.xPos + pos).toPrecision(len.X))
 		}
 	}
 }

@@ -8,37 +8,33 @@ const DIRECTION = {
 };
 
 export default class Grab {
-	constructor(entity) {
-		this.entity = entity;
-	}
-
 	_grab() {
-		let props = this.entity.collisions.get(DIRECTION[this.entity.direction][0]).prop;
+		let props = this.collisions.get(DIRECTION[this.direction][0]).prop;
 
 		// Only grab if the entity is not off the edge
-		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
-			if ((this.entity.xPos < props[0] - 6) || (this.entity.xPos > props[0] + props[2] - 10)) {
-				this.entity.pullCounter = 0;
+		if (this.direction === "UP" || this.direction === "DOWN") {
+			if ((this.xPos < props[0] - 6) || (this.xPos > props[0] + props[2] - 10)) {
+				this.pullCounter = 0;
 
 				return;
 			}
 		} else {
-			if ((this.entity.yPos < props[1] - 12) || (this.entity.yPos > props[1] + props[3] - 22)) {
-				this.entity.pullCounter = 0;
+			if ((this.yPos < props[1] - 12) || (this.yPos > props[1] + props[3] - 22)) {
+				this.pullCounter = 0;
 
 				return;
 			}
 		}
 
-		this.entity.currentAction = "LINK_GRABBING";
-		this.entity.actionIndex = 0;
+		this.currentAction = "LINK_GRABBING";
+		this.actionIndex = 0;
 
-		if (this.entity.direction === "LEFT") {
-			this.entity.actionXOffset = -2;
-		} else if (this.entity.direction === "UP") {
-			this.entity.actionYOffset = 4;
-		} else if (this.entity.direction === "DOWN") {
-			this.entity.actionYOffset = 4;
+		if (this.direction === "LEFT") {
+			this.actionXOffset = -2;
+		} else if (this.direction === "UP") {
+			this.actionYOffset = 4;
+		} else if (this.direction === "DOWN") {
+			this.actionYOffset = 4;
 		}
 	}
 }
