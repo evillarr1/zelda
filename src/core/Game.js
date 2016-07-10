@@ -87,25 +87,25 @@ export default class Game {
 
 	unitCollision(collisions, response, otherUnit) {
 		if (response.overlapV.y > 0) {
-			collisions.DOWN = {
+			collisions.set("DOWN", {
 				overlap: response.overlapV,
 				prop: otherUnit
-			};
+			});
 		} else if (response.overlapV.y < 0) {
-			collisions.UP = {
+			collisions.set("UP", {
 				overlap: response.overlapV,
 				prop: otherUnit
-			};
+			});
 		} else if (response.overlapV.x > 0) {
-			collisions.RIGHT = {
+			collisions.set("RIGHT", {
 				overlap: response.overlapV,
 				prop: otherUnit
-			};
+			});
 		} else if (response.overlapV.x < 0) {
-			collisions.LEFT = {
+			collisions.set("LEFT", {
 				overlap: response.overlapV,
 				prop: otherUnit
-			};
+			});
 		}
 	}
 }
