@@ -39,14 +39,20 @@ const LIFT_OFFSET = {
 	}
 };
 
-export default class Lift {
+const LIFT_WALKING = [0, 1, 6];
+
+export default class LiftWalk {
 	constructor(entity) {
 		this.entity = entity;
 	}
 
 	update(directions) {
-		if (this.entity.liftCounter <= 40 && this.entity.objectLifted) {
-			this.entity.actions("LIFT", directions);
+		if (this.entity.objectLifted && directions) {
+			this.entity.action["WALK"].perform(directions, 0.8);
+			this.entity.actionIndex = (this.entity.actionIndex + 1) % 17;
+			this.entity.currentAction = "LINK_WALKING_" + LIFT_WALKING[Math.floor(this.entity.actionIndex / 6)];
+			this.entity.actionXOffset = this.entity.actionYOffset = 0;
+			this.entity.action["LIFT"].perform();
 			return true;
 		}
 

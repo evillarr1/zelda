@@ -1,10 +1,13 @@
 "use strict";
 
 import Keyboard from "keyboardjs";
-import Step from "./Actions/Step";
+import Walk from "./Actions/Walk";
 import Grab from "./Actions/Grab";
 import Pull from "./Actions/Pull";
 import Lift from "./Actions/Lift";
+import Push from "./Actions/Push";
+import Stand from "./Actions/Stand";
+import LiftWalk from "./Actions/LiftWalk";
 
 const DIRECTION = {
 	UP: ["UP", "DOWN"],
@@ -12,8 +15,6 @@ const DIRECTION = {
 	LEFT: ["LEFT", "RIGHT"],
 	RIGHT: ["RIGHT", "LEFT"]
 };
-
-const LIFT_WALKING = [0, 1, 6];
 
 export default class Player {
 	constructor() {
@@ -35,7 +36,6 @@ export default class Player {
 		this.currentStrokes = new Map();
 
 		// Action counters
-		this.pushCounter = 0;
 		this.pullCounter = 0;
 		this.liftCounter = 0;
 
@@ -47,10 +47,13 @@ export default class Player {
 		this.actionYOffset = 0;
 
 		this.action = {
-			"WALK": (new Step(this))._walk.bind(this),
-			"GRAB": (new Grab(this))._grab.bind(this),
-			"PULL": (new Pull(this))._pull.bind(this),
-			"LIFT": (new Lift(this))._lift.bind(this)
+			"GRAB": new Grab(this),
+			"PULL": new Pull(this),
+			"LIFT": new Lift(this),
+			"LiftWalk": new LiftWalk(this),
+			"PUSH": new Push(this),
+			"STAND": new Stand(this),
+			"WALK": new Walk(this)
 		};
 
 		Keyboard.withContext("Player", () => {
@@ -111,92 +114,40 @@ export default class Player {
 	update() {
 		let directions = Array.from(this.currentStrokes.keys());
 
-		if (this.liftCounter <= 40) {
-			if (!this.objectLifted && this.pullCounter > 0 && this.collisions.has(this.direction)) {
-				if (this.specialCollisions.has(this.direction)) {
-					let special = this.mapObjects.special;
-					let keys = Object.keys(special);
-
-					for (let i = 0; i < keys.length; i++) {
-						if (this.specialCollisions.get(this.direction).prop[4] === special[keys[i]][4]) {
-							this.objectLifted = this.mapObjects.special[keys[i]].slice(-1)[0];
-							delete this.mapObjects.special[keys[i]];
-							delete this.specialCollisions.get(this.direction);
-							delete this.collisions.get(this.direction);
-							this.liftCounter = 0;
-							return;
-						}
-					}
-				} else {
-					return this.actions("GRAB", directions);
-				}
+		for (let objKey in this.action) {
+			if (this.action[objKey].update(directions)) {
+				return;
 			}
-
-			if (this.objectLifted) {
-				return this.actions("LIFT", directions);
-			}
-		} else {
-			if (directions.length > 0) {
-				return this.actions("LIFT_WALK", directions);
-			}
-
 		}
-
-		if (this.currentStrokes.size === 0) {
-			this.pushCounter = 0;
-			return this.actions("STAND");
-		}
-
-		if (this.collisions.has(this.direction) && directions[0] === this.direction) {
-			if (this.pushCounter++ > 30) {
-				return this.actions("PUSH", directions);
-			}
-		} else {
-			this.pushCounter = 0;
-		}
-
-		this.actions("STEP", directions);
 	}
 
 	actions(action, ...args) {
 		switch (action) {
-			case "STEP":
-				this.action["WALK"](args[0]);
-				this.actionIndex = (this.actionIndex + 1) % 14;
-				this.currentAction = "LINK_WALKING_" + Math.floor(this.actionIndex / 2);
+			case "WALK":
+				this.action["WALK"].perform(args[0]);
 				break;
 			case "PUSH":
-				if (args[0][0] === "UP" || args[0][0] === "DOWN") {
-					this.actionIndex = (this.actionIndex + 1) % 24;
-				} else {
-					this.actionIndex = (this.actionIndex + 1) % 32;
-				}
-
-				this.currentAction = "LINK_PUSHING_" + Math.floor(this.actionIndex / 8);
+				this.action["PUSH"].perform(args[0][0]);
 				break;
 			case "STAND":
-				this.currentAction = "LINK_STANDING";
-				this.direction = args[0] || this.direction;
+				this.action["STAND"].perform(args);
 				break;
 			case "GRAB":
 				if (DIRECTION[this.direction][1] === args[0][0]) {
 					// If the player if facing the opposite way he is facing, the pull
-					this.action["PULL"]();
+					this.action["PULL"].perform();
 				} else {
-					this.action["GRAB"]();
+					this.action["GRAB"].perform();
 				}
 				break;
 			case "LIFT":
-				this.action["LIFT"]();
+				this.action["LIFT"].perform();
 				break;
 			case "LIFT_WALK":
-				this.action["WALK"](args[0], 0.8);
-				this.actionIndex = (this.actionIndex + 1) % 17;
-				this.currentAction = "LINK_WALKING_" + LIFT_WALKING[Math.floor(this.actionIndex / 6)];
-				this.actionXOffset = this.actionYOffset = 0;
-				this.action["LIFT"]();
+				this.action["LIFT"].perform();
 				break;
 			default:
+				console.error("NOT A SUPPROTED ACTION");
 				break;
 		}
 	}
