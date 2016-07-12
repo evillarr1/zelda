@@ -46,19 +46,19 @@ export default class Lift {
 
 	update(directions) {
 		if (this.entity.liftCounter <= 40 && this.entity.objectLifted) {
-			if (directions.length > 0) {
+			if (directions.length === 0) {
 				this.entity.actions("LIFT");
-			} else {
-				this.entity.actions("LIFTWALK", directions);
-			}
 
-			return true;
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	perform() {
+		this.entity.liftCounter = Math.min(this.entity.liftCounter + 1, 41);
+
 		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
 			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6);
 		}
@@ -77,8 +77,6 @@ export default class Lift {
 			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftX;
 			this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftY;
 		}
-
-		this.entity.liftCounter = Math.min(this.entity.liftCounter + 1, 41);
 
 		if (this.entity.direction === "LEFT") {
 			this.entity.actionYOffset = 2;

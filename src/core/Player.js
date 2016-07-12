@@ -144,7 +144,7 @@ export default class Player {
 				this.action["LIFT"].perform();
 				break;
 			case "LIFTWALK":
-				this.action["LIFTWALK"].perform();
+				this.action["LIFTWALK"].perform(args[0]);
 				break;
 			default:
 				console.error("NOT A SUPPROTED ACTION");

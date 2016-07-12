@@ -39,27 +39,33 @@ const LIFT_OFFSET = {
 	}
 };
 
-const LIFT_WALKING = [0, 1, 6];
+const LIFT_WALKING = {
+	UP: 5,
+	LEFT: 4,
+	RIGHT: 4,
+	DOWN: 6
+};
 
 export default class LiftWalk {
 	constructor(entity) {
 		this.entity = entity;
+		this.actionCounter = 0;
 	}
 
 	update(directions) {
-		if (this.entity.objectLifted && directions) {
-			this.entity.action["WALK"].perform(directions, 0.8);
-			this.entity.actionIndex = (this.entity.actionIndex + 1) % 17;
-			this.entity.currentAction = "LINK_WALKING_" + LIFT_WALKING[Math.floor(this.entity.actionIndex / 6)];
-			this.entity.actionXOffset = this.entity.actionYOffset = 0;
-			this.entity.action["LIFT"].perform();
-			return true;
+		if (this.entity.objectLifted) {
+			if (directions.length > 0) {
+				this.entity.actions("WALK", directions);
+				this.entity.actions("LIFTWALK", directions);
+
+				return true;
+			}
 		}
 
 		return false;
 	}
 
-	perform() {
+	perform(directions) {
 		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
 			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6);
 		}
@@ -79,22 +85,7 @@ export default class LiftWalk {
 			this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftY;
 		}
 
-		this.entity.liftCounter = Math.min(this.entity.liftCounter + 1, 41);
-
-		if (this.entity.direction === "LEFT") {
-			this.entity.actionYOffset = 2;
-			this.entity.actionXOffset = -13;
-		} else if (this.entity.direction === "UP") {
-			this.entity.actionYOffset = 2;
-			this.entity.actionXOffset = -9;
-		} else if (this.entity.direction === "DOWN") {
-			this.entity.actionYOffset = 2;
-			this.entity.actionXOffset = -9;
-		} else if (this.entity.direction === "RIGHT") {
-			this.entity.actionXOffset = -7;
-			this.entity.actionYOffset = 2;
-		}
-
-		this.entity.currentAction = "LINK_LIFTING_" + Math.floor(this.entity.liftCounter / 8);
+		this.actionCounter = (this.actionCounter + 1) % ((LIFT_WALKING[directions[0]] * 3) - 1);
+		this.entity.currentAction = "LINK_LIFT_WALKING_" + Math.floor(this.actionCounter / 3);
 	}
 }
