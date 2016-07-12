@@ -50,7 +50,7 @@ export default class Player {
 			"GRAB": new Grab(this),
 			"PULL": new Pull(this),
 			"LIFT": new Lift(this),
-			"LiftWalk": new LiftWalk(this),
+			"LIFTWALK": new LiftWalk(this),
 			"PUSH": new Push(this),
 			"STAND": new Stand(this),
 			"WALK": new Walk(this)
@@ -143,8 +143,8 @@ export default class Player {
 			case "LIFT":
 				this.action["LIFT"].perform();
 				break;
-			case "LIFT_WALK":
-				this.action["LIFT"].perform();
+			case "LIFTWALK":
+				this.action["LIFTWALK"].perform();
 				break;
 			default:
 				console.error("NOT A SUPPROTED ACTION");
