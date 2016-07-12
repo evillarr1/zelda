@@ -14,11 +14,21 @@ const DEFAULT_OVERLAY_FIXED = {
 };
 
 const START_MENU_OVERLAY = {
-	GREEN_BOX_L: [0, 1000, 240, 201, 5, 10],
-	GREEN_BOX_R: [],
-	RED_BOX: [],
-	YELLOW_BOX_TOP: [],
-	YELLOW_BOX_BOT: []
+	BLOCKS: [0, 1000, 240, 201, 5, 10],
+	Y_ITEM_TEXT: [673, 999, 18, 7, 21, 10],
+	A_DO_TEXT: [673, 1007, 18, 7, 21, 138],
+	EQUIPMENT_TEXT: [766, 1135, 40, 8, 174, 145],
+	PENDANTS_TEXT: [596, 999, 36, 7, 175, 67],
+	EMPTY_PENDANT_TOP: [395, 930, 16, 16, 198, 80],
+	EMPTY_PENDANT2_L: [395, 930, 16, 16, 181, 106],
+	EMPTY_PENDANT3_R: [395, 930, 16, 16, 213, 106],
+	EMPTY_HEART: [384, 913, 16, 16, 196, 183],
+	GREEN_TUNIC: [384, 862, 16, 16, 219, 153],
+	LIFT_1_TEXT: [673, 1018, 35, 8, 29, 155],
+	TALK_TEXT: [711, 1018, 35, 8, 112, 155],
+	READ_TEXT: [673, 1030, 35, 8, 72, 155],
+	PULL_TEXT: [711, 1030, 35, 8, 29, 171],
+	DASHES_EQUIPMENT: [766, 1163, 62, 1, 173, 171]
 };
 
 export default class MenuOverlay {
@@ -44,20 +54,21 @@ export default class MenuOverlay {
 
 		// Change context to Menu_Closing. Close menu in update()
 		Keyboard.withContext("Menu", () => {
-			Keyboard.bind('enter', () => {
+			Keyboard.bind(['enter', 'a', 's', 'd', 'w', 'shift'], () => {
 				this.menuBool = false;
 				Keyboard.setContext("Menu_Closing");
 			});
 		});
 
 	}
+
 	// Open menu OR Close menu OR Reanable Link's controls
 	update() {
 		if (Keyboard.getContext() === "Menu" && this.tick < SCROLL_DISTANCE && this.menuBool) {
 			this.tick += 7.5;
 		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick > 0) {
 			this.tick -= 7.5;
-		} else if(Keyboard.getContext() === "Menu_Closing" && this.tick === 0 && !this.menuBool){
+		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick === 0 && !this.menuBool) {
 			this.menuBool = true;
 			Keyboard.setContext("Player");
 		}
