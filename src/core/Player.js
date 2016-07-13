@@ -119,6 +119,16 @@ export default class Player {
 				return;
 			}
 		}
+		if (this.yPos >= 210) {
+			let newEvent = new CustomEvent('OFFMAP', {
+					detail: {
+						pos: [this.xPos, this.yPos]
+					}
+				}
+			);
+
+			document.querySelector("canvas").dispatchEvent(newEvent);
+		}
 	}
 
 	actions(action, ...args) {

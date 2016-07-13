@@ -273,6 +273,10 @@ const WALL = {
 	}
 };
 
+const MAPS = {
+	linksHouse: [512, 512]
+};
+
 export default class Paint {
 	constructor() {
 		// Create a new image
@@ -280,6 +284,8 @@ export default class Paint {
 		this.house.src = "img/mainSheet.png";
 		this.link = new Image();
 		this.link.src = "img/link.png";
+		this.linksHouse = new Image();
+		this.linksHouse.src = "img/linksHouse.png";
 		this.items = ITEMS;
 	}
 
@@ -295,7 +301,6 @@ export default class Paint {
 			yPos,
 			xWidth,
 			yWidth);
-
 	}
 
 	drawX(item, direction, xPos, yPos, separator, x) {
@@ -363,4 +368,18 @@ export default class Paint {
 			secondEdge[3]);
 	}
 
+	drawMap(imageSet, xCor, yCor, xPos, yPos) {
+		let [xWidth, yWidth]= MAPS[imageSet];
+
+		Context.drawImage(
+			this[imageSet],
+			xCor,
+			yCor,
+			xWidth,
+			yWidth,
+			xPos,
+			yPos,
+			xWidth,
+			yWidth);
+	}
 }

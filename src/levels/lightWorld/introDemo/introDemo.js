@@ -1,6 +1,7 @@
 "use strict";
 
 import Keyboard from "keyboardjs";
+import LinksHouse from "./LinksHouse";
 
 const DIALOGUE = {
 	SCROLL: `Help me...
@@ -160,6 +161,14 @@ export default class IntroDemo {
 			});
 		});
 		Keyboard.setContext("level");
+
+		document.querySelector("canvas").addEventListener('OFFMAP', function () {
+			State.pop();
+
+			let linksHouse = new LinksHouse();
+
+			State.push(linksHouse);
+		}, false);
 	}
 
 	update() {
