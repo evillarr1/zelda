@@ -65,7 +65,6 @@ export default class MenuOverlay {
 
 	// Open menu OR Close menu OR Reanable Link's controls
 	update() {
-		console.log(this.tick, this.lockControls, this.lockTick);
 		if (Keyboard.getContext() === "Menu_Opening" && this.tick < SCROLL_DISTANCE) {
 			this.tick += 7.5;
 		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick > 0) {
