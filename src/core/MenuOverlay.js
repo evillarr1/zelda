@@ -43,20 +43,21 @@ export default class MenuOverlay {
 		this.tick = 0;
 
 		// Check if Start Menu is closed
-		this.menuBool = true;
-
+		this.lockControls = false;
 		// Take away Link's controls
 		Keyboard.withContext("Player", () => {
 			Keyboard.bind('enter', () => {
-				Keyboard.setContext("Menu");
+				Keyboard.setContext("Menu_Opening");
 			});
 		});
 
-		// Change context to Menu_Closing. Close menu in update()
-		Keyboard.withContext("Menu", () => {
+		// Change context to Menu_Closing if entire Start Menu is open. Close menu in update()
+		Keyboard.withContext("Menu_Opening", () => {
 			Keyboard.bind(['enter', 'a', 's', 'd', 'w', 'shift'], () => {
-				this.menuBool = false;
-				Keyboard.setContext("Menu_Closing");
+				this.lockControls = true;
+				if (this.tick === SCROLL_DISTANCE) {
+					Keyboard.setContext("Menu_Closing");
+				}
 			});
 		});
 
@@ -64,12 +65,13 @@ export default class MenuOverlay {
 
 	// Open menu OR Close menu OR Reanable Link's controls
 	update() {
-		if (Keyboard.getContext() === "Menu" && this.tick < SCROLL_DISTANCE && this.menuBool) {
+		console.log(this.tick, this.lockControls, this.lockTick);
+		if (Keyboard.getContext() === "Menu_Opening" && this.tick < SCROLL_DISTANCE) {
 			this.tick += 7.5;
 		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick > 0) {
 			this.tick -= 7.5;
-		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick === 0 && !this.menuBool) {
-			this.menuBool = true;
+		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick === 0 && this.lockControls) {
+			this.lockControls = false;
 			Keyboard.setContext("Player");
 		}
 	}
@@ -107,7 +109,7 @@ export default class MenuOverlay {
 		}
 		// Draw hearts for Link's Life
 		for (let i = 0; i < Link.hearts; i++) {
-			Paint.draw("HEART", null, 148 + (i * 8), 21 + this.tick);
+			Paint.draw("HEARTS", "HEALTH_FULL", 148 + (i * 8), 21 + this.tick);
 		}
 
 		// Draw zeros for rupees
@@ -122,6 +124,7 @@ export default class MenuOverlay {
 		for (let i = 0; i < 2; i++) {
 			Paint.draw("NUMBERS", '0', 118 + (i * 8), 25 + this.tick);
 		}
+
 
 	}
 
