@@ -17,12 +17,6 @@ module.exports = {
 				query: {
 					presets: ['es2015']
 				}
-			},
-			{
-				test: /pixi.js/, loader: "script"
-			},
-			{
-				test: /phaser.js/, loader: "script"
 			}
 		]
 	}
