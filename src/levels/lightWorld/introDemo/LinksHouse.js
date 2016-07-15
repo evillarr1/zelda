@@ -1,5 +1,7 @@
 "use strict";
 
+import Keyboard from "keyboardjs";
+
 const OBJECTS = function () {
 	return {
 		static: [
@@ -14,6 +16,7 @@ export default class LinksHouse {
 		Player.setLevelObjects(new OBJECTS());
 		Player.actions("STAND", "RIGHT");
 		Player.postion(90, 75);
+		Keyboard.setContext("Player");
 	}
 
 	update() {

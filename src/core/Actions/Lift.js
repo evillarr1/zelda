@@ -46,11 +46,9 @@ export default class Lift {
 
 	update(directions) {
 		if (this.entity.liftCounter <= 40 && this.entity.objectLifted) {
-			if (directions.length === 0) {
-				this.entity.actions("LIFT");
-
-				return true;
-			}
+			this.entity.actions("LIFT");
+			
+			return true;
 		}
 
 		return false;

@@ -97,15 +97,18 @@ export default class IntroDemo {
 			Context.closePath();
 		};
 
-		this.storyStateIndex = 0;
-		this.storyState = [() => {
+		let initialPaint = () => {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
-			blueMask();
-
 			Paint.draw("POT", "UP", 41, 70);
 			Paint.draw("POT", "UP", 41, 86);
 			Paint.draw("POT", "UP", 41, 102);
+		}
+
+		this.storyStateIndex = 0;
+		this.storyState = [() => {
+			initialPaint();
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
+			blueMask();
 
 			if (Animate.openingCircle(this)) {
 				if (Text.drawScrollText(38, 145)) {
@@ -115,20 +118,14 @@ export default class IntroDemo {
 				}
 			}
 		}, () => {
-			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
-			Paint.draw("POT", "UP", 41, 70);
-			Paint.draw("POT", "UP", 41, 86);
-			Paint.draw("POT", "UP", 41, 102);
+			initialPaint();
 
 			if (Animate.linkSnoozing(this, 56, 61)) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 			}
 		}, () => {
-			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
-			Paint.draw("POT", "UP", 41, 70);
-			Paint.draw("POT", "UP", 41, 86);
-			Paint.draw("POT", "UP", 41, 102);
+			initialPaint();
 
 			if (Animate.linkJumpingOffBed(this, 56, 66)) {
 				Keyboard.setContext("Player");

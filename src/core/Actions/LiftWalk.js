@@ -1,42 +1,10 @@
 "use strict";
 
-const LIFT_OFFSET = {
-	UP: {
-		0: [0, 0],
-		1: [0, 0],
-		2: [0, 0],
-		3: [0, 0],
-		4: [0, -1],
-		5: [0, -1],
-		6: [0, -9.9]
-	},
-	LEFT: {
-		0: [0, -3],
-		1: [0, 0],
-		2: [0, 0],
-		3: [1.5, -3],
-		4: [7.5, -4],
-		5: [5, -2],
-		6: [-2.5, -10]
-	},
-	RIGHT: {
-		0: [0, 0],
-		1: [0, 0],
-		2: [0, 0],
-		3: [0, 0],
-		4: [0, -1],
-		5: [0, -1],
-		6: [2, -10]
-	},
-	DOWN: {
-		0: [0, 0],
-		1: [0, 0],
-		2: [0, 0],
-		3: [0, 0],
-		4: [0, -1],
-		5: [0, -1],
-		6: [0, -10]
-	}
+const LIFT_WALK_OFFSET = {
+	UP: [0, -9.9],
+	LEFT: [-2, -10],
+	RIGHT: [2, -10],
+	DOWN: [0, -10]
 };
 
 const LIFT_WALKING = {
@@ -50,42 +18,50 @@ export default class LiftWalk {
 	constructor(entity) {
 		this.entity = entity;
 		this.actionCounter = 0;
+		this.isStanding = true;
+		this.itemBounce = 0.25;
 	}
 
 	update(directions) {
 		if (this.entity.objectLifted) {
 			if (directions.length > 0) {
+				this.isStanding = false;
 				this.entity.actions("WALK", directions);
 				this.entity.actions("LIFTWALK", directions);
-
-				return true;
+			} else {
+				this.isStanding = true;
+				this.entity.actions("LIFTWALK", [this.entity.direction]);
 			}
+
+			return true;
 		}
 
 		return false;
 	}
 
 	perform(directions) {
+		let [itemLift, dirLift, xLift, yLift] = this.entity.objectLifted;
+
 		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
-			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6);
+			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6);
 		}
 
-		let liftCounter = this.entity.liftCounter / 8;
+		let [liftX, liftY] = LIFT_WALK_OFFSET[this.entity.direction];
 
-		if (Number.isInteger(liftCounter)) {
-			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][liftCounter];
-			this.entity.objectLifted[2] += liftX;
-			this.entity.objectLifted[3] += liftY;
+		this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6) + liftX;
+		this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[itemLift][dirLift][2] / 6) + liftY + this.itemBounce;
+		
+		console.log(this.itemBounce);
+		if (this.isStanding) {
+			this.actionCounter = 0;
+			this.itemBounce = 0.25;
+		} else {
+			if (this.actionCounter === 0 || this.actionCounter === (Number(LIFT_WALKING[directions[0]] * 3) / 2)) {
+				this.itemBounce *= -1;
+			}
+			this.actionCounter = (this.actionCounter + 1) % ((LIFT_WALKING[directions[0]] * 3) - 1);
 		}
-
-		if (this.entity.liftCounter === 41) {
-			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][6];
-
-			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftX;
-			this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftY;
-		}
-
-		this.actionCounter = (this.actionCounter + 1) % ((LIFT_WALKING[directions[0]] * 3) - 1);
+		
 		this.entity.currentAction = "LINK_LIFT_WALKING_" + Math.floor(this.actionCounter / 3);
 	}
 }
