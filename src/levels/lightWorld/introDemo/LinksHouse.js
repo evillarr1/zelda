@@ -17,15 +17,9 @@ export default class LinksHouse {
 		Keyboard.setContext("Player");
 		Player.disableDisplacement = false;
 		Player.setLevelObjects(new OBJECTS());
-<<<<<<< Updated upstream
 		Player.actions("STAND", "RIGHT");
 		Player.setPostion(90, 75);
 		Keyboard.setContext("Player");
-=======
-		Player.actions("STAND", "DOWN");
-		Player.postion(80, 160);
-
->>>>>>> Stashed changes
 	}
 
 	update() {
