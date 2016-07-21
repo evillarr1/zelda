@@ -74,6 +74,6 @@ function watch() {
 	gulp.watch(paths.allSounds, gulp.series(music));
 }
 
-gulp.task("build", gulp.series(clean, html, images, styles, scripts, music, sounds));
+gulp.task("build", gulp.series(clean, gulp.parallel(html, images, styles, scripts, music, sounds)));
 gulp.task("serve", gulp.parallel(webserver, watch));
 gulp.task("default", gulp.series("build", "serve"));
