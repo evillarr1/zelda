@@ -24,6 +24,11 @@ export default class Player {
 		this.direction = DIRECTION.DOWN[0];
 		this.currentAction = "LINK_STANDING";
 
+		// Check if Link is allowed displacement of camera
+		this.disableDisplacementX = false;
+		this.disableDisplacementY = false;
+
+
 		// The objects for the current level
 		this.mapObjects = {};
 
@@ -45,6 +50,14 @@ export default class Player {
 		// Special offsets needed for certain animations
 		this.actionXOffset = 0;
 		this.actionYOffset = 0;
+
+		// Counteract xPos and yPos for Link, and move camera of current map
+		this.disabledX = 0;
+		this.disabledY = 0;
+
+		// Values that can be passed after Walk is done
+		this.holdX = 0;
+		this.holdY = 0;
 
 		this.action = {
 			"GRAB": new Grab(this),
@@ -164,10 +177,15 @@ export default class Player {
 		for (let objKey in this.mapObjects.special) {
 			Paint.draw(...this.mapObjects.special[objKey].slice(-1)[0]);
 		}
-
-		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
-		this.actionXOffset = this.actionYOffset = 0;
-
+		if (this.disableDisplacementX) {
+			this.disabledX += this.holdX;
+		}
+		if (this.disableDisplacementY) {
+			this.disabledY += this.holdY;
+		}
+		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset - this.disabledX,
+			this.yPos + this.actionYOffset - this.disabledY, "link");
+		this.actionXOffset = this.actionYOffset = this.holdX = this.holdY = 0;
 		if (this.objectLifted) {
 			Paint.draw(...this.objectLifted);
 		}

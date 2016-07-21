@@ -5,58 +5,39 @@ import Keyboard from "keyboardjs";
 const OBJECTS = function () {
 	return {
 		static: [
-			[-21, 177, 50, 30]
-
+			[31, 104, 50, 28]
 		],
-		special: {}
+		special: {
+			//"POT_1": [31, 104, 50, 28, "POT_1", "LIFT", ["POT", "UP", 27, 104]]
+		}
 	}
 };
 
 export default class LinksHouse {
 	constructor() {
-		Keyboard.setContext("Player");
-		Player.disableDisplacement = false;
 		Player.setLevelObjects(new OBJECTS());
-		Player.actions("STAND", "RIGHT");
-		Player.setPostion(90, 75);
+		Player.actions("STAND", "DOWN");
+		Player.setPostion(115, 96);
 		Keyboard.setContext("Player");
 	}
 
 	update() {
 		Player.update();
-		console.log(Player.xPos, Player.yPos, this.xPos, this.yPos, Player.disableDisplacement, Player.actionXOffset,
-			Player.actionYOffset);
 		this.linkRespectMap();
 	}
 
 	linkRespectMap() {
-		Player.disableDisplacement = Player.xPos >= 0 && Player.yPos >= 0 && Player.xPos <= 261 && Player.yPos <= 291;
-		if (Player.disableDisplacement) {
-			this.xPos = Player.xPos;
-			this.yPos = Player.yPos;
-		} else {
-			if ((Player.xPos < 0 && Player.yPos <= 291 && Player.yPos >= 0) ||
-				(Player.xPos > 261 && Player.yPos <= 291 && Player.yPos >= 0)) {
-				this.yPos = Player.yPos;
-			} else if ((Player.yPos < 0 && Player.xPos <= 261 && Player.xPos >= 0) ||
-				(Player.yPos > 261 && Player.xPos <= 261 && Player.xPos >= 0)) {
-				this.xPos = Player.xPos;
-			}
-			Player.actionXOffset = 132 - this.xPos;
-			Player.actionYOffset = 96 - this.yPos;
-		}
+		Player.disableDisplacementX = Player.xPos >= 35 && Player.xPos <= 293;
+		Player.disableDisplacementY = Player.yPos >= -73 && Player.yPos <= 216;
 	}
 
 	draw() {
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-		Paint.drawMap("linksHouse", this.xPos, this.yPos, 0, 0);
+		Paint.drawMap("linksHouse", Player.disabledX + 80, Player.disabledY + 170, 0, 0);
 		Player.draw();
 		MenuOverlay.drawDefaultOverlay();
 
 	}
 }
 
-// Paint.draw(this.currentAction, this.direction, this.actionXOffset + 95,  this.actionYOffset + 125, "link");
-// 	Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset, this.yPos + this.actionYOffset, "link");
-
-// Player.postion does not affect your play.
+// Maybe setPostion can have 2 more parameters, disable of x,y

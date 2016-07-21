@@ -106,30 +106,41 @@ export default class Walk {
 	};
 
 	_moveDown(pos, len, shouldTransform, direction) {
+
 		if (shouldTransform) {
 			this.entity.pushCounter = 0;
-
 			if (!direction || direction.overlap.y < 0.5) {
 				this.entity.yPos = pos + (Number((this.entity.yPos - pos)) + .5);
+				if (Player.disableDisplacementY) {
+					Player.disabledY += .5;
+				}
 			} else if (direction.overlap.y >= 0.5) {
 				this.entity.yPos = this.entity.yPos + (direction.overlap.y / 5);
 			}
 		} else {
 			this.entity.yPos = Number((this.entity.yPos + pos).toPrecision(len.Y));
+			if (Player.disableDisplacementY) {
+				Player.holdY += pos;
+			}
 		}
 	}
 
 	_moveUp(pos, len, shouldTransform, direction) {
 		if (shouldTransform) {
 			this.entity.pushCounter = 0;
-
 			if (!direction || direction.overlap.y < 0.5) {
 				this.entity.yPos = pos - (Number((pos - this.entity.yPos)) + .5);
+				if (Player.disableDisplacementY) {
+					Player.disabledY -=  .5;
+				}
 			} else if (direction.overlap.y >= 0.5) {
 				this.entity.yPos = this.entity.yPos + (direction.overlap.y / 5);
 			}
 		} else {
 			this.entity.yPos = Number((this.entity.yPos - pos).toPrecision(len.Y));
+			if (Player.disableDisplacementY) {
+				Player.holdY -= pos;
+			}
 		}
 	}
 
@@ -139,11 +150,17 @@ export default class Walk {
 
 			if (!direction || direction.overlap.x < 0.5) {
 				this.entity.xPos = pos - (Number((pos - this.entity.xPos)) + .5);
+				if (Player.disableDisplacementX) {
+					Player.disabledX -= .5;
+				}
 			} else if (direction.overlap.x >= 0.5) {
 				this.entity.xPos = this.entity.xPos + (direction.overlap.x / 5);
 			}
 		} else {
 			this.entity.xPos = Number((this.entity.xPos - pos).toPrecision(len.X));
+			if (Player.disableDisplacementX) {
+				Player.holdX -= pos;
+			}
 		}
 	}
 
@@ -153,11 +170,17 @@ export default class Walk {
 
 			if (!direction || direction.overlap.x < 0.5) {
 				this.entity.xPos = pos + (Number((this.entity.xPos - pos)) + .5);
+				if (Player.disableDisplacementX) {
+					Player.disabledX += .5;
+				}
 			} else if (direction.overlap.x >= 0.5) {
 				this.entity.xPos = this.entity.xPos + (direction.overlap.x / 5);
 			}
 		} else {
-			this.entity.xPos = Number((this.entity.xPos + pos).toPrecision(len.X))
+			this.entity.xPos = Number((this.entity.xPos + pos).toPrecision(len.X));
+			if (Player.disableDisplacementX) {
+				Player.holdX += pos;
+			}
 		}
 	}
 }

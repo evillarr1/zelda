@@ -48,10 +48,10 @@ export default class LiftWalk {
 
 		let [liftX, liftY] = LIFT_WALK_OFFSET[this.entity.direction];
 
-		this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6) + liftX;
-		this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[itemLift][dirLift][2] / 6) + liftY + this.itemBounce;
+		this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6) + liftX - Player.disabledX;
+		this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[itemLift][dirLift][2] / 6) + liftY + this.itemBounce - Player.disabledY;
 		
-		console.log(this.itemBounce);
+		//console.log(this.itemBounce);
 		if (this.isStanding) {
 			this.actionCounter = 0;
 			this.itemBounce = 0.25;
