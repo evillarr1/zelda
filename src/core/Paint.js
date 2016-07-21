@@ -292,6 +292,16 @@ const ITEMS = {
 		8: [358, 856, 8, 7],
 		9: [366, 856, 8, 7],
 		0: [296, 856, 7, 7]
+	},
+	UNCLE: {
+		SITTING: [454, 356, 20,30],
+		SITTING_TURNING_LEFT: [434, 356, 20,30],
+		SITTING_FAT: [550, 359, 28, 28],
+		SITTING_SWORD: [519, 359, 28, 28],
+		WALK_LEFT_0: [291, 355, 22, 26],
+		WALK_LEFT_1: [317, 355, 22, 26],
+		WALK_DOWN_0: [340, 354, 22, 26],
+		WALK_DOWN_1: [363, 355, 22, 26]
 	}
 };
 
@@ -310,18 +320,24 @@ const MAPS = {
 
 export default class Paint {
 	constructor() {
-		// Create a new image
 		this.house = new Image();
 		this.house.src = "img/mainSheet.png";
+
 		this.link = new Image();
 		this.link.src = "img/link.png";
+
 		this.linksHouse = new Image();
 		this.linksHouse.src = "img/linksHouse.png";
+
+		this.npc = new Image();
+		this.npc.src = "img/npc.png";
+
 		this.items = ITEMS;
 	}
 
-	draw(item, direction, xPos, yPos, imageSet = "house") {
-		let [xCor, yCor, xWidth, yWidth] =  direction ? ITEMS[item][direction] : ITEMS[item];
+	draw(item, subItem, xPos, yPos, imageSet = "house") {
+		let [xCor, yCor, xWidth, yWidth] =  subItem ? ITEMS[item][subItem] : ITEMS[item];
+
 		Context.drawImage(
 			this[imageSet],
 			xCor,

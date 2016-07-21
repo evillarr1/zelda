@@ -87,31 +87,16 @@ export default class IntroDemo {
 		Player.actions("STAND", "RIGHT");
 		Player.setPostion(90, 75);
 
-		let blueMask = () => {
-			Context.beginPath();
-			Context.globalAlpha = 0.6;
-			Context.fillStyle = "#040188";
-			Context.fillRect(0, 0, Canvas.width, Canvas.height);
-			Context.fill();
-			Context.globalAlpha = 1;
-			Context.closePath();
-		};
-
-		let initialPaint = () => {
-			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
-			Paint.draw("POT", "UP", 41, 70);
-			Paint.draw("POT", "UP", 41, 86);
-			Paint.draw("POT", "UP", 41, 102);
-		}
-
 		this.storyStateIndex = 0;
 		this.storyState = [() => {
 			Animate.openingCircle();
 			this.storyState.shift();
+			this.storyStateIndex++;
 		}, () => {
-			initialPaint();
+			this.init();
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
-			blueMask();
+			Paint.draw("UNCLE", "SITTING", 165, 85, "npc");
+			this.blueMask();
 
 			if (!Animate.isAnimating()) {
 				if (Text.drawScrollText(38, 145)) {
@@ -122,14 +107,21 @@ export default class IntroDemo {
 				}
 			}
 		}, () => {
-			initialPaint();
+			this.init();
 
 			if (!Animate.isAnimating()) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
+				Paint.draw("UNCLE", "SITTING_TURNING_LEFT", 165, 85, "npc");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
+			} else {
+				Paint.draw("UNCLE", "SITTING", 165, 85, "npc");
 			}
 		}, () => {
-			initialPaint();
+			this.init();
+			Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
+
+		}, () => {
+			this.init();
 
 			if (!Animate.isAnimating()) {
 				Keyboard.setContext("Player");
@@ -144,9 +136,10 @@ export default class IntroDemo {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		}];
 
-		this.storyState.splice(0, 0);
-		this.storyStateIndex += 0;
+		this.storyState.splice(0, 3);
+		this.storyStateIndex += 3;
 
+		// Display the dialogue text
 		Text.setScrollText(DIALOGUE.SCROLL);
 
 		this.currentStrokes = new Map();
@@ -155,8 +148,11 @@ export default class IntroDemo {
 		Keyboard.withContext("level", () => {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
 				Text.animateScroll();
-				if (this.storyStateIndex === 1) {
+				if (this.storyStateIndex === 3) {
 					Animate.linkJumpingOffBed(56, 66);
+					this.storyState.shift();
+					this.storyStateIndex++;
+				} else if (this.storyStateIndex === 2) {
 					this.storyState.shift();
 					this.storyStateIndex++;
 				}
@@ -181,20 +177,36 @@ export default class IntroDemo {
 		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 		Paint.drawFloor("HOUSE_FLOOR");
 
-		IntroDemo.leftWall();
-		IntroDemo.rightWall();
-		IntroDemo.bottomWall();
-		IntroDemo.topWall();
-		IntroDemo.floor();
-		IntroDemo.specialObjects();
+		this.leftWall();
+		this.rightWall();
+		this.bottomWall();
+		this.topWall();
+		this.floor();
+		this.specialObjects();
 
 		this.storyState[0]();
 		MenuOverlay.drawDefaultOverlay();
 		Animate.draw();
 	}
 
-	static floor() {
-		// Static elements
+	init() {
+		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+		Paint.draw("POT", "UP", 41, 70);
+		Paint.draw("POT", "UP", 41, 86);
+		Paint.draw("POT", "UP", 41, 102);
+	}
+
+	blueMask() {
+		Context.beginPath();
+		Context.globalAlpha = 0.6;
+		Context.fillStyle = "#040188";
+		Context.fillRect(0, 0, Canvas.width, Canvas.height);
+		Context.fill();
+		Context.globalAlpha = 1;
+		Context.closePath();
+	}
+
+	floor() {
 		Paint.draw("POT_STAND", "LEFT", 39, 70);
 		Paint.draw("POT_STAND", "LEFT", 39, 86);
 		Paint.draw("POT_STAND", "LEFT", 39, 102);
@@ -205,7 +217,7 @@ export default class IntroDemo {
 		Paint.draw("BENCH", "UP", 167, 94);
 	}
 
-	static topWall() {
+	topWall() {
 		Paint.drawWall("HOUSE", "UP");
 
 		Paint.draw("MOLDING", "UP", 63, 46);
@@ -213,13 +225,13 @@ export default class IntroDemo {
 		Paint.draw("WELL", "UP", 167, 46);
 	}
 
-	static leftWall() {
+	leftWall() {
 		Paint.drawWall("HOUSE", "LEFT");
 
 		Paint.draw("WINDOW", "LEFT", 15, 118);
 	}
 
-	static bottomWall() {
+	bottomWall() {
 		Paint.drawWall("HOUSE", "DOWN");
 
 		Paint.draw("WINDOW", "DOWN", 48, 198);
@@ -227,13 +239,13 @@ export default class IntroDemo {
 		Paint.draw("DOOR", "DOWN", 112, 198);
 	}
 
-	static rightWall() {
+	rightWall() {
 		Paint.drawWall("HOUSE", "RIGHT");
 
 		Paint.draw("WINDOW", "RIGHT", 215, 118);
 	}
 
-	static specialObjects() {
+	specialObjects() {
 		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 }
