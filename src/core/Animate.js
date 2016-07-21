@@ -4,72 +4,57 @@ export default class Animate {
 	constructor() {
 		this.link = new Image();
 		this.link.src = "img/link.png";
+		this.queue = [];
 	}
 
-	openingCircle(obj) {
-		if (obj["CIRCLE_ANIMATION_COUNTER"] >= Canvas.width) {
-			return true;
+	openingCircle() {
+		for (let i = 0; i < Canvas.width; i += 5) {
+			this.queue.push(() => {
+				ContextMask.beginPath();
+				ContextMask.fillStyle = "#000";
+				ContextMask.fillRect(0, 0, Canvas.width, Canvas.height);
+				ContextMask.fill();
+				ContextMask.closePath();
+				ContextMask.beginPath();
+				ContextMask.save();
+				ContextMask.globalCompositeOperation = 'destination-out';
+				ContextMask.arc(50, 75, i, 0, 2 * Math.PI, false);
+				ContextMask.fill();
+				ContextMask.restore();
+				ContextMask.closePath();
+			});
 		}
-
-		if (!obj["CIRCLE_ANIMATION_COUNTER"]) {
-			obj["CIRCLE_ANIMATION_COUNTER"] = 0;
-		}
-
-		ContextMask.beginPath();
-		ContextMask.fillStyle = "#000";
-		ContextMask.fillRect(0, 0, Canvas.width, Canvas.height);
-		ContextMask.fill();
-		ContextMask.closePath();
-		ContextMask.beginPath();
-		ContextMask.save();
-		ContextMask.globalCompositeOperation = 'destination-out';
-		ContextMask.arc(50, 75, obj["CIRCLE_ANIMATION_COUNTER"] += 5, 0, 2 * Math.PI, false);
-		ContextMask.fill();
-		ContextMask.restore();
-		ContextMask.closePath();
 	}
 
-	linkSnoozing(obj, xPos, yPos) {
-		if (obj["LINK_WAKING_COUNTER"] >= 50) {
-			return true;
+	linkSnoozing(xPos, yPos) {
+		for (let i = 0; i < 25; i++) {
+			this.queue.push([this.link, 12 + (36 * i), 4, 30, 45, xPos, yPos, 30, 45]);
+			this.queue.push([this.link, 12 + (36 * i), 4, 30, 45, xPos, yPos, 30, 45]);
 		}
-
-		if (!obj["LINK_WAKING_COUNTER"]) {
-			obj["LINK_WAKING_COUNTER"] = 0;
-		}
-
-		Context.drawImage(
-			this.link,
-			12 + (36 * Math.floor(obj["LINK_WAKING_COUNTER"]++ / 2)),
-			4,
-			30,
-			45,
-			xPos,
-			yPos,
-			30,
-			45
-		)
 	}
 
-	linkJumpingOffBed(obj, xPos, yPos) {
-		if (obj["LINK_JUMPING_OFF_BED_COUNTER"] >= 34) {
-			return true;
+	linkJumpingOffBed(xPos, yPos) {
+		for (let i = 0; i < 17; i++) {
+			this.queue.push([this.link, 50 * i, 55, 50, 50, xPos, yPos, 50, 50]);
+			this.queue.push([this.link, 50 * i, 55, 50, 50, xPos, yPos, 50, 50]);
 		}
+	}
 
-		if (!obj["LINK_JUMPING_OFF_BED_COUNTER"]) {
-			obj["LINK_JUMPING_OFF_BED_COUNTER"] = 0;
+	isAnimating() {
+		return this.queue.length > 0;
+	}
+
+	draw() {
+		let nextFrame;
+
+		if (this.isAnimating()) {
+			nextFrame = this.queue.shift();
+
+			if (typeof nextFrame === "function") {
+				nextFrame();
+			} else {
+				Context.drawImage(...nextFrame);
+			}
 		}
-
-		Context.drawImage(
-			this.link,
-			50 * Math.floor(obj["LINK_JUMPING_OFF_BED_COUNTER"]++ / 2),
-			55,
-			50,
-			50,
-			xPos,
-			yPos,
-			50,
-			50
-		)
 	}
 }

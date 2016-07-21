@@ -15,7 +15,7 @@ export default class LinksHouse {
 	constructor() {
 		Player.setLevelObjects(new OBJECTS());
 		Player.actions("STAND", "RIGHT");
-		Player.postion(90, 75);
+		Player.setPostion(90, 75);
 		Keyboard.setContext("Player");
 	}
 

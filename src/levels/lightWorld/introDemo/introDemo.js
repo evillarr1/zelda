@@ -85,7 +85,7 @@ export default class IntroDemo {
 
 		Player.setLevelObjects(new OBJECTS());
 		Player.actions("STAND", "RIGHT");
-		Player.postion(90, 75);
+		Player.setPostion(90, 75);
 
 		let blueMask = () => {
 			Context.beginPath();
@@ -106,28 +106,32 @@ export default class IntroDemo {
 
 		this.storyStateIndex = 0;
 		this.storyState = [() => {
+			Animate.openingCircle();
+			this.storyState.shift();
+		}, () => {
 			initialPaint();
 			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
 			blueMask();
 
-			if (Animate.openingCircle(this)) {
+			if (!Animate.isAnimating()) {
 				if (Text.drawScrollText(38, 145)) {
 					this.music.openingDemo.play("intro");
 					this.storyState.shift();
 					this.storyStateIndex++;
+					Animate.linkSnoozing(56, 61);
 				}
 			}
 		}, () => {
 			initialPaint();
 
-			if (Animate.linkSnoozing(this, 56, 61)) {
+			if (!Animate.isAnimating()) {
 				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
 			}
 		}, () => {
 			initialPaint();
 
-			if (Animate.linkJumpingOffBed(this, 56, 66)) {
+			if (!Animate.isAnimating()) {
 				Keyboard.setContext("Player");
 				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
 				this.storyState.shift();
@@ -152,6 +156,7 @@ export default class IntroDemo {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
 				Text.animateScroll();
 				if (this.storyStateIndex === 1) {
+					Animate.linkJumpingOffBed(56, 66);
 					this.storyState.shift();
 					this.storyStateIndex++;
 				}
@@ -185,6 +190,7 @@ export default class IntroDemo {
 
 		this.storyState[0]();
 		MenuOverlay.drawDefaultOverlay();
+		Animate.draw();
 	}
 
 	static floor() {

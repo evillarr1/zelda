@@ -114,20 +114,18 @@ export default class Player {
 	update() {
 		let directions = Array.from(this.currentStrokes.keys());
 
+		// Once you find the action that needs to be performed stop the loop 
 		for (let objKey in this.action) {
 			if (this.action[objKey].update(directions)) {
 				return;
 			}
 		}
-		if (this.yPos >= 210) {
-			let newEvent = new CustomEvent('OFFMAP', {
-					detail: {
-						pos: [this.xPos, this.yPos]
-					}
-				}
-			);
 
-			document.querySelector("canvas").dispatchEvent(newEvent);
+		// If link runs off the map, then trigger the OFFMAP event to trigger location change.
+		if (this.yPos >= 210) {
+			let newEvent = this.createEventDetails();
+
+			Canvas.dispatchEvent(newEvent);
 		}
 	}
 
@@ -175,8 +173,18 @@ export default class Player {
 		}
 	}
 
-	postion(xPos, yPos) {
+	setPostion(xPos, yPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
+	}
+
+	createEventDetails()  {
+		return new CustomEvent('OFFMAP', {
+				detail: {
+					pos: [this.xPos, this.yPos],
+					direction: this.direction
+				}
+			}
+		)
 	}
 }
