@@ -50,8 +50,7 @@ export default class LiftWalk {
 
 		this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6) + liftX - Player.disabledX;
 		this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[itemLift][dirLift][2] / 6) + liftY + this.itemBounce - Player.disabledY;
-		
-		//console.log(this.itemBounce);
+
 		if (this.isStanding) {
 			this.actionCounter = 0;
 			this.itemBounce = 0.25;
@@ -61,7 +60,7 @@ export default class LiftWalk {
 			}
 			this.actionCounter = (this.actionCounter + 1) % ((LIFT_WALKING[directions[0]] * 3) - 1);
 		}
-		
-		this.entity.currentAction = "LINK_LIFT_WALKING_" + Math.floor(this.actionCounter / 3);
+
+		this.entity.currentAction = "LIFT_WALKING_" + Math.floor(this.actionCounter / 3);
 	}
 }

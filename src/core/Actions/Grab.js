@@ -57,7 +57,7 @@ export default class Grab {
 			}
 		}
 
-		this.entity.currentAction = "LINK_GRABBING";
+		this.entity.currentAction = "GRABBING";
 		this.entity.actionIndex = 0;
 
 		if (this.entity.direction === "LEFT") {

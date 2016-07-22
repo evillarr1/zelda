@@ -28,7 +28,7 @@ export default class Push {
 			this.actionCounter = (this.actionCounter + 1) % 31;
 		}
 
-		this.entity.currentAction = "LINK_PUSHING_" + Math.floor(this.actionCounter / 8);
+		this.entity.currentAction = "PUSHING_" + Math.floor(this.actionCounter / 8);
 
 	}
 }

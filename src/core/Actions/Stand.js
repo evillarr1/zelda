@@ -17,7 +17,7 @@ export default class Stand {
 	}
 
 	perform(directions) {
-		this.entity.currentAction = "LINK_STANDING";
+		this.entity.currentAction = "STANDING";
 		this.entity.direction = directions[0] || this.entity.direction;
 	}
 }

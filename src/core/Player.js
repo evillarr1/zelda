@@ -18,11 +18,13 @@ const DIRECTION = {
 
 export default class Player {
 	constructor() {
+		this.npc = "LINK";
+
 		// Links position, current action and direction he is facing
 		this.xPos = 100;
 		this.yPos = 100;
 		this.direction = DIRECTION.DOWN[0];
-		this.currentAction = "LINK_STANDING";
+		this.currentAction = "STANDING";
 
 		// Check if Link is allowed displacement of camera
 		this.disableDisplacementX = false;
@@ -168,7 +170,7 @@ export default class Player {
 				this.action["LIFTWALK"].perform(args[0]);
 				break;
 			default:
-				console.error("NOT A SUPPROTED ACTION");
+				console.error(`${action} NOT A SUPPORTED ACTION`);
 				break;
 		}
 	}
@@ -184,14 +186,14 @@ export default class Player {
 			this.disabledY += this.holdY;
 		}
 		Paint.draw(this.currentAction, this.direction, this.xPos + this.actionXOffset - this.disabledX,
-			this.yPos + this.actionYOffset - this.disabledY, "link");
+			this.yPos + this.actionYOffset - this.disabledY, "link", "LINK");
 		this.actionXOffset = this.actionYOffset = this.holdX = this.holdY = 0;
 		if (this.objectLifted) {
 			Paint.draw(...this.objectLifted);
 		}
 	}
 
-	setPostion(xPos, yPos) {
+	setPosition(xPos, yPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}

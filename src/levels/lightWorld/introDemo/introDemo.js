@@ -2,6 +2,7 @@
 
 import Keyboard from "keyboardjs";
 import LinksHouse from "./LinksHouse";
+import NPC from "../../../core/NPC";
 
 const DIALOGUE = {
 	SCROLL: `Help me...
@@ -83,9 +84,14 @@ export default class IntroDemo {
 			})
 		};
 
+		this.uncle = new NPC("UNCLE");
+		this.uncle.setLevelObjects(new OBJECTS());
+		this.uncle.setCurrentAction("SITTING", "DOWN");
+		this.uncle.setPosition(165, 85);
+
 		Player.setLevelObjects(new OBJECTS());
 		Player.actions("STAND", "RIGHT");
-		Player.setPostion(90, 75);
+		Player.setPosition(90, 75);
 
 		this.storyStateIndex = 0;
 		this.storyState = [() => {
@@ -94,8 +100,7 @@ export default class IntroDemo {
 			this.storyStateIndex++;
 		}, () => {
 			this.init();
-			Paint.draw("LINK_SLEEPING_IN_BED", "UP", 56, 72, "link");
-			Paint.draw("UNCLE", "SITTING", 165, 85, "npc");
+			Paint.draw("SLEEPING_IN_BED", "UP", 56, 72, "link", "LINK");
 			this.blueMask();
 
 			if (!Animate.isAnimating()) {
@@ -110,34 +115,29 @@ export default class IntroDemo {
 			this.init();
 
 			if (!Animate.isAnimating()) {
-				Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
-				Paint.draw("UNCLE", "SITTING_TURNING_LEFT", 165, 85, "npc");
+				Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
+				this.uncle.setCurrentAction("SITTING", "LEFT");
 				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
-			} else {
-				Paint.draw("UNCLE", "SITTING", 165, 85, "npc");
 			}
 		}, () => {
 			this.init();
-			Paint.draw("LINK_SITTIN_IN_BED", "UP", 56, 66, "link");
+			Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
 
 		}, () => {
 			this.init();
 
 			if (!Animate.isAnimating()) {
 				Keyboard.setContext("Player");
-				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
+				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
 				this.storyState.shift();
 				this.storyStateIndex++;
 				Player.draw();
 			}
 		}, () => {
-			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link");
+			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
 			Player.draw();
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		}];
-
-		this.storyState.splice(0, 3);
-		this.storyStateIndex += 3;
 
 		// Display the dialogue text
 		Text.setScrollText(DIALOGUE.SCROLL);
@@ -184,6 +184,7 @@ export default class IntroDemo {
 		this.floor();
 		this.specialObjects();
 
+		this.uncle.draw();
 		this.storyState[0]();
 		MenuOverlay.drawDefaultOverlay();
 		Animate.draw();

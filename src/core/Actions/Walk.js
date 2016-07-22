@@ -18,7 +18,7 @@ export default class Walk {
 		}
 
 		this.actionCounter = (this.actionCounter + 1) % 14;
-		this.entity.currentAction = "LINK_WALKING_" + Math.floor(this.actionCounter / 2);
+		this.entity.currentAction = "WALKING_" + Math.floor(this.actionCounter / 2);
 
 		// Set the direction the entity should be facing
 		this.entity.direction = directions[0];

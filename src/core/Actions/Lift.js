@@ -90,6 +90,6 @@ export default class Lift {
 			this.entity.actionYOffset = 2;
 		}
 
-		this.entity.currentAction = "LINK_LIFTING_" + Math.floor(this.entity.liftCounter / 8);
+		this.entity.currentAction = "LIFTING_" + Math.floor(this.entity.liftCounter / 8);
 	}
 }

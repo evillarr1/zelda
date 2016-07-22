@@ -25,6 +25,6 @@ export default class Pull {
 			this.entity.actionXOffset = -7;
 		}
 
-		this.entity.currentAction = "LINK_TUGGING_" + Math.floor(this.actionIndex / 8);
+		this.entity.currentAction = "TUGGING_" + Math.floor(this.actionIndex / 8);
 	}
 }

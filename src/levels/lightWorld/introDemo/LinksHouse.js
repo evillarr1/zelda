@@ -17,7 +17,7 @@ export default class LinksHouse {
 	constructor() {
 		Player.setLevelObjects(new OBJECTS());
 		Player.actions("STAND", "DOWN");
-		Player.setPostion(115, 96);
+		Player.setPosition(115, 96);
 		Keyboard.setContext("Player");
 	}
 
@@ -40,4 +40,4 @@ export default class LinksHouse {
 	}
 }
 
-// Maybe setPostion can have 2 more parameters, disable of x,y
+// Maybe setPosition can have 2 more parameters, disable of x,y
