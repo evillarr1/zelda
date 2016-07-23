@@ -84,7 +84,7 @@ export default class IntroDemo {
 			})
 		};
 
-		this.uncle = new NPC("UNCLE");
+		this.uncle = new NPC("UNCLE", 3);
 		this.uncle.setLevelObjects(new OBJECTS());
 		this.uncle.setCurrentAction("SITTING", "DOWN");
 		this.uncle.setPosition(165, 85);
@@ -94,63 +94,25 @@ export default class IntroDemo {
 		Player.setPosition(90, 75);
 
 		this.storyStateIndex = 0;
-		this.storyState = [() => {
-			Animate.openingCircle();
-			this.storyState.shift();
-			this.storyStateIndex++;
-		}, () => {
-			this.init();
-			Paint.draw("SLEEPING_IN_BED", "UP", 56, 72, "link", "LINK");
-			this.blueMask();
-
-			if (!Animate.isAnimating()) {
-				if (Text.isScrollComplete()) {
-					this.music.openingDemo.play("intro");
-					this.storyState.shift();
-					this.storyStateIndex++;
-					Animate.linkSnoozing(56, 61);
-				}
-			}
-		}, () => {
-			this.init();
-
-			if (!Animate.isAnimating()) {
-				Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
-				this.uncle.setCurrentAction("SITTING", "LEFT");
-				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
-			}
-		}, () => {
-			this.init();
-			Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
-
-		}, () => {
-			this.init();
-
-			if (!Animate.isAnimating()) {
-				Keyboard.setContext("Player");
-				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
-				this.storyState.shift();
-				this.storyStateIndex++;
-				Player.draw();
-			}
-		}, () => {
-			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
-			Player.draw();
-			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
-		}];
+		this.initialState();
 
 		this.currentStrokes = new Map();
+
+		this.counter = 0;
 
 		// Setup the key bindings
 		Keyboard.withContext("level", () => {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
-				if (this.storyStateIndex === 3) {
-					Animate.linkJumpingOffBed(56, 66);
+				if (this.storyStateIndex === 2) {
+					Animate.uncleWalking(this.uncle);
 					this.storyState.shift();
 					this.storyStateIndex++;
-				} else if (this.storyStateIndex === 2) {
-					this.storyState.shift();
-					this.storyStateIndex++;
+				} else if (this.storyStateIndex === 3) {
+					if (!Animate.isAnimating()) {
+						Animate.linkJumpingOffBed(56, 66);
+						this.storyState.shift();
+						this.storyStateIndex++;
+					}
 				}
 			});
 		});
@@ -175,7 +137,6 @@ export default class IntroDemo {
 		this.floor();
 		this.specialObjects();
 
-		this.uncle.draw();
 		this.storyState[0]();
 		Animate.draw();
 	}
@@ -185,6 +146,55 @@ export default class IntroDemo {
 		Paint.draw("POT", "UP", 41, 70);
 		Paint.draw("POT", "UP", 41, 86);
 		Paint.draw("POT", "UP", 41, 102);
+	}
+
+	initialState() {
+		this.storyState = [() => {
+			Animate.openingCircle();
+			this.storyState.shift();
+			this.storyStateIndex++;
+		}, () => {
+			this.init();
+			Paint.draw("SLEEPING_IN_BED", "UP", 56, 72, "link", "LINK");
+			this.uncle.draw();
+			this.blueMask();
+
+			if (!Animate.isAnimating()) {
+				if (Text.isScrollComplete()) {
+					this.music.openingDemo.play("intro");
+					this.storyState.shift();
+					this.storyStateIndex++;
+					Animate.linkSnoozing(56, 61);
+				}
+			}
+		}, () => {
+			this.uncle.draw();
+			this.init();
+
+			if (!Animate.isAnimating()) {
+				Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
+				this.uncle.setCurrentAction("SITTING", "LEFT");
+				Text.write(Link.charName + DIALOGUE.ZELDA, 40, 152, false, true);
+			}
+		}, () => {
+			this.uncle.draw();
+			this.init();
+			Paint.draw("SITTIN_IN_BED", "UP", 56, 66, "link", "LINK");
+		}, () => {
+			this.init();
+
+			if (!Animate.isAnimating()) {
+				Keyboard.setContext("Player");
+				Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
+				this.storyState.shift();
+				this.storyStateIndex++;
+				Player.draw();
+			}
+		}, () => {
+			Paint.draw("UNCOVERED_COMFORTER", "UP", 56, 86, "link", "LINK");
+			Player.draw();
+			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
+		}];
 	}
 
 	blueMask() {

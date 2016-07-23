@@ -27,3 +27,15 @@ Array.prototype.equals = function (array) {
 	}
 	return true;
 };
+
+Array.prototype.getAllIndexes = function (str) {
+	let indexes = [];
+
+	for (let i = 0; i < this.length; i++) {
+		if (this[i].startsWith(str)) {
+			indexes.push(i);
+		}
+	}
+
+	return indexes;
+};

@@ -11,7 +11,7 @@ const DIRECTION = {
 };
 
 export default class Player {
-	constructor(npc) {
+	constructor(npc, walkPace) {
 		this.npc = npc;
 
 		// Npcs position, current action and direction he is facing
@@ -50,7 +50,7 @@ export default class Player {
 
 		this.action = {
 			"STAND": new Stand(this),
-			"WALK": new Walk(this)
+			"WALK": new Walk(this, walkPace)
 		};
 	}
 
@@ -70,7 +70,7 @@ export default class Player {
 	actions(action, ...args) {
 		switch (action) {
 			case "WALK":
-				this.action["WALK"].perform(args[0]);
+				this.action["WALK"].perform(args[0], args[1]);
 				break;
 			case "STAND":
 				this.action["STAND"].perform(args);

@@ -1,9 +1,12 @@
 "use strict";
 
 export default class Walk {
-	constructor(entity) {
+	constructor(entity, paceSpeed = 0) {
 		this.entity = entity;
 		this.actionCounter = 0;
+		this.frameLimits = Object.keys(Paint[entity.npc]).getAllIndexes("WALKING").length * 2;
+		this.paceSpeed = paceSpeed;
+		this.paceCounter = 0;
 	}
 
 	update(directions) {
@@ -11,13 +14,21 @@ export default class Walk {
 		this.entity.actions("WALK", directions);
 	}
 
-	perform(directions, newPace) {
+	perform(directions, newSpeed) {
 		// Skip if no directions are passed in
 		if (directions.length === 0) {
 			return;
 		}
 
-		this.actionCounter = (this.actionCounter + 1) % 14;
+		if (this.paceSpeed !== 0) {
+			if (this.paceCounter++ >= this.paceSpeed) {
+				this.paceCounter = 0;
+			} else {
+				return;
+			}
+		}
+
+		this.actionCounter = (this.actionCounter + 1) % this.frameLimits;
 		this.entity.currentAction = "WALKING_" + Math.floor(this.actionCounter / 2);
 
 		// Set the direction the entity should be facing
@@ -48,7 +59,7 @@ export default class Walk {
 		this.entity.collisions = new Map([...this.entity.collisions, ...this.entity.specialCollisions]);
 
 		// Run at different speeds if more than one direction is triggered at the same time
-		let pos = newPace || (directions.length === 1 ? 1.5 : 1);
+		let pos = newSpeed || (directions.length === 1 ? 1.5 : 1);
 
 		// Move in the direction the user chooses, if no collisions are detected
 		// If a valid movement, round the new position to the nearest position to two decimal points

@@ -40,6 +40,24 @@ export default class Animate {
 		}
 	}
 
+	uncleWalking(entity) {
+		entity.mapObjects = {
+			static: [],
+			special: {}
+		};
+		for (let i = 0; i < 96; i++) {
+			this.queue.push(() => {
+				entity.actions("WALK", ["LEFT"], 2)
+			});
+		}
+
+		for (let i = 0; i < 260; i++) {
+			this.queue.push(() => {
+				entity.actions("WALK", ["DOWN"], 2)
+			});
+		}
+	}
+
 	isAnimating() {
 		return this.queue.length > 0;
 	}
