@@ -127,8 +127,6 @@ export default class CopyPlayer {
 	}
 
 	draw() {
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-
 		// Draw the background
 		Context.drawImage(this.charSelectSheet, 264, 1, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 

@@ -22,17 +22,12 @@ export default class Title {
 		// Setup the key bindings
 		this.keyboard = document.onkeydown = (event) => {
 			if (event.keyCode === KeyCodes.Y) {
-				let nameSelect = new NameSelect();
-
-				State.pop();
-				State.push(nameSelect);
+				State.popAndPush(new NameSelect());
 			}
 		};
 	}
 
 	draw() {
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-
 		// Draw the background
 		Context.drawImage(
 			this.titleSheet,

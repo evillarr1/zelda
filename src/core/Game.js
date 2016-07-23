@@ -14,6 +14,20 @@ import MenuOverlay from "./MenuOverlay";
 
 export default class Game {
 	constructor() {
+		window.Game = this;
+
+		this.updateList = [];
+		this.drawList = [];
+
+		this.configure();
+
+		// Uncomment if developing
+		//this.development();
+
+		new Intro();
+	}
+
+	development() {
 		// Preload this user for development
 		window.Link = {
 			charName: "Link",
@@ -24,8 +38,8 @@ export default class Game {
 			rupee: 0
 		};
 
-		this.configure();
-		new Intro();
+		window.Game.addUpdate(window.MenuOverlay);
+		window.Game.addDraw(window.MenuOverlay);
 	}
 
 	configure() {
@@ -36,20 +50,10 @@ export default class Game {
 		window.ContextMask = CanvasMask.getContext("2d");
 
 		// Setup the games main loop
-		window.MainLoop = Mainloop.setUpdate(() => {
-			let lastState = window.State.peek();
-
-			if (lastState && lastState.update) {
-				lastState.update();
-			}
-			window.MenuOverlay.update();
-		}).setDraw(() => {
-			let lastState = window.State.peek();
-
-			if (lastState) {
-				lastState.draw();
-			}
-		}).start();
+		window.MainLoop = Mainloop
+			.setUpdate(() => this.mainUpdate())
+			.setDraw(() => this.mainDraw())
+			.start();
 
 		// Setup the game's state handler
 		window.State = new State();
@@ -107,5 +111,33 @@ export default class Game {
 				prop: otherUnit
 			});
 		}
+	}
+
+	mainUpdate() {
+		let lastState = window.State.peek();
+
+		if (lastState && lastState.update) {
+			lastState.update();
+		}
+
+		this.updateList.forEach((item) => item.globalUpdate());
+	}
+
+	mainDraw() {
+		let lastState = window.State.peek();
+
+		if (lastState) {
+			Context.clearRect(0, 0, Canvas.width, Canvas.height);
+			lastState.draw();
+		}
+		this.drawList.forEach((item) => item.globalDraw());
+	}
+
+	addDraw(item) {
+		this.drawList.push(item);
+	}
+
+	addUpdate(item) {
+		this.updateList.push(item);
 	}
 }

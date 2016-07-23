@@ -31,7 +31,7 @@ while. I'll be back by morning.
 Don't leave the house.`
 };
 
-const OBJECTS = function () {
+const OBJECTS = () => {
 	return {
 		static: [
 			[30, 0, 10, 250], //left
@@ -104,7 +104,7 @@ export default class IntroDemo {
 			this.blueMask();
 
 			if (!Animate.isAnimating()) {
-				if (Text.drawScrollText(38, 145)) {
+				if (Text.isScrollComplete()) {
 					this.music.openingDemo.play("intro");
 					this.storyState.shift();
 					this.storyStateIndex++;
@@ -139,15 +139,11 @@ export default class IntroDemo {
 			Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		}];
 
-		// Display the dialogue text
-		Text.setScrollText(DIALOGUE.SCROLL);
-
 		this.currentStrokes = new Map();
 
 		// Setup the key bindings
 		Keyboard.withContext("level", () => {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
-				Text.animateScroll();
 				if (this.storyStateIndex === 3) {
 					Animate.linkJumpingOffBed(56, 66);
 					this.storyState.shift();
@@ -158,15 +154,11 @@ export default class IntroDemo {
 				}
 			});
 		});
-		Keyboard.setContext("level");
 
-		document.querySelector("canvas").addEventListener('OFFMAP', function () {
-			State.pop();
+		// Display the dialogue text
+		Text.setScrollText(DIALOGUE.SCROLL, 38, 145);
 
-			let linksHouse = new LinksHouse();
-
-			State.push(linksHouse);
-		}, false);
+		Canvas.addEventListener('OFFMAP', () => State.popAndPush(new LinksHouse()) , false);
 	}
 
 	update() {
@@ -174,7 +166,6 @@ export default class IntroDemo {
 	}
 
 	draw() {
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 		Paint.drawFloor("HOUSE_FLOOR");
 
 		this.leftWall();
@@ -186,7 +177,6 @@ export default class IntroDemo {
 
 		this.uncle.draw();
 		this.storyState[0]();
-		MenuOverlay.drawDefaultOverlay();
 		Animate.draw();
 	}
 

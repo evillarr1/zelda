@@ -1,5 +1,7 @@
 "use strict";
 
+import Keyboard from "keyboardjs";
+
 const CHAR_MAP = {
 	"A": [0, 0, 6, 13],
 	"B": [16, 0, 6, 13],
@@ -89,9 +91,26 @@ export default class Text {
 		this.charTick = 0;
 		this.charInterval = 0;
 		this.scrollStr = "";
+		this.scrollXPos = 0;
+		this.scrollYPos = 0;
+
 		this.isScrolling = 0;
 		this.scrollingTick = 0;
 		this.displayComplete = false;
+
+		Game.addDraw(this);
+
+		// Setup the key bindings
+		Keyboard.withContext("scrollingText", () => {
+			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
+				this.animateScroll();
+
+				// If all the text is done, then give control back to the player
+				if (this.isScrollComplete()) {
+					Keyboard.setContext("level");
+				}
+			});
+		});
 	}
 
 	write(text, xPos, yPos, displayComplete, showFrame = false) {
@@ -113,27 +132,9 @@ export default class Text {
 
 				// If the text is currently animating and it is the first line, perform a clipping animation on it
 				if (this.isScrolling && newLine === 0) {
-					Context.drawImage(
-						this.text,
-						xCor,
-						yCor + this.scrollingTick,
-						width,
-						height - this.scrollingTick,
-						xPos + offset,
-						yPos + (HORIZONTAL_SPACE * newLine),
-						width,
-						height - this.scrollingTick);
+					Context.drawImage(this.text, xCor, yCor + this.scrollingTick, width, height - this.scrollingTick, xPos + offset, yPos + (HORIZONTAL_SPACE * newLine), width, height - this.scrollingTick);
 				} else {
-					Context.drawImage(
-						this.text,
-						xCor,
-						yCor,
-						width,
-						height,
-						xPos + offset,
-						yPos + ((HORIZONTAL_SPACE * newLine) - this.scrollingTick),
-						width,
-						height);
+					Context.drawImage(this.text, xCor, yCor, width, height, xPos + offset, yPos + ((HORIZONTAL_SPACE * newLine) - this.scrollingTick), width, height);
 				}
 
 				offset += width;
@@ -160,11 +161,15 @@ export default class Text {
 		}
 	}
 
-	setScrollText(paragraph) {
+	setScrollText(paragraph, xPos, yPos) {
 		this.scrollStr = paragraph;
+		this.scrollXPos = xPos;
+		this.scrollYPos = yPos;
+
+		Keyboard.setContext("scrollingText");
 	}
 
-	drawScrollText(xPos, yPos) {
+	globalDraw() {
 		let displayComplete = false;
 
 		// Don't do anything if we don't have anymore text
@@ -196,7 +201,7 @@ export default class Text {
 		// Cut out only the characters needed in this interval
 		str = str.slice(0, this.charInterval);
 
-		this.write(str, xPos, yPos, displayComplete);
+		this.write(str, this.scrollXPos, this.scrollYPos, displayComplete);
 	}
 
 	animateScroll() {
@@ -213,5 +218,9 @@ export default class Text {
 			this.isScrolling++;
 			this.displayComplete = false;
 		}
+	}
+
+	isScrollComplete() {
+		return this.scrollStr.length === 0;
 	}
 }

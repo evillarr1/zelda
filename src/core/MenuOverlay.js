@@ -36,9 +36,12 @@ export default class MenuOverlay {
 		// Create a new image
 		this.menu = new Image();
 		this.menu.src = "img/mainSheet.png";
-		this.hearts = Link.hearts;
-		this.bombs = Link.bombs;
-		this.arrow = Link.arrow;
+
+		if (window.Link) {
+			this.hearts = Link.hearts;
+			this.bombs = Link.bombs;
+			this.arrow = Link.arrow;
+		}
 
 		this.tick = 0;
 
@@ -64,7 +67,7 @@ export default class MenuOverlay {
 	}
 
 	// Open menu OR Close menu OR Reanable Link's controls
-	update() {
+	globalUpdate() {
 		if (Keyboard.getContext() === "Menu_Opening" && this.tick < SCROLL_DISTANCE) {
 			this.tick += 7.5;
 		} else if (Keyboard.getContext() === "Menu_Closing" && this.tick > 0) {
@@ -75,8 +78,7 @@ export default class MenuOverlay {
 		}
 	}
 
-	drawDefaultOverlay() {
-
+	globalDraw() {
 		// Draw Start Menu. Originally above default overlay
 		for (let key in START_MENU_OVERLAY) {
 			let [xCor, yCor, xWidth, yWidth, xPos, yPos] = START_MENU_OVERLAY[key];
@@ -123,8 +125,5 @@ export default class MenuOverlay {
 		for (let i = 0; i < 2; i++) {
 			Paint.draw("NUMBERS", '0', 118 + (i * 8), 25 + this.tick);
 		}
-
-
 	}
-
 }

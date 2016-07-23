@@ -396,8 +396,6 @@ export default class RegisterName {
 	}
 
 	draw() {
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-
 		// Draw the background
 		Context.drawImage(
 			this.registerNameSheet,

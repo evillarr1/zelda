@@ -5,6 +5,11 @@ export default class State {
 		this.state = [];
 	}
 
+	popAndPush(el, options) {
+		this.state.pop(options);
+		this.state.push(el);
+	}
+
 	push(el) {
 		this.state.push(el);
 

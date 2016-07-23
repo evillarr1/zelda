@@ -42,6 +42,8 @@ export default class NameSelect {
 						State.pop();
 						window.Link = newChar;
 
+						Game.addUpdate(MenuOverlay);
+						Game.addDraw(MenuOverlay);
 						new LightWorld();
 					} else {
 						let registerName = new RegisterName(this.music, this.yPosIndex);
@@ -119,9 +121,6 @@ export default class NameSelect {
 	}
 
 	draw() {
-		// Clear screen
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
-
 		// Draw the background
 		Context.drawImage(this.charSelectSheet, 264, 1, Constants.GAME_WIDTH, Constants.GAME_HEIGHT, 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 

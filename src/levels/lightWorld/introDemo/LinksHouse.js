@@ -2,7 +2,7 @@
 
 import Keyboard from "keyboardjs";
 
-const OBJECTS = function () {
+const OBJECTS = () => {
 	return {
 		static: [
 			[31, 104, 50, 28]
@@ -32,10 +32,8 @@ export default class LinksHouse {
 	}
 
 	draw() {
-		Context.clearRect(0, 0, Canvas.width, Canvas.height);
 		Paint.drawMap("linksHouse", Player.disabledX + 80, Player.disabledY + 170, 0, 0);
 		Player.draw();
-		MenuOverlay.drawDefaultOverlay();
 
 	}
 }
