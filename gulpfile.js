@@ -1,14 +1,13 @@
 "use strict";
 
 const gulp = require("gulp");
-const webpack = require("gulp-webpack");
+const webpack = require('webpack');
 const webpackConfig = require("./webpack.config.js");
 
 const paths = {
 	allScripts: ["src/**/*.js"],
 	allMusic: ["src/levels/**/*.m*"],
 	allSounds: ["src/assets/sounds/**/*"],
-	entryScript: ["src/app.js"],
 	allImages: ["src/levels/**/*.png", "src/assets/icons/**/*", "src/assets/img/*.png"],
 	entryStyles: ["src/app.scss"],
 	allStyles: ["src/**/*.scss"],
@@ -27,9 +26,9 @@ function html() {
 }
 
 function scripts() {
-	return gulp.src(paths.entryScript)
-		.pipe(webpack(webpackConfig))
-		.pipe(gulp.dest("build/js"));
+	return new Promise((resolve) => {
+		webpack(webpackConfig).run(resolve);
+	});
 }
 
 function images() {
