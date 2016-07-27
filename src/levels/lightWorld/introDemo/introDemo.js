@@ -5,27 +5,7 @@ import LinksHouse from "./LinksHouse";
 import NPC from "../../../core/NPC";
 
 const DIALOGUE = {
-	SCROLL: `Help me...
-
-Please help me...
-
-I am a prisoner in the dungeon
-of the castle.
-My name is Zelda.
-
-The wizard, Agahnim, has done...
-something to the other missing
-girls. Now only I remain...
-
-Agahnim has seized control of
-the castle and is now trying to
-open the seven wise men's
-
-seal. ... ...
-I am in the dungeon of the
-castle.
-
-Please help me...`,
+	SCROLL: `Help me...`,
 	ZELDA: `, I'm going out for a
 while. I'll be back by morning.
 Don't leave the house.`
@@ -44,13 +24,13 @@ const OBJECTS = () => {
 			[54, 158, 34, 24], //small table
 			[167, 142, 16, 16], //bottom stool
 			[167, 95, 16, 16], //top stool
-			[167, 46, 32, 32],
-			[190, 159, 16, 16],
+			[167, 46, 32, 32]
 		],
 		special: {
 			"POT_1": [39, 70, 16, 16, "POT_1", "LIFT", ["POT", "UP", 41, 70]],
 			"POT_2": [39, 86, 16, 16, "POT_2", "LIFT", ["POT", "UP", 41, 86]],
-			"POT_3": [39, 102, 16, 16, "POT_3", "LIFT", ["POT", "UP", 41, 102]]
+			"POT_3": [39, 102, 16, 16, "POT_3", "LIFT", ["POT", "UP", 41, 102]],
+			"CHEST_1": [190, 159, 16, 16, "CHEST_1", "OPEN", ["LAMP", "UP", 190, 140], ["CHEST_CLOSED", "UP", 190, 158]]
 		}
 	}
 };
@@ -98,8 +78,6 @@ export default class IntroDemo {
 
 		this.currentStrokes = new Map();
 
-		this.counter = 0;
-
 		// Setup the key bindings
 		Keyboard.withContext("level", () => {
 			Keyboard.bind(["a", "s", "d", "w", "enter"], () => {
@@ -135,13 +113,13 @@ export default class IntroDemo {
 		this.bottomWall();
 		this.topWall();
 		this.floor();
-		this.specialObjects();
 
 		this.storyState[0]();
 		Animate.draw();
 	}
 
 	init() {
+		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 		Paint.draw("DOOR_FRAME", "DOWN", 112, 198);
 		Paint.draw("POT", "UP", 41, 70);
 		Paint.draw("POT", "UP", 41, 86);
@@ -244,9 +222,5 @@ export default class IntroDemo {
 		Paint.drawWall("HOUSE", "RIGHT");
 
 		Paint.draw("WINDOW", "RIGHT", 215, 118);
-	}
-
-	specialObjects() {
-		Paint.draw("CHEST_CLOSED", "UP", 190, 158);
 	}
 }

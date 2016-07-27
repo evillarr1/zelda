@@ -39,14 +39,14 @@ const LIFT_OFFSET = {
 	}
 };
 
-export default class Lift {
+export default class Open {
 	constructor(entity) {
 		this.entity = entity;
 	}
 
 	update(directions) {
-		if (this.entity.liftCounter <= 40 && this.entity.objectLifted && !this.entity.openItem) {
-			this.entity.actions("LIFT");
+		if (this.entity.liftCounter <= 40 && this.entity.openItem && !this.entity.objectLifted) {
+			this.entity.actions("OPEN");
 			
 			return true;
 		}
@@ -55,25 +55,27 @@ export default class Lift {
 	}
 
 	perform() {
+		let openItem = this.entity.openItem.slice(-1).pop();
+
 		this.entity.liftCounter = Math.min(this.entity.liftCounter + 1, 41);
 
 		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
-			this.entity.objectLifted[2] = this.entity.xPos + (Paint.ITEMS[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6);
+			openItem[2] = this.entity.xPos + (Paint.ITEMS[openItem[0]][openItem[1]][2] / 6);
 		}
 
 		let liftCounter = this.entity.liftCounter / 8;
 
 		if (Number.isInteger(liftCounter)) {
 			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][liftCounter];
-			this.entity.objectLifted[2] += liftX;
-			this.entity.objectLifted[3] += liftY;
+			openItem[2] += liftX;
+			openItem[3] += liftY;
 		}
 
 		if (this.entity.liftCounter === 41) {
 			let [liftX, liftY] = LIFT_OFFSET[this.entity.direction][6];
 
-			this.entity.objectLifted[2] = this.entity.xPos + (Paint.ITEMS[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftX;
-			this.entity.objectLifted[3] = this.entity.yPos + (Paint.ITEMS[this.entity.objectLifted[0]][this.entity.objectLifted[1]][2] / 6) + liftY;
+			openItem[2] = this.entity.xPos + (Paint.ITEMS[openItem[0]][openItem[1]][2] / 6) + liftX;
+			openItem[3] = this.entity.yPos + (Paint.ITEMS[openItem[0]][openItem[1]][2] / 6) + liftY;
 		}
 
 		if (this.entity.direction === "LEFT") {

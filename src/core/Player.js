@@ -5,6 +5,7 @@ import Walk from "./Actions/Walk";
 import Grab from "./Actions/Grab";
 import Pull from "./Actions/Pull";
 import Lift from "./Actions/Lift";
+import Open from "./Actions/Open";
 import Push from "./Actions/Push";
 import Stand from "./Actions/Stand";
 import LiftWalk from "./Actions/LiftWalk";
@@ -38,6 +39,7 @@ export default class Player {
 		this.collisions = new Map();
 		this.specialCollisions = new Map();
 		this.objectLifted = null;
+		this.openItem = null;
 
 		// Current key strokes
 		this.currentStrokes = new Map();
@@ -65,6 +67,7 @@ export default class Player {
 			"GRAB": new Grab(this),
 			"PULL": new Pull(this),
 			"LIFT": new Lift(this),
+			"OPEN": new Open(this),
 			"LIFTWALK": new LiftWalk(this),
 			"PUSH": new Push(this),
 			"STAND": new Stand(this),
@@ -165,6 +168,9 @@ export default class Player {
 				break;
 			case "LIFT":
 				this.action["LIFT"].perform();
+				break;
+			case "OPEN":
+				this.action["OPEN"].perform();
 				break;
 			case "LIFTWALK":
 				this.action["LIFTWALK"].perform(args[0]);

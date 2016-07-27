@@ -21,12 +21,29 @@ export default class Grab {
 
 					for (let i = 0; i < keys.length; i++) {
 						if (this.entity.specialCollisions.get(this.entity.direction).prop[4] === special[keys[i]][4]) {
-							this.entity.objectLifted = this.entity.mapObjects.special[keys[i]].slice(-1)[0];
-							delete this.entity.mapObjects.special[keys[i]];
-							delete this.entity.specialCollisions.get(this.entity.direction);
-							delete this.entity.collisions.get(this.entity.direction);
-							this.entity.liftCounter = 0;
-							return true;
+							let objectLifted = this.entity.mapObjects.special[keys[i]];
+							let subSection = objectLifted[objectLifted.length - 1];
+							let itemState = subSection[0].split("_")[1];
+
+							if (objectLifted[5] === "LIFT") {
+								delete this.entity.mapObjects.special[keys[i]];
+
+								this.entity.objectLifted = objectLifted.slice(-1)[0];
+								delete this.entity.specialCollisions.get(this.entity.direction);
+								delete this.entity.collisions.get(this.entity.direction);
+								this.entity.liftCounter = 0;
+
+								return true;
+							} else if (objectLifted[5] === "OPEN" && this.entity.direction === "UP" && itemState === "CLOSED") {
+								subSection[0] = subSection[0].split("_")[0] + "_OPEN";
+
+								this.entity.openItem = objectLifted;
+								delete this.entity.specialCollisions.get(this.entity.direction);
+								delete this.entity.collisions.get(this.entity.direction);
+								this.entity.liftCounter = 0;
+
+								return true;
+							}
 						}
 					}
 				} else {

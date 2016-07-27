@@ -23,7 +23,7 @@ export default class LiftWalk {
 	}
 
 	update(directions) {
-		if (this.entity.objectLifted) {
+		if (this.entity.objectLifted && !this.entity.openItem) {
 			if (directions.length > 0) {
 				this.isStanding = false;
 				this.entity.actions("WALK", directions);
@@ -43,13 +43,13 @@ export default class LiftWalk {
 		let [itemLift, dirLift, xLift, yLift] = this.entity.objectLifted;
 
 		if (this.entity.direction === "UP" || this.entity.direction === "DOWN") {
-			this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6);
+			this.entity.objectLifted[2] = this.entity.xPos + (Paint.ITEMS[itemLift][dirLift][2] / 6);
 		}
 
 		let [liftX, liftY] = LIFT_WALK_OFFSET[this.entity.direction];
 
-		this.entity.objectLifted[2] = this.entity.xPos + (Paint.items[itemLift][dirLift][2] / 6) + liftX - Player.disabledX;
-		this.entity.objectLifted[3] = this.entity.yPos + (Paint.items[itemLift][dirLift][2] / 6) + liftY + this.itemBounce - Player.disabledY;
+		this.entity.objectLifted[2] = this.entity.xPos + (Paint.ITEMS[itemLift][dirLift][2] / 6) + liftX - Player.disabledX;
+		this.entity.objectLifted[3] = this.entity.yPos + (Paint.ITEMS[itemLift][dirLift][2] / 6) + liftY + this.itemBounce - Player.disabledY;
 
 		if (this.isStanding) {
 			this.actionCounter = 0;
